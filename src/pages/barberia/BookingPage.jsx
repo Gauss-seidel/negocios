@@ -1,0 +1,756 @@
+import { useState, useEffect, useRef } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../../lib/supabase'
+import { getTemplateConfig, getAnimationStyle } from '../../templates/registry'
+import Button from '../../components/ui/Button'
+import Input from '../../components/ui/Input'
+
+/* ─── Utilities ─── */
+
+function generateTimeSlots(openTime, closeTime, durationMinutes, existingAppointments = []) {
+  const slots = []
+  const [openH, openM] = openTime.split(':').map(Number)
+  const [closeH, closeM] = closeTime.split(':').map(Number)
+  const openMinutes = openH * 60 + openM
+  const closeMinutes = closeH * 60 + closeM
+  const busySlots = existingAppointments.map((a) => ({ start: a.start_time, end: a.end_time }))
+
+  for (let mins = openMinutes; mins + durationMinutes <= closeMinutes; mins += 30) {
+    const sH = Math.floor(mins / 60)
+    const sM = mins % 60
+    const startStr = `${String(sH).padStart(2, '0')}:${String(sM).padStart(2, '0')}`
+    const eMins = mins + durationMinutes
+    const eH = Math.floor(eMins / 60)
+    const eM = eMins % 60
+    const endStr = `${String(eH).padStart(2, '0')}:${String(eM).padStart(2, '0')}`
+
+    const isBusy = busySlots.some((b) => startStr < b.end && endStr > b.start)
+    if (!isBusy) slots.push(startStr)
+  }
+  return slots
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00')
+  return d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
+}
+
+function getNext7Days() {
+  const today = new Date()
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today)
+    d.setDate(d.getDate() + i)
+    const dateStr = d.toISOString().split('T')[0]
+    const label = d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' })
+    return { date: dateStr, label, dayOfWeek: d.getDay() === 0 ? 7 : d.getDay() }
+  })
+}
+
+/* ─── Step progress ─── */
+
+function StepProgress({ step, colors }) {
+  const steps = ['Servicio', 'Barbero', 'Fecha', 'Hora', 'Datos']
+
+  return (
+    <div className="flex items-center justify-center gap-0 sm:gap-1">
+      {steps.map((label, i) => {
+        const num = i + 1
+        const isDone = step > num
+        const isCurrent = step === num
+        const isLast = i === steps.length - 1
+
+        return (
+          <div key={label} className="flex items-center">
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold transition-all duration-500 ${
+                  isDone
+                    ? 'scale-100'
+                    : isCurrent
+                    ? 'scale-110 shadow-lg'
+                    : 'scale-100'
+                }`}
+                style={{
+                  backgroundColor: isDone || isCurrent ? colors.accent : `${colors.primary}10`,
+                  color: isDone || isCurrent ? '#fff' : colors.textSecondary,
+                  boxShadow: isCurrent ? `0 4px 20px ${colors.accent}40` : 'none',
+                }}
+              >
+                {isDone ? (
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  num
+                )}
+              </div>
+              <span
+                className={`hidden text-[10px] font-semibold uppercase tracking-wider transition-colors sm:inline ${
+                  isCurrent ? 'opacity-100' : 'opacity-50'
+                }`}
+                style={{ color: isCurrent ? colors.accent : colors.textSecondary }}
+              >
+                {label}
+              </span>
+            </div>
+            {!isLast && (
+              <div
+                className={`mx-1 h-px w-6 sm:mx-2 sm:w-10 transition-colors duration-500 ${
+                  isDone ? 'opacity-60' : 'opacity-20'
+                }`}
+                style={{ backgroundColor: isDone ? colors.accent : colors.textSecondary }}
+              />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ─── Step transitions ─── */
+
+function StepContainer({ children, isActive }) {
+  return (
+    <div
+      className={`transition-all duration-500 ${
+        isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 absolute pointer-events-none'
+      }`}
+    >
+      {children}
+    </div>
+  )
+}
+
+/* ─── Service card ─── */
+
+function ServiceCard({ service, isSelected, onClick, colors }) {
+  return (
+    <button
+      onClick={onClick}
+      className="group relative w-full rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5"
+      style={{
+        borderColor: isSelected ? colors.accent : `${colors.primary}12`,
+        backgroundColor: isSelected ? `${colors.accent}06` : 'white',
+        boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
+      }}
+    >
+      {isSelected && (
+        <div
+          className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-white"
+          style={{ backgroundColor: colors.accent }}
+        >
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+      )}
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div
+            className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold text-white"
+            style={{ backgroundColor: colors.primary }}
+          >
+            {service.name.charAt(0)}
+          </div>
+          <div className="font-semibold" style={{ color: colors.text }}>{service.name}</div>
+          {service.description && (
+            <div className="mt-0.5 text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+              {service.description}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col items-end gap-0.5">
+          <div className="text-lg font-bold" style={{ color: colors.accent }}>₲ {service.price}</div>
+          <div className="flex items-center gap-1 text-xs" style={{ color: colors.textSecondary }}>
+            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {service.duration} min
+          </div>
+        </div>
+      </div>
+    </button>
+  )
+}
+
+/* ─── Main component ─── */
+
+export default function BookingPage() {
+  const { slug } = useParams()
+  const [business, setBusiness] = useState(null)
+  const [services, setServices] = useState([])
+  const [barbers, setBarbers] = useState([])
+  const [hours, setHours] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  const [selectedService, setSelectedService] = useState(null)
+  const [selectedBarber, setSelectedBarber] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedTime, setSelectedTime] = useState(null)
+  const [availableSlots, setAvailableSlots] = useState([])
+  const [slotsLoading, setSlotsLoading] = useState(false)
+
+  const [clientName, setClientName] = useState('')
+  const [clientPhone, setClientPhone] = useState('')
+  const [clientEmail, setClientEmail] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
+  const [step, setStep] = useState(1)
+
+  const days = getNext7Days()
+  const contentRef = useRef(null)
+
+  useEffect(() => {
+    loadBarberia()
+  }, [slug])
+
+  useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    if (submitError) setSubmitError(null)
+  }, [step])
+
+  async function loadBarberia() {
+    setLoading(true)
+    try {
+      const { data: biz } = await supabase
+        .from('businesses').select('*').eq('slug', slug).single()
+      if (!biz) throw new Error('Barbería no encontrada')
+      setBusiness(biz)
+
+      const { data: svc } = await supabase
+        .from('services').select('*').eq('business_id', biz.id).eq('is_active', true).order('name')
+      setServices(svc || [])
+
+      const { data: bar } = await supabase
+        .from('barbers').select('*').eq('business_id', biz.id).eq('is_active', true)
+      setBarbers(bar || [])
+
+      const { data: hrs } = await supabase
+        .from('business_hours').select('*').eq('business_id', biz.id).order('day_of_week')
+      setHours(hrs || [])
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!selectedDate || !selectedService || !business) return
+    setSlotsLoading(true)
+    setSelectedTime(null)
+
+    async function loadSlots() {
+      const dayOfWeek = new Date(selectedDate + 'T12:00:00').getDay() || 7
+      const dayHours = hours.find((h) => h.day_of_week === dayOfWeek)
+      if (!dayHours || dayHours.is_closed) { setAvailableSlots([]); setSlotsLoading(false); return }
+
+      const { data: holidays } = await supabase
+        .from('business_holidays').select('*')
+        .eq('business_id', business.id).eq('date', selectedDate).eq('is_closed', true)
+      if (holidays?.length > 0) { setAvailableSlots([]); setSlotsLoading(false); return }
+
+      let query = supabase
+        .from('appointments').select('start_time, end_time')
+        .eq('business_id', business.id).eq('date', selectedDate)
+        .not('status', 'in', '("cancelled","no_show")')
+      if (selectedBarber) query = query.eq('barber_id', selectedBarber)
+
+      const { data: existing } = await query
+      const slots = generateTimeSlots(dayHours.open_time, dayHours.close_time, selectedService.duration, existing || [])
+      setAvailableSlots(slots)
+      setSlotsLoading(false)
+    }
+    loadSlots()
+  }, [selectedDate, selectedService, selectedBarber, business?.id])
+
+  const checkSlotAvailable = async () => {
+    const [h, m] = selectedTime.split(':').map(Number)
+    const startMin = h * 60 + m
+    const endMin = startMin + selectedService.duration
+    const eH = String(Math.floor(endMin / 60)).padStart(2, '0')
+    const eM = String(endMin % 60).padStart(2, '0')
+    const endTimeStr = `${eH}:${eM}`
+
+    let query = supabase
+      .from('appointments')
+      .select('id')
+      .eq('business_id', business.id)
+      .eq('date', selectedDate)
+      .not('status', 'in', '("cancelled","no_show")')
+      .lt('start_time', endTimeStr)
+      .gt('end_time', selectedTime)
+
+    if (selectedBarber) {
+      query = query.eq('barber_id', selectedBarber)
+    }
+
+    const { data: conflicts, error } = await query
+    if (error) throw new Error('Error al verificar disponibilidad: ' + error.message)
+    if (conflicts && conflicts.length > 0) {
+      throw new Error('Este horario acaba de ser reservado por otra persona. Por favor elegí otro turno.')
+    }
+    return endTimeStr
+  }
+
+  const handleSubmit = async () => {
+    if (!clientName || !clientPhone || !selectedTime || !selectedService || !selectedDate) return
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      // Verificar que el slot sigue disponible (evita doble reserva)
+      const endTime = await checkSlotAvailable()
+
+      let clientId = null
+
+      // Buscar cliente existente por teléfono
+      const { data: existingClient, error: findErr } = await supabase
+        .from('clients').select('id')
+        .eq('business_id', business.id).eq('phone', clientPhone).maybeSingle()
+      if (findErr) throw new Error('Error al buscar cliente: ' + findErr.message)
+
+      if (existingClient) {
+        clientId = existingClient.id
+      } else {
+        // Crear nuevo cliente
+        const { data: newClient, error: insertClientErr } = await supabase
+          .from('clients').insert({
+            business_id: business.id, name: clientName, phone: clientPhone, email: clientEmail || null
+          }).select().single()
+        if (insertClientErr) throw new Error('Error al crear cliente: ' + insertClientErr.message)
+        if (!newClient) throw new Error('No se pudo crear el cliente')
+        clientId = newClient.id
+      }
+
+      // Crear reserva
+      const { data: appointment, error: insertApptErr } = await supabase
+        .from('appointments').insert({
+          business_id: business.id, client_id: clientId, barber_id: selectedBarber || null,
+          date: selectedDate, start_time: selectedTime, end_time: endTime, status: 'pending',
+        }).select().single()
+      if (insertApptErr) {
+        // Si hay un error de unique constraint, el slot se acaba de ocupar
+        if (insertApptErr.code === '23505') {
+          throw new Error('Este horario acaba de ser reservado por otra persona. Por favor elegí otro turno.')
+        }
+        throw new Error('Error al crear reserva: ' + insertApptErr.message)
+      }
+      if (!appointment) throw new Error('No se pudo crear la reserva')
+
+      // Agregar servicio a la reserva
+      const { error: insertSvcErr } = await supabase.from('appointment_services').insert({
+        appointment_id: appointment.id, service_id: selectedService.id, price: selectedService.price,
+      })
+      if (insertSvcErr) throw new Error('Error al agregar servicio: ' + insertSvcErr.message)
+
+      setSuccess(true)
+      setStep(6)
+    } catch (err) {
+      setSubmitError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
+      console.error(err)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
+        <div className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !business) {
+    return (
+      <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
+        <div className="text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
+            <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01" />
+            </svg>
+          </div>
+          <h2 className="mt-4 text-xl font-bold text-gray-900">Barbería no encontrada</h2>
+          <p className="mt-1 text-sm text-gray-500">{error || 'La barbería que buscas no existe o no está disponible.'}</p>
+          <Link to="/" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-accent)]/80">
+            ← Volver al inicio
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const templateConfig = getTemplateConfig(business.template_id, business.template_colors)
+  const { colors } = templateConfig
+
+  // Obtener clase de animación para el template actual
+  const getStepAnimationClass = () => `animate-${business.template_id || 'classic'}-card`
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
+      <style>{`
+        :root {
+          --barber-primary: ${colors.primary};
+          --barber-secondary: ${colors.secondary};
+          --barber-accent: ${colors.accent};
+          --barber-bg: ${colors.background};
+          --barber-text: ${colors.text};
+          --barber-text-secondary: ${colors.textSecondary};
+        }
+      `}</style>
+
+      {/* Navbar */}
+      <nav
+        className="sticky top-0 z-40 border-b backdrop-blur-xl"
+        style={{ borderColor: `${colors.primary}08`, backgroundColor: `${colors.background}D9` }}
+      >
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
+          <Link
+            to={`/barberia/${slug}`}
+            className="group flex items-center gap-1.5 text-sm font-medium transition-colors"
+            style={{ color: colors.textSecondary }}
+          >
+            <svg className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver
+          </Link>
+          <span className="text-sm font-semibold" style={{ color: colors.text }}>
+            Reservar en {business.name}
+          </span>
+        </div>
+      </nav>
+
+      {/* Progress */}
+      <div className="mx-auto max-w-3xl px-4 py-6">
+        <StepProgress step={step} colors={colors} />
+      </div>
+
+      {/* Content */}
+      <div ref={contentRef} className="mx-auto max-w-3xl px-4 pb-20">
+        {/* Step 1: Service */}
+        {step === 1 && (
+          <div className={step === 1 ? getStepAnimationClass() : ''}>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí un servicio</h2>
+              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>Seleccioná el servicio que querés recibir</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {services.map((svc) => (
+                <ServiceCard
+                  key={svc.id}
+                  service={svc}
+                  isSelected={selectedService?.id === svc.id}
+                  onClick={() => { setSelectedService(svc); setStep(2) }}
+                  colors={colors}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Barber */}
+        {step === 2 && (
+          <div className={getStepAnimationClass()}>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>
+                Elegí un barbero
+              </h2>
+              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
+                Opcional — podés dejar que te atienda cualquier barbero disponible
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                onClick={() => { setSelectedBarber(null); setStep(3) }}
+                className="group flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 hover:-translate-y-0.5"
+                style={{
+                  borderColor: selectedBarber === null ? colors.accent : `${colors.primary}20`,
+                  backgroundColor: selectedBarber === null ? `${colors.accent}06` : 'transparent',
+                }}
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-2xl transition-transform group-hover:scale-105">
+                  <svg className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-semibold" style={{ color: colors.text }}>Cualquier barbero</div>
+                  <div className="text-xs" style={{ color: colors.textSecondary }}>Sin preferencia</div>
+                </div>
+              </button>
+
+              {barbers.map((barber) => {
+                const isSelected = selectedBarber === barber.id
+                return (
+                  <button
+                    key={barber.id}
+                    onClick={() => { setSelectedBarber(barber.id); setStep(3) }}
+                    className="group flex items-center gap-4 rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5"
+                    style={{
+                      borderColor: isSelected ? colors.accent : `${colors.primary}12`,
+                      backgroundColor: isSelected ? `${colors.accent}06` : 'white',
+                      boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-black/5">
+                      {barber.photo_url ? (
+                        <img src={barber.photo_url} alt={barber.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <span className="text-xl font-bold text-gray-400">{barber.name.charAt(0)}</span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold" style={{ color: colors.text }}>{barber.name}</div>
+                      {barber.specialty && (
+                        <div className="text-sm" style={{ color: colors.textSecondary }}>{barber.specialty}</div>
+                      )}
+                    </div>
+                    {isSelected && (
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full text-white" style={{ backgroundColor: colors.accent }}>
+                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Date */}
+        {step === 3 && (
+          <div className={getStepAnimationClass()}>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí una fecha</h2>
+              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>Seleccioná el día para tu turno</p>
+            </div>
+            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+              {days.map((day) => {
+                const isSelected = selectedDate === day.date
+                return (
+                  <button
+                    key={day.date}
+                    onClick={() => { setSelectedDate(day.date); setStep(4) }}
+                    className="group rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-0.5"
+                    style={{
+                      borderColor: isSelected ? colors.accent : `${colors.primary}12`,
+                      backgroundColor: isSelected ? `${colors.accent}06` : 'white',
+                      boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    <div className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: colors.textSecondary }}>
+                      {day.label.split(' ')[0]}
+                    </div>
+                    <div className="mt-1.5 text-2xl font-bold" style={{ color: colors.text }}>
+                      {day.label.split(' ')[1]}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Time */}
+        {step === 4 && (
+          <div className={getStepAnimationClass()}>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí un horario</h2>
+              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
+                {selectedDate && formatDate(selectedDate)}
+              </p>
+            </div>
+
+            {slotsLoading ? (
+              <div className="flex justify-center py-16">
+                <div className="flex gap-1.5">
+                  <span className="h-2 w-2 animate-bounce rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '0ms' }} />
+                  <span className="h-2 w-2 animate-bounce rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '150ms' }} />
+                  <span className="h-2 w-2 animate-bounce rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '300ms' }} />
+                </div>
+              </div>
+            ) : availableSlots.length === 0 ? (
+              <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
+                  <svg className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="mt-4 text-lg font-medium" style={{ color: colors.textSecondary }}>
+                  No hay horarios disponibles para esta fecha
+                </p>
+                <button
+                  onClick={() => setStep(3)}
+                  className="mt-2 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                  style={{ color: colors.accent }}
+                >
+                  ← Elegir otra fecha
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
+                {availableSlots.map((slot) => {
+                  const isSelected = selectedTime === slot
+                  return (
+                    <button
+                      key={slot}
+                      onClick={() => { setSelectedTime(slot); setStep(5) }}
+                      className="rounded-2xl border px-3 py-3.5 text-center font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                      style={{
+                        borderColor: isSelected ? colors.accent : `${colors.primary}12`,
+                        backgroundColor: isSelected ? `${colors.accent}06` : 'white',
+                        color: colors.text,
+                        boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
+                      }}
+                    >
+                      {slot}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 5: Client data */}
+        {step === 5 && (
+          <div className={getStepAnimationClass()}>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Tus datos</h2>
+              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
+                Completá tus datos para confirmar la reserva
+              </p>
+            </div>
+
+            <div className="space-y-5 rounded-2xl border p-6" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
+              <Input
+                label="Nombre completo"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                placeholder="Ej: Juan Pérez"
+                required
+              />
+              <Input
+                label="Teléfono"
+                type="tel"
+                value={clientPhone}
+                onChange={(e) => setClientPhone(e.target.value)}
+                placeholder="Ej: 11 1234 5678"
+                required
+              />
+              <Input
+                label="Correo electrónico (opcional)"
+                type="email"
+                value={clientEmail}
+                onChange={(e) => setClientEmail(e.target.value)}
+                placeholder="ej: juan@email.com"
+              />
+
+              {/* Summary */}
+              <div className="rounded-xl p-4" style={{ backgroundColor: `${colors.primary}05` }}>
+                <p className="mb-3 text-sm font-semibold" style={{ color: colors.text }}>Resumen de la reserva</p>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span style={{ color: colors.textSecondary }}>Servicio</span>
+                    <span className="font-medium" style={{ color: colors.text }}>{selectedService?.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span style={{ color: colors.textSecondary }}>Barbero</span>
+                    <span className="font-medium" style={{ color: colors.text }}>
+                      {selectedBarber ? barbers.find(b => b.id === selectedBarber)?.name || '—' : 'Cualquier barbero'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span style={{ color: colors.textSecondary }}>Fecha</span>
+                    <span className="font-medium" style={{ color: colors.text }}>{selectedDate && formatDate(selectedDate)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span style={{ color: colors.textSecondary }}>Hora</span>
+                    <span className="font-medium" style={{ color: colors.text }}>{selectedTime} hs</span>
+                  </div>
+                  <div className="border-t pt-2" style={{ borderColor: `${colors.primary}12` }}>
+                    <div className="flex justify-between">
+                      <span className="font-semibold" style={{ color: colors.text }}>Total</span>
+                      <span className="font-bold text-lg" style={{ color: colors.accent }}>₲ {selectedService?.price}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                onClick={handleSubmit}
+                loading={submitting}
+                className="w-full"
+                size="lg"
+                style={{ backgroundColor: colors.accent }}
+              >
+                Confirmar reserva
+              </Button>
+
+              {submitError && (
+                <div className="rounded-xl bg-red-50 p-4 text-sm text-red-600">{submitError}</div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Step 6: Success */}
+        {step === 6 && (
+          <div className={`${getStepAnimationClass()} py-8`}>
+            <div className="rounded-2xl border p-8 text-center" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
+              {/* Celebration check */}
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl" style={{ backgroundColor: `${colors.accent}12` }}>
+                <svg className="h-10 w-10" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+
+              <h2 className="mt-6 text-2xl font-bold tracking-tight" style={{ color: colors.text }}>
+                ¡Reserva confirmada!
+              </h2>
+              <p className="mt-2" style={{ color: colors.textSecondary }}>
+                Te esperamos{' '}
+                <strong style={{ color: colors.text }}>
+                  {selectedDate && formatDate(selectedDate)} a las {selectedTime} hs
+                </strong>
+                {' '}en {business.name}.
+              </p>
+
+              <div className="mt-4 flex flex-col items-center gap-2 text-sm" style={{ color: colors.textSecondary }}>
+                {business.address && <span>📍 {business.address}</span>}
+                {business.phone && <span>📞 {business.phone}</span>}
+              </div>
+
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link
+                  to={`/barberia/${slug}`}
+                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  style={{ backgroundColor: colors.accent }}
+                >
+                  Volver a la barbería
+                </Link>
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold transition-all"
+                  style={{ backgroundColor: `${colors.primary}08`, color: colors.text }}
+                >
+                  Ver más barberías
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
