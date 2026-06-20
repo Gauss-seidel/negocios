@@ -1,6 +1,6 @@
 import { supabase } from '../../lib/supabase'
-import { adminClient } from '../../lib/admin-client'
 import { useState, useEffect } from 'react'
+import { useAuth } from '../../contexts/AuthContext'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
@@ -82,6 +82,8 @@ export default function SuperDashboard() {
   const [editForm, setEditForm] = useState({ ...INITIAL_EDIT })
   const [editErrors, setEditErrors] = useState({})
 
+  const { session } = useAuth()
+
   useEffect(() => { fetchAll() }, [])
 
   useEffect(() => {
@@ -155,14 +157,27 @@ export default function SuperDashboard() {
     setActionLoading(true)
     setFormError(null)
     try {
-      // 1. Crear usuario auth
-      const { data: authUser, error: ae } = await adminClient.auth.admin.createUser({
-        email: createForm.email.trim(),
-        password: createForm.password,
-        email_confirm: true,
-        app_metadata: { role: ROLES.BUSINESS_ADMIN },
+      if (!session?.access_token) throw new Error('No hay sesión activa')
+
+      const efUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-super`
+
+      // 1. Crear usuario auth via Edge Function
+      const efRes = await fetch(efUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          action: 'create_user',
+          email: createForm.email.trim(),
+          password: createForm.password,
+          role: ROLES.BUSINESS_ADMIN,
+        }),
       })
-      if (ae) throw new Error(`Error al crear usuario: ${ae.message}`)
+      const efData = await efRes.json()
+      if (!efData.success) throw new Error(`Error al crear usuario: ${efData.error}`)
+      const authUserId = efData.data.user_id
 
       // 2. Crear negocio
       const { data: biz, error: be } = await supabase.from('businesses').insert([{
@@ -172,16 +187,27 @@ export default function SuperDashboard() {
       }]).select('id').single()
       if (be) throw new Error(`Error al crear negocio: ${be.message}`)
 
-      // 3. Asignar business_id al auth user y crear staff
-      const [sr] = await Promise.all([
-        adminClient.auth.admin.updateUserById(authUser.user.id, {
+      // 3. Asignar business_id al auth user via Edge Function
+      const efRes2 = await fetch(efUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          action: 'update_user',
+          user_id: authUserId,
           app_metadata: { role: ROLES.BUSINESS_ADMIN, business_id: biz.id },
         }),
-        supabase.from('business_staff').insert([
-          { user_id: authUser.user.id, business_id: biz.id, role: 'business_admin' },
-        ]),
+      })
+      const efData2 = await efRes2.json()
+      if (!efData2.success) throw new Error(`Error al asignar admin: ${efData2.error}`)
+
+      // 4. Crear staff
+      const { error: se } = await supabase.from('business_staff').insert([
+        { user_id: authUserId, business_id: biz.id, role: 'business_admin' },
       ])
-      if (sr.error) throw new Error(`Error al asignar admin: ${sr.error.message}`)
+      if (se) throw new Error(`Error al asignar staff: ${se.message}`)
 
       setShowCreate(false)
       setCreateForm({ ...INITIAL_CREATE })
