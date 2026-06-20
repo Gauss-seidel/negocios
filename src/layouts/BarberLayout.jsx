@@ -3,11 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useState } from 'react'
 
 const navItems = [
-  { path: '/admin/dashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-  { path: '/admin/dashboard/barberias', label: 'Barberías', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
-  { path: '/admin/dashboard/planes', label: 'Planes', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z' },
-  { path: '/admin/dashboard/barberos', label: 'Barberos', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
-  { path: '/admin/dashboard/config', label: 'Configuración', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
+  { path: '/admin/mi-trabajo', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
 ]
 
 function NavIcon({ path }) {
@@ -18,7 +14,7 @@ function NavIcon({ path }) {
   )
 }
 
-export default function SuperAdminLayout() {
+export default function BarberLayout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -46,7 +42,7 @@ export default function SuperAdminLayout() {
         }`}
       >
         <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-4">
-          <Link to="/admin/dashboard" className="text-lg font-bold tracking-tight text-white">
+          <Link to="/admin/mi-trabajo" className="text-lg font-bold tracking-tight text-white">
             BarberShifts
           </Link>
           <button
@@ -62,9 +58,9 @@ export default function SuperAdminLayout() {
         <div className="px-3 py-3">
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-accent)] text-[9px] font-bold text-white">SA</div>
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-accent)] text-[9px] font-bold text-white">B</div>
               <div>
-                <p className="text-xs font-medium text-white">Super Admin</p>
+                <p className="text-xs font-medium text-white">Barbero</p>
               </div>
             </div>
           </div>

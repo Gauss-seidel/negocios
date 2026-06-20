@@ -7,6 +7,8 @@ import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
 
+const EF_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-super`
+
 const INITIAL_FORM = {
   name: '',
   phone: '',
@@ -18,7 +20,7 @@ const INITIAL_FORM = {
 }
 
 export default function BarbersPage() {
-  const { businessId } = useAuth()
+  const { businessId, session } = useAuth()
   const { planName, limits, loading: planLoading } = usePlan()
   const [barbers, setBarbers] = useState([])
   const [services, setServices] = useState([])
@@ -38,6 +40,18 @@ export default function BarbersPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
 
+  // User creation
+  const [showUserModal, setShowUserModal] = useState(false)
+  const [userBarber, setUserBarber] = useState(null)
+  const [userForm, setUserForm] = useState({ email: '', password: '' })
+  const [userErrors, setUserErrors] = useState({})
+  const [userLoading, setUserLoading] = useState(false)
+  const [userError, setUserError] = useState(null)
+  const [userSuccess, setUserSuccess] = useState(false)
+
+  // Track which barbers already have users
+  const [barberUsers, setBarberUsers] = useState({})
+
   useEffect(() => {
     if (businessId) fetchAll()
   }, [businessId])
@@ -47,7 +61,7 @@ export default function BarbersPage() {
     setError(null)
 
     try {
-      const [barbersRes, servicesRes] = await Promise.allSettled([
+      const [barbersRes, servicesRes, staffRes] = await Promise.allSettled([
         supabase
           .from('barbers')
           .select('*, barber_services(service_id)')
@@ -59,6 +73,11 @@ export default function BarbersPage() {
           .eq('business_id', businessId)
           .eq('is_active', true)
           .order('name'),
+        supabase
+          .from('business_staff')
+          .select('barber_id, user_id')
+          .eq('business_id', businessId)
+          .eq('role', 'barber'),
       ])
 
       if (barbersRes.status === 'fulfilled') {
@@ -67,10 +86,94 @@ export default function BarbersPage() {
       if (servicesRes.status === 'fulfilled') {
         setServices(servicesRes.value.data || [])
       }
+      if (staffRes.status === 'fulfilled' && staffRes.value.data) {
+        const map = {}
+        staffRes.value.data.forEach(s => { map[s.barber_id] = s.user_id })
+        setBarberUsers(map)
+      }
     } catch (err) {
       setError(err?.message || 'Error al cargar barberos')
     } finally {
       setLoading(false)
+    }
+  }
+
+  /* ─── User creation ─── */
+  function openUserModal(barber) {
+    setUserBarber(barber)
+    setUserForm({ email: barber.email || '', password: '' })
+    setUserErrors({})
+    setUserError(null)
+    setUserSuccess(false)
+    setShowUserModal(true)
+  }
+
+  function handleUserChange(e) {
+    const { name, value } = e.target
+    setUserForm(p => ({ ...p, [name]: value }))
+    if (userErrors[name]) setUserErrors(p => ({ ...p, [name]: '' }))
+    if (userError) setUserError(null)
+    if (userSuccess) setUserSuccess(false)
+  }
+
+  function validateUser() {
+    const e = {}
+    if (!userForm.email.trim()) e.email = 'Obligatorio'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userForm.email)) e.email = 'Email inválido'
+    if (!userForm.password) e.password = 'Obligatorio'
+    else if (userForm.password.length < 6) e.password = 'Mínimo 6 caracteres'
+    return e
+  }
+
+  async function handleCreateUser(e) {
+    e.preventDefault()
+    const v = validateUser()
+    setUserErrors(v)
+    if (Object.keys(v).length) return
+
+    if (!session?.access_token) {
+      setUserError('No hay sesión activa')
+      return
+    }
+
+    setUserLoading(true)
+    setUserError(null)
+    setUserSuccess(false)
+    try {
+      // 1. Create auth user via Edge Function (with role + business_id in metadata)
+      const efRes = await fetch(EF_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          action: 'create_user',
+          email: userForm.email.trim(),
+          password: userForm.password,
+          role: 'barber',
+          business_id: businessId,
+        }),
+      })
+      const efData = await efRes.json()
+      if (!efData.success) throw new Error(efData.error)
+      const newUserId = efData.data.user.id
+
+      // 2. Create business_staff entry
+      const { error: staffErr } = await supabase.from('business_staff').insert([{
+        user_id: newUserId,
+        business_id: businessId,
+        role: 'barber',
+        barber_id: userBarber.id,
+      }])
+      if (staffErr) throw new Error(`Error al registrar staff: ${staffErr.message}`)
+
+      setUserSuccess(true)
+      await fetchAll()
+    } catch (err) {
+      setUserError(err.message || 'Error al crear usuario')
+    } finally {
+      setUserLoading(false)
     }
   }
 
@@ -201,7 +304,34 @@ export default function BarbersPage() {
     setActionLoading(true)
 
     try {
+      const hasUser = barberUsers[deleteTarget.id]
+
+      // 1. Delete business_staff + auth user (if has one)
+      if (hasUser) {
+        await supabase.from('business_staff').delete().eq('barber_id', deleteTarget.id)
+
+        const efRes = await fetch(EF_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            action: 'delete_user',
+            user_id: hasUser,
+          }),
+        })
+        const efData = await efRes.json()
+        if (!efData.success) {
+          console.warn('No se pudo eliminar el auth user:', efData.error)
+          // Continue anyway — barber profile still gets deleted
+        }
+      }
+
+      // 2. Delete barber services
       await supabase.from('barber_services').delete().eq('barber_id', deleteTarget.id)
+
+      // 3. Delete barber profile
       const { error: deleteErr } = await supabase
         .from('barbers')
         .delete()
@@ -342,7 +472,21 @@ export default function BarbersPage() {
                   </div>
                 )}
 
-                <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 w-full justify-center">
+                {!barberUsers[barber.id] && (
+                  <Button variant="secondary" size="sm" className="mt-3" onClick={() => openUserModal(barber)}>
+                    Crear Usuario
+                  </Button>
+                )}
+                {barberUsers[barber.id] && (
+                  <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Usuario creado
+                  </span>
+                )}
+
+                <div className="mt-3 flex items-center gap-2 border-t border-gray-100 pt-3 w-full justify-center">
                   <Button variant="ghost" size="sm" onClick={() => openEditModal(barber)}>
                     Editar
                   </Button>
@@ -460,6 +604,78 @@ export default function BarbersPage() {
         </form>
       </Modal>
 
+      {/* User creation modal */}
+      <Modal
+        open={showUserModal}
+        onClose={() => { setShowUserModal(false); setUserError(null); setUserSuccess(false) }}
+        title="Crear Usuario para Barbero"
+        size="sm"
+      >
+        {userSuccess ? (
+          <div className="space-y-4">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-6 text-center">
+              <svg className="mx-auto h-10 w-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="mt-3 text-base font-semibold text-emerald-800">Usuario creado exitosamente</h3>
+              <p className="mt-1 text-sm text-emerald-600">
+                El barbero <strong>{userBarber?.name}</strong> ya tiene acceso con <strong>{userForm.email}</strong>
+              </p>
+            </div>
+            <div className="flex justify-end">
+              <Button onClick={() => setShowUserModal(false)}>Cerrar</Button>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleCreateUser} className="space-y-4">
+            <div>
+              <p className="text-sm text-gray-600 mb-3">
+                Creá un usuario para que <strong>{userBarber?.name}</strong> pueda acceder al sistema.
+              </p>
+            </div>
+
+            {userError && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {userError}
+              </div>
+            )}
+
+            <Input
+              label="Email"
+              name="email"
+              type="email"
+              value={userForm.email}
+              onChange={handleUserChange}
+              placeholder="barbero@email.com"
+              error={userErrors.email}
+            />
+
+            <Input
+              label="Contraseña"
+              name="password"
+              type="password"
+              value={userForm.password}
+              onChange={handleUserChange}
+              placeholder="Mínimo 6 caracteres"
+              error={userErrors.password}
+            />
+
+            <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2.5 text-xs text-amber-700">
+              <strong>Importante:</strong> El email y la contraseña son para que el barbero inicie sesión. Compartilos de forma segura.
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={() => setShowUserModal(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" loading={userLoading}>
+                Crear Usuario
+              </Button>
+            </div>
+          </form>
+        )}
+      </Modal>
+
       {/* Delete confirmation */}
       <Modal
         open={showDeleteConfirm}
@@ -471,7 +687,13 @@ export default function BarbersPage() {
           <p className="text-sm text-gray-600">
             ¿Estás seguro de eliminar a <strong className="text-gray-900">{deleteTarget?.name}</strong>?
           </p>
-          <p className="text-sm text-gray-500">Esta acción no se puede deshacer.</p>
+          {deleteTarget && barberUsers[deleteTarget.id] ? (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+              <strong>Atención:</strong> Este barbero tiene un usuario asociado. Se eliminará también su cuenta de acceso al sistema.
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">Esta acción no se puede deshacer.</p>
+          )}
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}>
               Cancelar

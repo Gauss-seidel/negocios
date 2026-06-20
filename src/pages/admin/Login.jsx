@@ -14,6 +14,8 @@ export default function Login() {
   if (isAuthenticated) {
     if (userRole === 'super_admin') {
       navigate('/admin/dashboard', { replace: true })
+    } else if (userRole === 'barber') {
+      navigate('/admin/mi-trabajo', { replace: true })
     } else {
       navigate('/admin/mi-negocio', { replace: true })
     }

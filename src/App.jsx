@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import PublicLayout from './layouts/PublicLayout'
 import AdminLayout from './layouts/AdminLayout'
 import SuperAdminLayout from './layouts/SuperAdminLayout'
+import BarberLayout from './layouts/BarberLayout'
 
 // Páginas públicas
 import Marketplace from './pages/public/Marketplace'
@@ -27,6 +28,10 @@ import ReportsPage from './pages/admin/ReportsPage'
 import ConfigPage from './pages/admin/ConfigPage'
 import AppearancePage from './pages/admin/AppearancePage'
 import PlansPage from './pages/admin/PlansPage'
+import SuperPlanesPage from './pages/admin/PlanesPage'
+import SuperConfigPage from './pages/admin/SuperConfigPage'
+import SuperBarberosPage from './pages/admin/SuperBarberosPage'
+import BarberDashboard from './pages/barber/BarberDashboard'
 
 export default function App() {
   return (
@@ -54,8 +59,21 @@ export default function App() {
           >
             <Route index element={<SuperDashboard />} />
             <Route path="barberias" element={<SuperDashboard />} />
-            <Route path="planes" element={<SuperDashboard />} />
-            <Route path="config" element={<SuperDashboard />} />
+            <Route path="planes" element={<SuperPlanesPage />} />
+            <Route path="barberos" element={<SuperBarberosPage />} />
+            <Route path="config" element={<SuperConfigPage />} />
+          </Route>
+
+          {/* Barber */}
+          <Route
+            path="/admin/mi-trabajo"
+            element={
+              <ProtectedRoute allowedRoles={['barber']}>
+                <BarberLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<BarberDashboard />} />
           </Route>
 
           {/* Business Admin */}

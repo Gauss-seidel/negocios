@@ -18,9 +18,11 @@ export function ProtectedRoute({ children, allowedRoles = [] }) {
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
-    // Redirigir según el rol
     if (userRole === 'super_admin') {
       return <Navigate to="/admin/dashboard" replace />
+    }
+    if (userRole === 'barber') {
+      return <Navigate to="/admin/mi-trabajo" replace />
     }
     return <Navigate to="/admin/mi-negocio" replace />
   }
