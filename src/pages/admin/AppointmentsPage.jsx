@@ -90,7 +90,7 @@ export default function AppointmentsPage() {
           id, date, start_time, status, total, notes, created_at,
           client:client_id (id, name, phone),
           barber:barber_id (id, name),
-          services:appointment_services ( id, service:services ( id, name ) )
+           services:appointment_services ( service:services ( name ) )
         `
         )
         .eq('business_id', businessId)
