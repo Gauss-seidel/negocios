@@ -5,7 +5,7 @@ import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
 import Card from '../../components/ui/Card'
 import { fmtCurrency } from '../../utils/format'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 
 /* ─── Constants ─── */
 
@@ -18,7 +18,7 @@ const INITIAL_FORM = {
 /* ─── Main ─── */
 
 export default function PlanesPage() {
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
   const [plans, setPlans] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)

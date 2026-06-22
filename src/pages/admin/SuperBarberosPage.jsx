@@ -1,7 +1,7 @@
 import { supabase } from '../../lib/supabase'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
@@ -25,7 +25,7 @@ export default function SuperBarberosPage() {
   const [showDelete, setShowDelete] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
 
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
 
   useEffect(() => { fetchAll() }, [])
 

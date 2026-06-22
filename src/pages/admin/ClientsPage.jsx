@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
 import { fmtCurrency as formatCurrency } from '../../utils/format'
@@ -34,7 +34,7 @@ export default function ClientsPage() {
   const [clientHistory, setClientHistory] = useState([])
   const [historyLoading, setHistoryLoading] = useState(false)
 
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
 
   useEffect(() => {
     if (businessId) fetchClients()

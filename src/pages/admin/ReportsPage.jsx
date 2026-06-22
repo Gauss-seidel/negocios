@@ -289,7 +289,7 @@ export default function ReportsPage() {
 
     supabase
       .from('appointments')
-      .select('date, start_time, status, total, client:client_id(name), barber:barber_id(name), service:service_id(name)')
+      .select('date, start_time, status, total, client:client_id(name), barber:barber_id(name), services:appointment_services(service:services(name))')
       .eq('business_id', businessId)
       .in('status', [APPOINTMENT_STATUS.COMPLETED, APPOINTMENT_STATUS.IN_PROGRESS])
       .gte('date', start)
@@ -353,7 +353,7 @@ export default function ReportsPage() {
           // ── Top services (bars) ──
           const svMap = {}
           data.forEach(a => {
-            const n = a.service?.name || 'Sin servicio'
+            const n = a.services?.[0]?.service?.name || 'Sin servicio'
             svMap[n] = (svMap[n] || 0) + 1
           })
           const topSv = Object.entries(svMap).sort((a, b) => b[1] - a[1]).slice(0, 5)
@@ -415,7 +415,7 @@ export default function ReportsPage() {
             a.start_time ? a.start_time.slice(0, 5) : '',
             a.client?.name || '',
             a.barber?.name || '',
-            a.service?.name || '',
+            a.services?.[0]?.service?.name || '',
             Number(a.total || 0).toFixed(0),
           ])
 

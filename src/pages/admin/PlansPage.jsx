@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
 import { fmtCurrency } from '../../utils/format'
 import Card from '../../components/ui/Card'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 
 function CheckIcon() {
   return (
@@ -102,7 +102,7 @@ function PlanCard({ plan, isCurrent }) {
 }
 
 export default function PlansPage() {
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
   const { businessId } = useAuth()
   const [plans, setPlans] = useState([])
   const [currentPlan, setCurrentPlan] = useState(null)

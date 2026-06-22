@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { usePlan } from '../../hooks/usePlan'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import UpgradePrompt from '../../components/ui/UpgradePrompt'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -41,7 +41,7 @@ export default function InventoryPage() {
   const [stockAdjustmentType, setStockAdjustmentType] = useState('in')
   const [stockError, setStockError] = useState(null)
 
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
 
   useEffect(() => {
     if (businessId) fetchProducts()

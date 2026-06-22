@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { usePlan } from '../../hooks/usePlan'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
@@ -72,7 +72,7 @@ export default function AppointmentsPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [dateFilter, setDateFilter] = useState('')
 
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
 
   useEffect(() => {
     if (businessId) fetchAppointments()

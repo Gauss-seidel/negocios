@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
 import { fmtCurrency } from '../../utils/format'
@@ -42,7 +42,7 @@ export default function BusinessDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { isMobile } = useResponsiveTable()
 
   useEffect(() => { if (businessId) fetchDashboard() }, [businessId])
 
