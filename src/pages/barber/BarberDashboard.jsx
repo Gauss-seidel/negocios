@@ -29,6 +29,9 @@ export default function BarberDashboard() {
   const [myApps, setMyApps] = useState([])
   // Unassigned appointments (barber_id = null)
   const [unassignedApps, setUnassignedApps] = useState([])
+  // Other barbers' appointments available for transfer
+  const [otherBarberApps, setOtherBarberApps] = useState([])
+  const [transferringId, setTransferringId] = useState(null)
 
   useEffect(() => {
     if (user?.id && businessId) fetchAll()
@@ -62,8 +65,8 @@ export default function BarberDashboard() {
         .single()
       if (barber) setBarberName(barber.name)
 
-      // Fetch both in parallel
-      const [myRes, unassignedRes] = await Promise.all([
+      // Fetch all in parallel
+      const [myRes, unassignedRes, otherBarbersRes] = await Promise.all([
         supabase
           .from('appointments')
           .select('*, services:appointment_services(service:services(name))')
@@ -80,13 +83,24 @@ export default function BarberDashboard() {
           .gte('date', date)
           .lte('date', date)
           .order('start_time'),
+        supabase
+          .from('appointments')
+          .select('*, client:client_id(name, phone), barber:barber_id(name), services:appointment_services(service:services(name))')
+          .eq('business_id', businessId)
+          .eq('date', date)
+          .in('status', ['pending', 'confirmed'])
+          .not('barber_id', 'is', null)
+          .neq('barber_id', bid)
+          .order('start_time'),
       ])
 
       if (myRes.error) throw myRes.error
       if (unassignedRes.error) throw unassignedRes.error
+      if (otherBarbersRes.error) throw otherBarbersRes.error
 
       setMyApps(myRes.data || [])
       setUnassignedApps(unassignedRes.data || [])
+      setOtherBarberApps(otherBarbersRes.data || [])
     } catch (err) {
       setError(err?.message || 'Error al cargar datos')
     } finally {
@@ -119,6 +133,29 @@ export default function BarberDashboard() {
       await fetchAll()
     } catch (err) {
       setError(err?.message || 'Error al tomar la reserva')
+    }
+  }
+
+  async function handleTransferAppointment(appointmentId) {
+    if (transferringId) return
+    setTransferringId(appointmentId)
+    try {
+      const { data, error } = await supabase.rpc('transfer_appointment', {
+        p_appointment_id: appointmentId,
+      })
+
+      if (error) throw error
+
+      if (!data?.success) {
+        setError(data.error)
+        return
+      }
+
+      await fetchAll()
+    } catch (err) {
+      setError(err?.message || 'Error al transferir la reserva')
+    } finally {
+      setTransferringId(null)
     }
   }
 
@@ -391,6 +428,77 @@ export default function BarberDashboard() {
                     >
                       Tomar Reserva
                     </Button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </Card>
+      )}
+
+      {/* Otros barberos — reservas transferibles */}
+      {otherBarberApps.length > 0 && (
+        <Card dark padding={false}>
+          <div className="border-b border-white/[0.06] px-6 py-4">
+            <div className="flex items-center gap-2">
+              <svg className="h-5 w-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
+              <h2 className="text-lg font-semibold text-white">Reservas de Otros Barberos</h2>
+            </div>
+            <p className="mt-0.5 text-sm text-white/40">
+              {otherBarberApps.length} {otherBarberApps.length === 1 ? 'reserva disponible' : 'reservas disponibles'} para tomar
+            </p>
+          </div>
+
+          <div className="divide-y divide-white/[0.04]">
+            {otherBarberApps.map(a => {
+              const timeStr = a.start_time?.substring(0, 5) || '—'
+              const clientName = a.client?.name || 'Cliente'
+              const barberName = a.barber?.name || 'Otro barbero'
+
+              return (
+                <div key={a.id} className="border-l-4 border-l-violet-400/50 px-6 py-4 transition-colors hover:bg-white/[0.02]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/10 text-lg font-bold text-violet-400">
+                        {timeStr}
+                      </div>
+                      <div>
+                        <p className="font-medium text-white">{clientName}</p>
+                        <div className="mt-0.5 flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center gap-1 text-xs text-white/50">
+                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg>
+                            {barberName}
+                          </span>
+                          {a.services?.length > 0 && a.services[0]?.service?.name && (
+                            <>
+                              <span className="text-white/20">•</span>
+                              <span className="text-xs text-white/40">{a.services[0].service.name}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        a.status === 'pending'
+                          ? 'bg-amber-500/10 text-amber-400'
+                          : 'bg-blue-500/10 text-blue-400'
+                      }`}>
+                        {a.status === 'pending' ? 'Pendiente' : 'Confirmada'}
+                      </span>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleTransferAppointment(a.id)}
+                        loading={transferringId === a.id}
+                      >
+                        Tomar Reserva
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )
