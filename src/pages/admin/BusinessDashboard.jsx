@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
@@ -41,13 +41,15 @@ export default function BusinessDashboard() {
   const [recent, setRecent] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [toast, setToast] = useState(null)
+  const audioCtxRef = useRef(null)
+  const isFirstLoad = useRef(true)
+  const toastTimerRef = useRef(null)
 
   const { isMobile } = useResponsiveTable()
 
-  useEffect(() => { if (businessId) fetchDashboard() }, [businessId])
-
-  async function fetchDashboard() {
-    setLoading(true)
+  const fetchDashboard = useCallback(async () => {
+    if (isFirstLoad.current) setLoading(true)
     setError(null)
     try {
       const { start, end } = getTodayRange()
@@ -68,8 +70,119 @@ export default function BusinessDashboard() {
         newClients: clR.status === 'fulfilled' ? clR.value.count ?? 0 : 0,
       })
     } catch (err) { setError(err?.message || 'Error al cargar') }
-    finally { setLoading(false) }
-  }
+    finally {
+      if (isFirstLoad.current) {
+        isFirstLoad.current = false
+      }
+      setLoading(false)
+    }
+  }, [businessId])
+
+  // ── Carga inicial ──
+  useEffect(() => { if (businessId) fetchDashboard() }, [businessId, fetchDashboard])
+
+  // ── Realtime: notificar al admin cuando alguien reserva ──
+  useEffect(() => {
+    if (!businessId) return
+
+    // Solicitar permiso de notificaciones del navegador
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+
+    const channel = supabase
+      .channel(`admin-dashboard-${businessId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'appointments',
+          filter: `business_id=eq.${businessId}`,
+        },
+        async (payload) => {
+          try {
+            const { new: newAppt } = payload
+
+            // Obtener nombre del cliente
+            const { data: client } = await supabase
+              .from('clients')
+              .select('name')
+              .eq('id', newAppt.client_id)
+              .single()
+
+            // Obtener nombre del servicio
+            const { data: svc } = await supabase
+              .from('appointment_services')
+              .select('service:services(name)')
+              .eq('appointment_id', newAppt.id)
+              .maybeSingle()
+
+            const clientName = client?.name || 'Un cliente'
+            const serviceName = svc?.service?.name || 'un servicio'
+            const timeStr = newAppt.start_time?.substring(0, 5) || ''
+
+            // Sonido sutil con Web Audio API
+            try {
+              if (!audioCtxRef.current) {
+                audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)()
+              }
+              if (audioCtxRef.current.state === 'suspended') {
+                await audioCtxRef.current.resume()
+              }
+              const osc = audioCtxRef.current.createOscillator()
+              const gain = audioCtxRef.current.createGain()
+              osc.connect(gain)
+              gain.connect(audioCtxRef.current.destination)
+              osc.frequency.value = 880
+              osc.type = 'sine'
+              gain.gain.value = 0.08
+              gain.gain.exponentialRampToValueAtTime(0.001, audioCtxRef.current.currentTime + 0.3)
+              osc.start()
+              osc.stop(audioCtxRef.current.currentTime + 0.3)
+            } catch (audioErr) {
+              console.warn('[Realtime] Error al reproducir sonido:', audioErr)
+            }
+
+            // Toast en pantalla
+            setToast({
+              id: newAppt.id,
+              clientName,
+              serviceName,
+              time: timeStr,
+            })
+            if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+            toastTimerRef.current = setTimeout(
+              () => setToast((t) => (t?.id === newAppt.id ? null : t)),
+              7000
+            )
+
+            // Notificación del navegador (si la pestaña no está activa)
+            if ('Notification' in window && Notification.permission === 'granted') {
+              new Notification('📅 Nueva reserva', {
+                body: `${clientName} — ${serviceName} a las ${timeStr || '—'}`,
+                tag: `appt-${newAppt.id}`,
+              })
+            }
+
+            // Refrescar datos (sin mostrar el spinner de carga)
+            fetchDashboard()
+          } catch (err) {
+            console.error('[Realtime] Error al procesar notificación:', err)
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close().catch(() => {})
+        audioCtxRef.current = null
+      }
+    }
+  }, [businessId, fetchDashboard])
 
   if (loading) return (
     <div className="flex items-center justify-center py-32">
@@ -205,6 +318,42 @@ export default function BusinessDashboard() {
           </div>
         )}
       </Card>
+
+      {/* ── Toast notification ── */}
+      {toast && (
+        <div
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl bg-gray-900 px-5 py-4 text-white shadow-2xl ring-1 ring-white/10 transition-all"
+          style={{ animation: 'slideUpIn 0.35s ease-out' }}
+        >
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20">
+            <svg className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold">Nueva reserva</p>
+            <p className="text-xs text-white/60 truncate max-w-[260px]">
+              {toast.clientName} · {toast.serviceName}{toast.time ? ` · ${toast.time}` : ''}
+            </p>
+          </div>
+          <button
+            onClick={() => setToast(null)}
+            className="ml-2 shrink-0 rounded-full p-1 text-white/30 transition-colors hover:bg-white/10 hover:text-white/70"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {/* ── Keyframes para toast ── */}
+      <style>{`
+        @keyframes slideUpIn {
+          from { opacity: 0; transform: translateY(16px) scale(0.96); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </div>
   )
 }

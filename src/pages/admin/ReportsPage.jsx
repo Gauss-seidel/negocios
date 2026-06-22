@@ -303,49 +303,55 @@ export default function ReportsPage() {
         const pageH = doc.internal.pageSize.getHeight()
         const mx = 14
         const cw = pageW - mx * 2
-        const blue = [41, 128, 185]
-        const dark = [44, 62, 80]
+        const ink = [50, 50, 50]
+        const muted = [120, 120, 120]
+        const light = [230, 230, 230]
         let y = mx
 
-        // ── Header band ──
-        doc.setFillColor(...blue)
-        doc.rect(0, 0, pageW, 50, 'F')
+        // ── Header ──
+        doc.setFontSize(20)
+        doc.setTextColor(...ink)
+        doc.text(businessName || 'Reporte', mx, y + 8)
 
-        doc.setTextColor(255, 255, 255)
-        doc.setFontSize(22)
-        doc.text(businessName || 'Reporte', pageW / 2, 22, { align: 'center' })
+        doc.setFontSize(8)
+        doc.setTextColor(...muted)
+        doc.text(formatPeriodLabel(period, customStart, customEnd), mx, y + 17)
+        doc.text(`Generado: ${new Date().toLocaleDateString('es-PY')}`, mx, y + 24)
 
-        doc.setFontSize(9)
-        doc.text(formatPeriodLabel(period, customStart, customEnd), pageW / 2, 35, { align: 'center' })
-        doc.text(`Generado: ${new Date().toLocaleDateString('es-PY')}`, pageW / 2, 45, { align: 'center' })
+        // Fine separator line
+        doc.setDrawColor(...light)
+        doc.setLineWidth(0.5)
+        doc.line(mx, y + 30, pageW - mx, y + 30)
 
-        y = 64
+        y = y + 38
 
-        // ── Summary cards ──
+        // ── Summary cards (framed, no fill) ──
         const cardW = (cw - 12) / 3
-        const cardH = 34
+        const cardH = 30
         const cards = [
-          { label: 'Ingresos', value: fmtCurrency(income), color: blue },
-          { label: 'Reservas', value: String(apptCount), color: [46, 204, 113] },
-          { label: 'Ticket Prom.', value: fmtCurrency(avgTicket), color: [155, 89, 182] },
+          { label: 'Ingresos', value: fmtCurrency(income) },
+          { label: 'Reservas', value: String(apptCount) },
+          { label: 'Ticket Prom.', value: fmtCurrency(avgTicket) },
         ]
 
         cards.forEach((c, i) => {
           const cx = mx + i * (cardW + 6)
-          doc.setFillColor(...c.color)
-          doc.roundedRect(cx, y, cardW, cardH, 4, 4, 'F')
-          doc.setTextColor(255, 255, 255)
-          doc.setFontSize(9)
-          doc.text(c.label, cx + 5, y + 12)
-          doc.setFontSize(14)
-          doc.text(c.value, cx + 5, y + 27)
+          doc.setDrawColor(...light)
+          doc.setFillColor(252, 252, 252)
+          doc.roundedRect(cx, y, cardW, cardH, 3, 3, 'FD')
+          doc.setTextColor(...muted)
+          doc.setFontSize(7.5)
+          doc.text(c.label, cx + 6, y + 10)
+          doc.setTextColor(...ink)
+          doc.setFontSize(13)
+          doc.text(c.value, cx + 6, y + 24)
         })
 
-        y += cardH + 12
+        y += cardH + 14
 
-        // ── Divider ──
-        doc.setDrawColor(200)
-        doc.setLineWidth(0.5)
+        // ── Thin separator ──
+        doc.setDrawColor(...light)
+        doc.setLineWidth(0.3)
         doc.line(mx, y, pageW - mx, y)
         y += 8
 
@@ -359,21 +365,21 @@ export default function ReportsPage() {
           const topSv = Object.entries(svMap).sort((a, b) => b[1] - a[1]).slice(0, 5)
 
           if (topSv.length > 0) {
-            doc.setFontSize(12)
-            doc.setTextColor(...dark)
+            doc.setFontSize(10)
+            doc.setTextColor(...ink)
             doc.text('Servicios mas solicitados', mx, y)
             y += 6
             topSv.forEach(([name, count], i) => {
               const bw = (cw - 40) * (count / topSv[0][1])
-              doc.setFillColor(...blue)
-              doc.roundedRect(mx + 36, y + 1, Math.max(bw, 4), 7, 2, 2, 'F')
-              doc.setTextColor(80)
-              doc.setFontSize(8)
-              doc.text(`${i + 1}. ${name}`, mx, y + 7)
-              doc.text(String(count), mx + 36 + bw + 4, y + 7)
-              y += 11
+              doc.setFillColor(...light)
+              doc.roundedRect(mx + 36, y + 1, Math.max(bw, 4), 6, 1, 1, 'F')
+              doc.setTextColor(...ink)
+              doc.setFontSize(7.5)
+              doc.text(`${i + 1}. ${name}`, mx, y + 6)
+              doc.text(String(count), mx + 36 + bw + 4, y + 6)
+              y += 10
             })
-            y += 6
+            y += 4
           }
 
           // ── Top barbers ──
@@ -385,28 +391,28 @@ export default function ReportsPage() {
           const topBb = Object.entries(bbMap).sort((a, b) => b[1] - a[1]).slice(0, 5)
 
           if (topBb.length > 0) {
-            doc.setFontSize(12)
-            doc.setTextColor(...dark)
+            doc.setFontSize(10)
+            doc.setTextColor(...ink)
             doc.text('Barberos mas activos', mx, y)
             y += 6
             topBb.forEach(([name, count], i) => {
               const bw = (cw - 40) * (count / topBb[0][1])
-              doc.setFillColor(46, 204, 113)
-              doc.roundedRect(mx + 36, y + 1, Math.max(bw, 4), 7, 2, 2, 'F')
-              doc.setTextColor(80)
-              doc.setFontSize(8)
-              doc.text(`${i + 1}. ${name}`, mx, y + 7)
-              doc.text(String(count), mx + 36 + bw + 4, y + 7)
-              y += 11
+              doc.setFillColor(...light)
+              doc.roundedRect(mx + 36, y + 1, Math.max(bw, 4), 6, 1, 1, 'F')
+              doc.setTextColor(...ink)
+              doc.setFontSize(7.5)
+              doc.text(`${i + 1}. ${name}`, mx, y + 6)
+              doc.text(String(count), mx + 36 + bw + 4, y + 6)
+              y += 10
             })
-            y += 6
+            y += 4
           }
 
           // ── Table ──
           if (y > pageH - 60) { doc.addPage(); y = mx + 10 }
 
-          doc.setFontSize(12)
-          doc.setTextColor(...dark)
+          doc.setFontSize(10)
+          doc.setTextColor(...ink)
           doc.text('Reservas del periodo', mx, y)
           y += 4
 
@@ -424,8 +430,9 @@ export default function ReportsPage() {
             head: [['Fecha', 'Hora', 'Cliente', 'Barbero', 'Servicio', 'Total']],
             body: rows,
             theme: 'grid',
-            headStyles: { fillColor: [41, 128, 185], fontSize: 8, halign: 'center' },
-            bodyStyles: { fontSize: 7.5 },
+            headStyles: { fillColor: [80, 80, 80], textColor: [255, 255, 255], fontSize: 7.5, halign: 'center' },
+            bodyStyles: { fontSize: 7, textColor: [50, 50, 50] },
+            alternateRowStyles: { fillColor: [248, 248, 248] },
             columnStyles: {
               0: { cellWidth: 22, halign: 'center' },
               1: { cellWidth: 12, halign: 'center' },
@@ -437,12 +444,12 @@ export default function ReportsPage() {
             margin: { left: mx, right: mx },
             didDrawPage: (d) => {
               const fy = d.cursor.y || pageH - 15
-              doc.setDrawColor(220)
+              doc.setDrawColor(...light)
               doc.setLineWidth(0.3)
               doc.line(mx, fy + 5, pageW - mx, fy + 5)
-              doc.setTextColor(160)
-              doc.setFontSize(7)
-              doc.text(businessName || 'The Barber Club', mx, fy + 12)
+              doc.setTextColor(...muted)
+              doc.setFontSize(6.5)
+              doc.text(businessName || 'Reporte', mx, fy + 12)
               doc.text(`Pagina ${doc.getCurrentPageInfo().pageNumber}`, pageW - mx, fy + 12, { align: 'right' })
             },
           })

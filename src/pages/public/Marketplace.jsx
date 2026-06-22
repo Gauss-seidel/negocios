@@ -214,7 +214,7 @@ export default function Marketplace() {
             <div className="mx-auto mt-10 max-w-md">
               <div className="group relative">
                 <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-[var(--color-accent)]/20 to-[var(--color-accent-secondary)]/20 opacity-0 blur-xl transition-opacity duration-500 group-focus-within:opacity-100" />
-                <div className="relative flex items-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-300 focus-within:border-white/20 focus-within:bg-white/10">
+                <div className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-300 focus-within:border-white/20 focus-within:bg-white/10">
                   <svg className="pointer-events-none absolute left-4 h-5 w-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
