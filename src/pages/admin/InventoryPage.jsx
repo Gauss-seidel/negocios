@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { usePlan } from '../../hooks/usePlan'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import UpgradePrompt from '../../components/ui/UpgradePrompt'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -39,6 +40,8 @@ export default function InventoryPage() {
   const [stockAdjustment, setStockAdjustment] = useState('')
   const [stockAdjustmentType, setStockAdjustmentType] = useState('in')
   const [stockError, setStockError] = useState(null)
+
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     if (businessId) fetchProducts()
@@ -284,7 +287,60 @@ export default function InventoryPage() {
             <Button className="mt-4" onClick={openCreateModal}>Agregar Producto</Button>
           </div>
         </Card>
+      ) : isMobile ? (
+        /* ── Mobile card layout ── */
+        <div className="space-y-3">
+          {products.map((product) => {
+            const isLow = product.min_stock > 0 && product.current_stock <= product.min_stock
+            return (
+              <div key={product.id} className={`rounded-2xl border p-4 shadow-sm ${isLow ? 'border-amber-200 bg-amber-50' : 'border-black/5 bg-white'}`}>
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-gray-900">{product.name}</p>
+                    {product.description && (
+                      <p className="truncate text-xs text-gray-500">{product.description}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-xs text-gray-400">Stock</span>
+                    <p className={`font-semibold ${isLow ? 'text-red-600' : 'text-gray-900'}`}>
+                      {product.current_stock ?? 0} {product.unit || ''}
+                      {isLow && (
+                        <svg className="ml-1 inline h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-400">Stock mínimo</span>
+                    <p className="text-gray-700">{product.min_stock ?? 0} {product.unit || ''}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-400">Precio</span>
+                    <p className="font-medium text-gray-900">{product.price ? formatCurrency(product.price) : '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-400">Unidad</span>
+                    <p className="text-gray-700">{product.unit || '—'}</p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                  <Button variant="ghost" size="sm" onClick={() => openStockAdjustment(product)}>
+                    Ajustar stock
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => openEditModal(product)}>
+                    Editar
+                  </Button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       ) : (
+        /* ── Desktop table ── */
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -302,11 +358,11 @@ export default function InventoryPage() {
                 {products.map((product) => {
                   const isLow = product.min_stock > 0 && product.current_stock <= product.min_stock
                   return (
-                    <tr key={product.id} className={`transition-colors hover:bg-gray-50 ${isLow ? 'bg-amber-50/50' : ''}`}>
+                    <tr key={product.id} className={`transition-colors hover:bg-gray-50 ${isLow ? 'bg-amber-50' : ''}`}>
                       <td className="px-6 py-4">
                         <p className="font-medium text-gray-900">{product.name}</p>
                         {product.description && (
-                          <p className="text-xs text-gray-500 truncate max-w-xs">{product.description}</p>
+                          <p className="truncate max-w-xs text-xs text-gray-500">{product.description}</p>
                         )}
                       </td>
                       <td className="px-6 py-4">

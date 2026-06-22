@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
 import { fmtCurrency as formatCurrency } from '../../utils/format'
@@ -32,6 +33,8 @@ export default function ClientsPage() {
   const [expandedClient, setExpandedClient] = useState(null)
   const [clientHistory, setClientHistory] = useState([])
   const [historyLoading, setHistoryLoading] = useState(false)
+
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     if (businessId) fetchClients()
@@ -117,7 +120,7 @@ export default function ClientsPage() {
           `
           id, date, start_time, status, total,
           barber:barber_id (name),
-          service:service_id (name)
+          services:appointment_services ( service:services ( name ) )
         `
         )
         .eq('client_id', client.id)
@@ -248,9 +251,15 @@ export default function ClientsPage() {
                     {client.email && <span>{client.email}</span>}
                   </div>
                 </div>
-                <div className="hidden sm:block text-right">
+                {/* Desktop stats — visible sm:block */}
+                <div className="hidden sm:block text-right shrink-0">
                   <p className="text-sm font-medium text-gray-900">{client.total_visits} visitas</p>
                   <p className="text-xs text-gray-500">{formatCurrency(client.total_spent)}</p>
+                </div>
+                {/* Mobile compact stats — visible solo en mobile */}
+                <div className="sm:hidden text-right shrink-0">
+                  <p className="text-xs font-medium text-gray-900">{client.total_visits}</p>
+                  <p className="text-[10px] text-gray-400">visitas</p>
                 </div>
                 <svg
                   className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
@@ -277,7 +286,30 @@ export default function ClientsPage() {
                     </div>
                   ) : clientHistory.length === 0 ? (
                     <p className="text-sm text-gray-400">Sin reservas registradas.</p>
+                  ) : isMobile ? (
+                    /* ── Mobile cards for history ── */
+                    <div className="space-y-2">
+                      {clientHistory.map((appt) => (
+                        <div key={appt.id} className="rounded-xl border border-gray-100 bg-gray-50 p-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-900">
+                              {formatDate(appt.date)} · {formatTime(appt.start_time)}
+                            </span>
+                            {renderStatusBadge(appt.status)}
+                          </div>
+                          <div className="mt-2 flex items-center gap-3 text-xs text-gray-600">
+                            <span>{appt.barber?.name || '—'}</span>
+                            <span className="text-gray-300">|</span>
+                            <span className="truncate">{appt.services?.[0]?.service?.name || '—'}</span>
+                            <span className="ml-auto font-medium text-gray-900">
+                              {appt.total ? formatCurrency(appt.total) : '—'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
+                    /* ── Desktop table ── */
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-sm">
                         <thead>
@@ -293,10 +325,10 @@ export default function ClientsPage() {
                         <tbody className="divide-y divide-gray-100">
                           {clientHistory.map((appt) => (
                             <tr key={appt.id} className="hover:bg-gray-50">
-                              <td className="py-2 pr-4 text-gray-600 whitespace-nowrap">{formatDate(appt.date)}</td>
+                              <td className="whitespace-nowrap py-2 pr-4 text-gray-600">{formatDate(appt.date)}</td>
                               <td className="py-2 pr-4 text-gray-600">{formatTime(appt.start_time)}</td>
                               <td className="py-2 pr-4 text-gray-600">{appt.barber?.name || '—'}</td>
-                              <td className="py-2 pr-4 text-gray-600">{appt.service?.name || '—'}</td>
+                              <td className="py-2 pr-4 text-gray-600">{appt.services?.[0]?.service?.name || '—'}</td>
                               <td className="py-2 pr-4 font-medium text-gray-900">
                                 {appt.total ? formatCurrency(appt.total) : '—'}
                               </td>

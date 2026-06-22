@@ -68,9 +68,11 @@ export const DAYS_OF_WEEK = [
   { value: 7, label: 'Domingo' },
 ]
 
-// Planes de suscripción
+// Planes de suscripción (precios en guaraníes)
 export const PLANS = {
-  BASIC: { maxBarbers: 3, maxBranches: 1, maxMonthlyBookings: 100, price: 9.99 },
-  PROFESSIONAL: { maxBarbers: 10, maxBranches: 3, maxMonthlyBookings: 500, price: 19.99 },
-  PREMIUM: { maxBarbers: Infinity, maxBranches: Infinity, maxMonthlyBookings: Infinity, price: 39.99 },
+  BASIC: { maxBarbers: 3, maxBranches: 1, maxMonthlyBookings: 100, price: 100000 },
+  PROFESSIONAL: { maxBarbers: 10, maxBranches: 3, maxMonthlyBookings: 500, price: 150000 },
+  PREMIUM: { maxBarbers: Infinity, maxBranches: Infinity, maxMonthlyBookings: Infinity, price: 200000 },
 }
+
+

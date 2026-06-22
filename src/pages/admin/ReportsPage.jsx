@@ -131,12 +131,11 @@ export default function ReportsPage() {
         // Top services in range
         supabase
           .from('appointments')
-          .select('service:service_id(name), total')
+          .select('total, services:appointment_services(service:services(name))')
           .eq('business_id', businessId)
           .in('status', [APPOINTMENT_STATUS.COMPLETED, APPOINTMENT_STATUS.IN_PROGRESS])
           .gte('date', start)
-          .lte('date', end)
-          .not('service_id', 'is', null),
+          .lte('date', end),
         // Top barbers in range
         supabase
           .from('appointments')
@@ -172,7 +171,7 @@ export default function ReportsPage() {
       if (svcRes.status === 'fulfilled' && svcRes.value.data) {
         const map = {}
         svcRes.value.data.forEach(a => {
-          const name = a.service?.name || 'Sin servicio'
+          const name = a.services?.[0]?.service?.name || 'Sin servicio'
           if (!map[name]) map[name] = { name, count: 0, total: 0 }
           map[name].count++
           map[name].total += Number(a.total) || 0
@@ -250,7 +249,7 @@ export default function ReportsPage() {
 
     supabase
       .from('appointments')
-      .select('date, start_time, status, total, client:client_id(name), barber:barber_id(name), service:service_id(name)')
+      .select('date, start_time, status, total, client:client_id(name), barber:barber_id(name), services:appointment_services(service:services(name))')
       .eq('business_id', businessId)
       .in('status', [APPOINTMENT_STATUS.COMPLETED, APPOINTMENT_STATUS.IN_PROGRESS])
       .gte('date', start)
@@ -265,7 +264,7 @@ export default function ReportsPage() {
           const time = a.start_time ? a.start_time.slice(0, 5) : ''
           const client = a.client?.name || ''
           const barber = a.barber?.name || ''
-          const service = a.service?.name || ''
+          const service = a.services?.[0]?.service?.name || ''
           const total = Number(a.total || 0).toFixed(2)
           const status = a.status || ''
           return `"${date}","${time}","${client}","${barber}","${service}","${total}","${status}"`
@@ -539,7 +538,7 @@ export default function ReportsPage() {
           </div>
 
           {period === 'custom' && (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <input
                 type="date"
                 value={customStart}

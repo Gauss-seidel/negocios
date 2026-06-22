@@ -282,36 +282,36 @@ export default function CashPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {register ? (
-              <>
-                <Button variant="secondary" onClick={() => openAddMovement(CASH_MOVEMENT_TYPES.INCOME)}>
-                  + Ingreso
-                </Button>
-                <Button variant="secondary" onClick={() => openAddMovement(CASH_MOVEMENT_TYPES.EXPENSE)}>
-                  - Gasto
-                </Button>
-                <Button variant="danger" onClick={handleCloseRegister} loading={actionLoading}>
-                  Cerrar Caja
-                </Button>
-              </>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={openAmount}
-                  onChange={(e) => { setOpenAmount(e.target.value); setOpenError(null) }}
-                  placeholder="Monto inicial"
-                  className="w-40"
-                />
-                <Button onClick={handleOpenRegister} loading={actionLoading}>
-                  Abrir Caja
-                </Button>
-              </div>
-            )}
-          </div>
+          {register ? (
+            /* ── Caja abierta: botones con wrap ── */
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="secondary" onClick={() => openAddMovement(CASH_MOVEMENT_TYPES.INCOME)}>
+                + Ingreso
+              </Button>
+              <Button variant="secondary" onClick={() => openAddMovement(CASH_MOVEMENT_TYPES.EXPENSE)}>
+                - Gasto
+              </Button>
+              <Button variant="danger" onClick={handleCloseRegister} loading={actionLoading}>
+                Cerrar Caja
+              </Button>
+            </div>
+          ) : (
+            /* ── Caja cerrada: input + botón con wrap ── */
+            <div className="flex flex-wrap items-center gap-2">
+              <Input
+                type="number"
+                min="0"
+                step="0.01"
+                value={openAmount}
+                onChange={(e) => { setOpenAmount(e.target.value); setOpenError(null) }}
+                placeholder="Monto inicial"
+                className="w-full sm:w-40"
+              />
+              <Button onClick={handleOpenRegister} loading={actionLoading}>
+                Abrir Caja
+              </Button>
+            </div>
+          )}
         </div>
         {openError && <p className="mt-2 text-sm text-red-600">{openError}</p>}
       </Card>
@@ -340,14 +340,14 @@ export default function CashPage() {
                 key={mov.id}
                 className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 transition-colors hover:bg-gray-50"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`flex h-9 w-9 items-center justify-center rounded-full ${MOVEMENT_COLORS[mov.type] || 'bg-gray-100 text-gray-500'}`}>
                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={MOVEMENT_ICONS[mov.type] || 'M12 4v16m8-8H4'} />
                     </svg>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{mov.description}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{mov.description}</p>
                     <p className="text-xs text-gray-400">
                       {MOVEMENT_LABELS[mov.type] || mov.type}
                       {mov.reference ? ` · Ref: ${mov.reference}` : ''}
@@ -355,7 +355,7 @@ export default function CashPage() {
                     </p>
                   </div>
                 </div>
-                <span className={`text-sm font-bold ${
+                <span className={`text-sm font-bold shrink-0 ${
                   mov.type === CASH_MOVEMENT_TYPES.INCOME ? 'text-emerald-600' : 'text-red-600'
                 }`}>
                   {mov.type === CASH_MOVEMENT_TYPES.INCOME ? '+' : '-'}{formatCurrency(mov.amount)}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import Card from '../../components/ui/Card'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
 import { fmtCurrency } from '../../utils/format'
@@ -40,6 +41,8 @@ export default function BusinessDashboard() {
   const [recent, setRecent] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const isMobile = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => { if (businessId) fetchDashboard() }, [businessId])
 
@@ -142,7 +145,38 @@ export default function BusinessDashboard() {
             <h3 className="mt-4 text-base font-medium" style={{ color: 'var(--color-text)' }}>No hay reservas aún</h3>
             <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Las reservas aparecerán aquí cuando los clientes agenden citas.</p>
           </div>
+        ) : isMobile ? (
+          /* ── Mobile card layout ── */
+          <div className="mt-4 space-y-3">
+            {recent.map(a => (
+              <div key={a.id} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-gray-900">{a.client?.name || '—'}</span>
+                  <StatusBadge status={a.status} />
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-xs text-gray-400">Barbero</span>
+                    <p className="text-gray-700">{a.barber?.name || '—'}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-400">Fecha</span>
+                    <p className="text-gray-700">{fmtShortDate(a.date)}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-400">Hora</span>
+                    <p className="text-gray-700">{fmtTime(a.start_time)}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs text-gray-400">Total</span>
+                    <p className="font-medium text-gray-900">{a.total ? fmtCurrency(a.total) : '—'}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
+          /* ── Desktop table ── */
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>

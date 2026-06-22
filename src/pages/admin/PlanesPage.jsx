@@ -5,6 +5,7 @@ import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
 import Card from '../../components/ui/Card'
 import { fmtCurrency } from '../../utils/format'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 /* ─── Constants ─── */
 
@@ -17,6 +18,7 @@ const INITIAL_FORM = {
 /* ─── Main ─── */
 
 export default function PlanesPage() {
+  const isMobile = useMediaQuery('(max-width: 767px)')
   const [plans, setPlans] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -200,6 +202,64 @@ export default function PlanesPage() {
             </svg>
             <h3 className="mt-4 text-base font-medium text-white/60">No hay planes registrados</h3>
             <p className="mt-1 text-sm text-white/30">Los planes se crean desde la base de datos</p>
+          </div>
+        ) : isMobile ? (
+          <div className="space-y-3 px-4 py-4">
+            {plans.map(p => (
+              <div key={p.id} className="rounded-2xl border border-white/[0.06] bg-card-dark p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="font-medium text-white">{p.name}</p>
+                    {p.description && <p className="text-xs text-white/30 mt-0.5">{p.description}</p>}
+                  </div>
+                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                    p.is_active
+                      ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                      : 'border-red-500/20 bg-red-500/10 text-red-400'
+                  }`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${p.is_active ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                    {p.is_active ? 'Activo' : 'Inactivo'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+                  <div>
+                    <span className="text-white/40">Precio</span>
+                    <p className="font-semibold text-[var(--color-accent)]">{fmtCurrency(p.price)}/mes</p>
+                  </div>
+                  <div>
+                    <span className="text-white/40">Barberos</span>
+                    <p className="font-medium text-white">{p.max_barbers === 999 ? '∞' : p.max_barbers}</p>
+                  </div>
+                  <div>
+                    <span className="text-white/40">Sucursales</span>
+                    <p className="font-medium text-white">{p.max_branches === 999 ? '∞' : p.max_branches}</p>
+                  </div>
+                  <div>
+                    <span className="text-white/40">Reservas/mes</span>
+                    <p className="font-medium text-white">{p.max_monthly_bookings >= 999999 ? '∞' : p.max_monthly_bookings.toLocaleString()}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-1 border-t border-white/[0.06] pt-3">
+                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Editar">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                  </button>
+                  <button onClick={() => handleToggle(p)} disabled={actionLoading}
+                    className={`rounded-lg p-2 transition-all hover:bg-white/5 disabled:opacity-30 ${p.is_active ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'}`}
+                    title={p.is_active ? 'Desactivar' : 'Activar'}>
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      {p.is_active
+                        ? <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        : <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      }
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="overflow-x-auto">
