@@ -533,7 +533,7 @@ export default function InventoryPage() {
               </select>
             </div>
             <Input
-              label="Precio unitario ($)"
+              label="Precio unitario (₲)"
               name="price"
               type="number"
               min="0"
