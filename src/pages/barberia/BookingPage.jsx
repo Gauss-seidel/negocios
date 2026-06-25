@@ -49,7 +49,7 @@ function getNext7Days() {
 /* ─── Step progress ─── */
 
 function StepProgress({ step, colors }) {
-  const steps = ['Servicio', 'Barbero', 'Fecha', 'Hora', 'Datos']
+  const steps = ['Servicio', 'Barbero', 'Fecha', 'Hora', 'Producto', 'Datos']
 
   return (
     <div className="flex items-center justify-center gap-0 sm:gap-1">
@@ -199,6 +199,8 @@ export default function BookingPage() {
   const [success, setSuccess] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [step, setStep] = useState(1)
+  const [products, setProducts] = useState([])
+  const [selectedProducts, setSelectedProducts] = useState([])
 
   const days = getNext7Days()
   const contentRef = useRef(null)
@@ -231,6 +233,16 @@ export default function BookingPage() {
       const { data: hrs } = await supabase
         .from('business_hours').select('*').eq('business_id', biz.id).order('day_of_week')
       setHours(hrs || [])
+
+      const { data: prods } = await supabase
+        .from('inventory_products')
+        .select('*')
+        .eq('business_id', biz.id)
+        .eq('is_product', true)
+        .eq('is_active', true)
+        .gt('current_stock', 0)
+        .order('name')
+      setProducts(prods || [])
     } catch (err) {
       setError(err.message)
     } finally {
@@ -346,8 +358,22 @@ export default function BookingPage() {
       })
       if (insertSvcErr) throw new Error('Error al agregar servicio: ' + insertSvcErr.message)
 
+      // Agregar productos a la reserva
+      if (selectedProducts.length > 0) {
+        const productInserts = selectedProducts.map(sp => ({
+          appointment_id: appointment.id,
+          product_id: sp.product_id,
+          quantity: sp.quantity,
+          price: sp.price,
+        }))
+        const { error: insertProdErr } = await supabase
+          .from('appointment_products')
+          .insert(productInserts)
+        if (insertProdErr) throw new Error('Error al agregar productos: ' + insertProdErr.message)
+      }
+
       setSuccess(true)
-      setStep(6)
+      setStep(7)
     } catch (err) {
       setSubmitError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
       console.error(err)
@@ -622,14 +648,176 @@ export default function BookingPage() {
           </div>
         )}
 
-        {/* Step 5: Client data */}
+        {/* Step 5: Products */}
         {step === 5 && (
+          <div className={getStepAnimationClass()}>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>
+                ¿Quieres un producto más?
+              </h2>
+              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
+                Agregá productos a tu reserva para llevarte el cuidado a casa
+              </p>
+            </div>
+
+            {products.length === 0 ? (
+              <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
+                <p className="text-sm" style={{ color: colors.textSecondary }}>
+                  No hay productos disponibles en este momento
+                </p>
+                <button
+                  onClick={() => setStep(6)}
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                  style={{ color: colors.accent }}
+                >
+                  Continuar sin productos →
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {products.map((product) => {
+                    const sp = selectedProducts.find(p => p.product_id === product.id)
+                    const qty = sp?.quantity || 0
+                    return (
+                      <div
+                        key={product.id}
+                        className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+                          qty > 0 ? 'shadow-lg' : ''
+                        }`}
+                        style={{
+                          borderColor: qty > 0 ? colors.accent : `${colors.primary}12`,
+                          backgroundColor: 'white',
+                        }}
+                      >
+                        {/* Image */}
+                        <div className="h-32 flex items-center justify-center overflow-hidden bg-gray-50">
+                          {product.image_url ? (
+                            <img src={product.image_url} alt={product.name} className="h-full w-full object-cover"
+                              onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<div class="flex items-center justify-center h-full text-2xl font-bold" style="color:${colors.accent}44">${product.name.charAt(0)}</div>` }}
+                            />
+                          ) : (
+                            <span className="text-2xl font-bold" style={{ color: `${colors.accent}44` }}>
+                              {product.name.charAt(0)}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Info */}
+                        <div className="p-4">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="font-semibold" style={{ color: colors.text }}>{product.name}</h3>
+                              <p className="text-xs" style={{ color: colors.textSecondary }}>
+                                Stock: {product.current_stock} {product.unit}
+                              </p>
+                            </div>
+                            <span className="text-lg font-bold" style={{ color: colors.accent }}>
+                              ₲ {product.price}
+                            </span>
+                          </div>
+
+                          {/* Quantity selector */}
+                          <div className="mt-3 flex items-center justify-between">
+                            <span className="text-sm font-medium" style={{ color: colors.textSecondary }}>Cantidad</span>
+                            <div className="flex items-center gap-3">
+                              <button
+                                onClick={() => {
+                                  setSelectedProducts(prev => {
+                                    const existing = prev.find(p => p.product_id === product.id)
+                                    if (!existing || existing.quantity <= 1) {
+                                      return prev.filter(p => p.product_id !== product.id)
+                                    }
+                                    return prev.map(p => p.product_id === product.id
+                                      ? { ...p, quantity: p.quantity - 1 }
+                                      : p
+                                    )
+                                  })
+                                }}
+                                className="flex h-8 w-8 items-center justify-center rounded-full border text-lg font-medium transition-colors hover:bg-gray-50"
+                                style={{ borderColor: `${colors.primary}20`, color: colors.text }}
+                              >
+                                −
+                              </button>
+                              <span className="w-6 text-center font-semibold" style={{ color: colors.text }}>{qty}</span>
+                              <button
+                                onClick={() => {
+                                  setSelectedProducts(prev => {
+                                    const existing = prev.find(p => p.product_id === product.id)
+                                    if (existing) {
+                                      if (existing.quantity >= product.current_stock) return prev
+                                      return prev.map(p => p.product_id === product.id
+                                        ? { ...p, quantity: p.quantity + 1 }
+                                        : p
+                                      )
+                                    }
+                                    return [...prev, {
+                                      product_id: product.id,
+                                      name: product.name,
+                                      quantity: 1,
+                                      price: product.price,
+                                    }]
+                                  })
+                                }}
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-lg font-medium text-white transition-colors"
+                                style={{ backgroundColor: colors.accent }}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Actions */}
+                <div className="mt-8 flex items-center justify-between">
+                  <button
+                    onClick={() => { setSelectedProducts([]); setStep(4) }}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
+                    style={{ color: colors.textSecondary }}
+                  >
+                    ← Volver
+                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => { setSelectedProducts([]); setStep(6) }}
+                      className="rounded-2xl border px-5 py-2.5 text-sm font-medium transition-all"
+                      style={{ borderColor: `${colors.primary}20`, color: colors.textSecondary }}
+                    >
+                      Saltar
+                    </button>
+                    <button
+                      onClick={() => setStep(6)}
+                      className="rounded-2xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      style={{ backgroundColor: colors.accent }}
+                    >
+                      Continuar
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Step 6: Client data */}
+        {step === 6 && (
           <div className={getStepAnimationClass()}>
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Tus datos</h2>
               <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
                 Completá tus datos para confirmar la reserva
               </p>
+              <button
+                onClick={() => setStep(5)}
+                className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
+                style={{ color: colors.textSecondary }}
+              >
+                ← Volver a productos
+              </button>
             </div>
 
             <div className="space-y-5 rounded-2xl border p-6" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
@@ -678,10 +866,34 @@ export default function BookingPage() {
                     <span style={{ color: colors.textSecondary }}>Hora</span>
                     <span className="font-medium" style={{ color: colors.text }}>{selectedTime} hs</span>
                   </div>
+                  {selectedProducts.length > 0 && (
+                    <>
+                      <div className="border-t pt-2" style={{ borderColor: `${colors.primary}12` }}>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: colors.textSecondary }}>
+                          Productos adicionales
+                        </p>
+                        {selectedProducts.map(sp => (
+                          <div key={sp.product_id} className="flex justify-between text-sm">
+                            <span style={{ color: colors.textSecondary }}>
+                              {sp.name} ×{sp.quantity}
+                            </span>
+                            <span className="font-medium" style={{ color: colors.text }}>
+                              ₲ {Number(sp.price * sp.quantity).toLocaleString('es')}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                   <div className="border-t pt-2" style={{ borderColor: `${colors.primary}12` }}>
                     <div className="flex justify-between">
                       <span className="font-semibold" style={{ color: colors.text }}>Total</span>
-                      <span className="font-bold text-lg" style={{ color: colors.accent }}>₲ {selectedService?.price}</span>
+                      <span className="text-lg font-bold" style={{ color: colors.accent }}>
+                        ₲ {(
+                          Number(selectedService?.price || 0) +
+                          selectedProducts.reduce((sum, sp) => sum + sp.price * sp.quantity, 0)
+                        ).toLocaleString('es')}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -704,8 +916,8 @@ export default function BookingPage() {
           </div>
         )}
 
-        {/* Step 6: Success */}
-        {step === 6 && (
+        {/* Step 7: Success */}
+        {step === 7 && (
           <div className={`${getStepAnimationClass()} py-8`}>
             <div className="rounded-2xl border p-8 text-center" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
               {/* Celebration check */}
