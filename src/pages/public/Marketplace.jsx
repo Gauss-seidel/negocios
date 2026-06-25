@@ -80,13 +80,19 @@ function BusinessCard({ business, index }) {
 
           {/* Address */}
           {business.address && (
-            <p className="mt-1.5 flex items-start gap-2 text-sm text-[var(--color-text-secondary)]">
+            <a
+              href={business.google_maps_url || `https://maps.google.com/?q=${encodeURIComponent(business.address)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1.5 flex items-start gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
               <svg className="mt-0.5 h-4 w-4 flex-shrink-0 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               {business.address}
-            </p>
+            </a>
           )}
 
           {/* Phone */}

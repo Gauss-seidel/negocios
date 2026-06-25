@@ -18,6 +18,7 @@ export default function ConfigPage() {
     phone: '',
     email: '',
     address: '',
+    google_maps_url: '',
     description: '',
     logo_url: '',
   })
@@ -47,6 +48,7 @@ export default function ConfigPage() {
           phone: data.phone || '',
           email: data.email || '',
           address: data.address || '',
+          google_maps_url: data.google_maps_url || '',
           description: data.description || '',
           logo_url: data.logo_url || '',
         })
@@ -100,6 +102,7 @@ export default function ConfigPage() {
           phone: form.phone.trim() || null,
           email: form.email.trim() || null,
           address: form.address.trim() || null,
+          google_maps_url: form.google_maps_url.trim() || null,
           description: form.description.trim() || null,
           logo_url: form.logo_url.trim() || null,
         })
@@ -219,13 +222,35 @@ export default function ConfigPage() {
           {/* Address */}
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Ubicación</h2>
-            <Input
-              label="Dirección"
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              placeholder="Calle y número, colonia, ciudad"
-            />
+            <div className="space-y-4">
+              <Input
+                label="Dirección"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                placeholder="Calle y número, colonia, ciudad"
+              />
+              <Input
+                label="Google Maps URL"
+                name="google_maps_url"
+                value={form.google_maps_url}
+                onChange={handleChange}
+                placeholder="https://maps.app.goo.gl/VeAZcySBVie768Bm6"
+              />
+              {form.google_maps_url && (
+                <a
+                  href={form.google_maps_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800"
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Probar enlace
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Description */}
