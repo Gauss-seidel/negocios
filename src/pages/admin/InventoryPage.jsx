@@ -17,6 +17,9 @@ const INITIAL_FORM = {
   min_stock: 0,
   unit: 'pieza',
   price: '',
+  is_product: false,
+  image_url: '',
+  is_active: true,
 }
 
 const UNITS = ['pieza', 'litro', 'kilogramo', 'botella', 'tubo', 'pack', 'par']
@@ -84,6 +87,9 @@ export default function InventoryPage() {
       min_stock: product.min_stock ?? 0,
       unit: product.unit || 'pieza',
       price: product.price ?? '',
+      is_product: product.is_product ?? false,
+      image_url: product.image_url || '',
+      is_active: product.is_active ?? true,
     })
     setFormErrors({})
     setFormError(null)
@@ -91,8 +97,8 @@ export default function InventoryPage() {
   }
 
   function handleChange(e) {
-    const { name, value, type } = e.target
-    const val = type === 'number' ? (value === '' ? '' : Number(value)) : value
+    const { name, value, type, checked } = e.target
+    const val = type === 'number' ? (value === '' ? '' : Number(value)) : type === 'checkbox' ? checked : value
     setForm((prev) => ({ ...prev, [name]: val }))
     if (formErrors[name]) {
       setFormErrors((prev) => ({ ...prev, [name]: '' }))
@@ -125,6 +131,9 @@ export default function InventoryPage() {
         min_stock: Number(form.min_stock),
         unit: form.unit,
         price: form.price === '' ? null : Number(form.price),
+        is_product: form.is_product,
+        image_url: form.is_product ? (form.image_url.trim() || null) : null,
+        is_active: form.is_product ? form.is_active : true,
       }
 
       if (editTarget) {
@@ -295,11 +304,24 @@ export default function InventoryPage() {
             return (
               <div key={product.id} className={`rounded-2xl border p-4 shadow-sm ${isLow ? 'border-amber-200 bg-amber-50' : 'border-black/5 bg-white'}`}>
                 <div className="flex items-start justify-between">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-gray-900">{product.name}</p>
-                    {product.description && (
-                      <p className="truncate text-xs text-gray-500">{product.description}</p>
+                  <div className="flex items-center gap-2">
+                    {product.is_product && product.image_url && (
+                      <img src={product.image_url} alt="" className="h-10 w-10 flex-shrink-0 rounded-lg object-cover"
+                        onError={(e) => { e.target.style.display = 'none' }} />
                     )}
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-gray-900">{product.name}</p>
+                      {product.description && (
+                        <p className="truncate text-xs text-gray-500">{product.description}</p>
+                      )}
+                      {product.is_product && (
+                        <span className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                          product.is_active ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'
+                        }`}>
+                          🛍️ {product.is_active ? 'Producto' : 'Inactivo'}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
@@ -323,8 +345,19 @@ export default function InventoryPage() {
                     <p className="font-medium text-gray-900">{product.price ? formatCurrency(product.price) : '—'}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Unidad</span>
-                    <p className="text-gray-700">{product.unit || '—'}</p>
+                    {product.is_product ? (
+                      <>
+                        <span className="text-xs text-gray-400">Estado</span>
+                        <p className={`font-medium ${product.is_active ? 'text-emerald-600' : 'text-gray-500'}`}>
+                          {product.is_active ? 'Activo' : 'Inactivo'}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-xs text-gray-400">Unidad</span>
+                        <p className="text-gray-700">{product.unit || '—'}</p>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="mt-3 flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
@@ -350,6 +383,7 @@ export default function InventoryPage() {
                   <th className="px-6 py-3">Stock</th>
                   <th className="px-6 py-3">Mínimo</th>
                   <th className="px-6 py-3">Unidad</th>
+                  <th className="px-6 py-3">Estado</th>
                   <th className="px-6 py-3">Precio</th>
                   <th className="px-6 py-3 text-right">Acciones</th>
                 </tr>
@@ -360,10 +394,27 @@ export default function InventoryPage() {
                   return (
                     <tr key={product.id} className={`transition-colors hover:bg-gray-50 ${isLow ? 'bg-amber-50' : ''}`}>
                       <td className="px-6 py-4">
-                        <p className="font-medium text-gray-900">{product.name}</p>
-                        {product.description && (
-                          <p className="truncate max-w-xs text-xs text-gray-500">{product.description}</p>
-                        )}
+                        <div className="flex items-center gap-3">
+                          {product.is_product && product.image_url ? (
+                            <img src={product.image_url} alt="" className="h-8 w-8 flex-shrink-0 rounded-lg object-cover"
+                              onError={(e) => { e.target.style.display = 'none' }} />
+                          ) : product.is_product ? (
+                            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-purple-100 text-xs font-bold text-purple-600">
+                              {product.name.charAt(0)}
+                            </div>
+                          ) : null}
+                          <div>
+                            <p className="font-medium text-gray-900">{product.name}</p>
+                            {product.description && !product.is_product && (
+                              <p className="truncate max-w-xs text-xs text-gray-500">{product.description}</p>
+                            )}
+                            {product.is_product && (
+                              <span className="inline-flex items-center gap-1 text-xs font-medium text-purple-600">
+                                <span>🛍️</span> Producto
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <span className={`font-semibold ${isLow ? 'text-red-600' : 'text-gray-900'}`}>
@@ -377,6 +428,17 @@ export default function InventoryPage() {
                       </td>
                       <td className="px-6 py-4 text-gray-600">{product.min_stock ?? 0}</td>
                       <td className="px-6 py-4 text-gray-600">{product.unit || '—'}</td>
+                      <td className="px-6 py-4">
+                        {product.is_product ? (
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            product.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                          }`}>
+                            {product.is_active ? 'Activo' : 'Inactivo'}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-gray-400">—</span>
+                        )}
+                      </td>
                       <td className="px-6 py-4 font-medium text-gray-900">
                         {product.price ? formatCurrency(product.price) : '—'}
                       </td>
@@ -479,6 +541,43 @@ export default function InventoryPage() {
               value={form.price}
               onChange={handleChange}
             />
+          </div>
+
+          {/* Product for sale toggle */}
+          <div className="space-y-4 border-t border-gray-200 pt-4">
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                name="is_product"
+                checked={form.is_product}
+                onChange={handleChange}
+                className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+              />
+              <span className="text-sm font-medium text-gray-700">Producto para la venta</span>
+            </label>
+
+            {form.is_product && (
+              <>
+                <Input
+                  label="URL de imagen"
+                  name="image_url"
+                  value={form.image_url}
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/producto.jpg"
+                />
+
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    name="is_active"
+                    checked={form.is_active}
+                    onChange={handleChange}
+                    className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Producto activo (visible en página pública)</span>
+                </label>
+              </>
+            )}
           </div>
 
           <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
