@@ -342,6 +342,7 @@ export default function BookingPage() {
         .from('appointments').insert({
           business_id: business.id, client_id: clientId, barber_id: selectedBarber || null,
           date: selectedDate, start_time: selectedTime, end_time: endTime, status: 'pending',
+          total: Number(selectedService?.price || 0) + selectedProducts.reduce((sum, sp) => sum + Number(sp.price || 0) * (sp.quantity || 1), 0),
         }).select().single()
       if (insertApptErr) {
         // Si hay un error de unique constraint, el slot se acaba de ocupar
