@@ -264,11 +264,91 @@ function BarberiaHours({ hours, colors }) {
   )
 }
 
+function BarberiaProducts({ products, colors }) {
+  if (!products?.length) return null
+
+  return (
+    <AnimatedSection delay={50}>
+      <section className="border-t py-16 lg:py-20" style={{ borderColor: `${colors.primary}08` }}>
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="mb-10 text-center">
+            <span
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em]"
+              style={{ backgroundColor: `${colors.primary}08`, color: colors.textSecondary }}
+            >
+              Productos
+            </span>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight" style={{ color: colors.accent }}>
+              Nuestros productos
+            </h2>
+            <p className="mt-2 text-sm" style={{ color: colors.textSecondary }}>
+              Llévate el cuidado profesional a casa
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="group relative rounded-2xl border bg-white/50 p-0 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                style={{ borderColor: `${colors.primary}12` }}
+              >
+                {/* Image */}
+                <div
+                  className="h-44 flex items-center justify-center overflow-hidden"
+                  style={{ backgroundColor: `${colors.primary}06` }}
+                >
+                  {product.image_url ? (
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                        e.target.parentElement.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2.5rem;font-weight:bold;color:${colors.accent}66">${product.name.charAt(0)}</div>`
+                      }}
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full" style={{ color: `${colors.accent}66` }}>
+                      <span className="text-4xl font-bold">{product.name.charAt(0)}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="p-5">
+                  <h3 className="text-lg font-bold" style={{ color: colors.text }}>
+                    {product.name}
+                  </h3>
+                  {product.description && (
+                    <p className="mt-1 text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
+                      {product.description}
+                    </p>
+                  )}
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-sm" style={{ color: colors.textSecondary }}>
+                      Stock: {product.current_stock} {product.unit}
+                    </span>
+                    <span className="text-xl font-bold" style={{ color: colors.accent }}>
+                      ₲ {product.price}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </AnimatedSection>
+  )
+}
+
 export default function BarberiaPage() {
   const { slug } = useParams()
   const [business, setBusiness] = useState(null)
   const [services, setServices] = useState([])
   const [hours, setHours] = useState([])
+  const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -304,6 +384,16 @@ export default function BarberiaPage() {
         .eq('business_id', biz.id)
         .order('day_of_week')
       setHours(hrs || [])
+
+      const { data: prods } = await supabase
+        .from('inventory_products')
+        .select('*')
+        .eq('business_id', biz.id)
+        .eq('is_product', true)
+        .eq('is_active', true)
+        .gt('current_stock', 0)
+        .order('name')
+      setProducts(prods || [])
     } catch (err) {
       setError(err.message)
     } finally {
@@ -378,6 +468,7 @@ export default function BarberiaPage() {
 
       <BarberiaHero business={business} templateConfig={templateConfig} />
       <BarberiaServices services={services} colors={colors} templateId={business.template_id} />
+      <BarberiaProducts products={products} colors={colors} />
       <BarberiaHours hours={hours} colors={colors} />
 
       {/* CTA Final */}

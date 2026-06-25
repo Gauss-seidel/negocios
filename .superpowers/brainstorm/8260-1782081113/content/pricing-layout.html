@@ -1,0 +1,51 @@
+<h2>Tabla de Planes</h2>
+<p class="subtitle">¿Cómo mostramos los precios?</p>
+
+<div class="cards">
+  <div class="card" data-choice="horizontal" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>3 columnas horizontal</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0;">
+        <div style="border:2px solid #ddd;border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:11px;font-weight:bold;color:#1B2A4A;">BÁSICO</div>
+          <div style="font-size:16px;font-weight:bold;color:#D4A843;">100.000 Gs</div>
+          <div style="font-size:9px;color:#666;margin-top:4px;">Hasta 3 barberos<br>1 sucursal</div>
+        </div>
+        <div style="border:2px solid #1B2A4A;border-radius:8px;padding:8px;text-align:center;background:#1B2A4A;color:white;">
+          <div style="font-size:11px;font-weight:bold;">PROFESIONAL</div>
+          <div style="font-size:16px;font-weight:bold;color:#D4A843;">150.000 Gs</div>
+          <div style="font-size:9px;opacity:.8;margin-top:4px;">Hasta 10 barberos<br>3 sucursales</div>
+        </div>
+        <div style="border:2px solid #ddd;border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:11px;font-weight:bold;color:#1B2A4A;">PREMIUM</div>
+          <div style="font-size:16px;font-weight:bold;color:#D4A843;">200.000 Gs</div>
+          <div style="font-size:9px;color:#666;margin-top:4px;">Ilimitado<br>Todo incluido</div>
+        </div>
+      </div>
+      <p>Clásico, fácil de comparar. El plan del medio destacado.</p>
+    </div>
+  </div>
+  <div class="card" data-choice="stacked" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>Vertical apilado</h3>
+      <div style="margin:12px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #eee;">
+          <strong style="color:#1B2A4A;">Básico</strong>
+          <span style="color:#666;">3 barberos · 1 suc.</span>
+          <strong style="color:#D4A843;">100.000 Gs</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #eee;background:#1B2A4A;color:white;">
+          <strong>Profesional</strong>
+          <span style="opacity:.8;">10 barberos · 3 suc.</span>
+          <strong style="color:#D4A843;">150.000 Gs</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;">
+          <strong style="color:#1B2A4A;">Premium</strong>
+          <span style="color:#666;">Ilimitado</span>
+          <strong style="color:#D4A843;">200.000 Gs</strong>
+        </div>
+      </div>
+      <p>Compacto, tipo lista de precios. Bueno si el espacio es ajustado.</p>
+    </div>
+  </div>
+</div>

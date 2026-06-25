@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BarberShifts — Brochure</title>
+<style>
+  /* ─── Reset & Base ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: #e5e5e5;
+    color: #111;
+    -webkit-font-smoothing: antialiased;
+    padding: 20px;
+  }
+
+  /* ─── Hoja ─── */
+  .brochure {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  }
+
+  /* ─── PORTADA ─── */
+  .cover {
+    background: #f5f5f0;
+    padding: 60px 40px 40px;
+    text-align: center;
+    position: relative;
+    page-break-after: always;
+  }
+  .cover-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: #1B2A4A;
+  }
+  .cover-logo {
+    width: 80px; height: 80px;
+    background: #D4A843;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 36px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    color: #1B2A4A;
+    letter-spacing: -0.5px;
+  }
+  .cover-sub {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 4px 0 20px;
+  }
+  .cover-line {
+    width: 80px; height: 3px;
+    background: #D4A843;
+    margin: 0 auto 24px;
+  }
+  .cover h2 {
+    font-size: 28px;
+    color: #1B2A4A;
+  }
+  .cover h2 span {
+    color: #D4A843;
+    display: block;
+    font-size: 24px;
+    margin-top: 4px;
+  }
+  .cover-btn {
+    display: inline-block;
+    margin-top: 28px;
+    background: #D4A843;
+    color: #fff;
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+  }
+  .cover-footer {
+    margin-top: 70px;
+    font-size: 11px;
+    color: #9CA3AF;
+  }
+
+  /* ─── INTERIOR ─── */
+  .interior {
+    background: #f5f5f0;
+    padding: 40px;
+  }
+
+  /* Secciones */
+  .section { margin-bottom: 32px; }
+
+  .section-title {
+    font-size: 20px;
+    color: #1B2A4A;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .problem-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+  }
+  .problem-list li {
+    padding: 5px 0;
+    font-size: 14px;
+    color: #1f2937;
+    line-height: 1.6;
+  }
+  .problem-list li::before {
+    content: '•';
+    color: #D4A843;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  .problem-close {
+    color: #D4A843;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* Features Grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .feature-card {
+    padding: 16px 8px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .feature-card.navy { background: #1B2A4A; color: #fff; }
+  .feature-card.gold { background: #D4A843; color: #1B2A4A; }
+  .features-note {
+    font-size: 12px;
+    color: #9CA3AF;
+  }
+
+  /* Tabla de Planes */
+  .plans-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .plans-table th {
+    background: #1B2A4A;
+    color: #fff;
+    padding: 12px 14px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .plans-table th:first-child { text-align: left; }
+  .plans-table td {
+    padding: 12px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .plans-table td:first-child {
+    background: #f5f5f0;
+    font-weight: 700;
+    text-align: left;
+  }
+  .plans-table tr.highlight td {
+    background: #1B2A4A;
+    color: #fff;
+  }
+  .plans-table tr.highlight td:first-child {
+    background: #1B2A4A;
+    color: #fff;
+  }
+
+  /* CTA */
+  .cta {
+    text-align: center;
+    padding: 28px;
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 8px;
+  }
+  .cta h3 {
+    font-size: 20px;
+    color: #1B2A4A;
+    margin-bottom: 6px;
+  }
+  .cta p { color: #6B7280; font-size: 14px; }
+  .cta .brand { color: #D4A843; font-weight: 700; font-size: 18px; margin-top: 4px; }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .brochure { box-shadow: none; border-radius: 0; max-width: 100%; }
+    .cover { padding: 40px 30px; }
+    .interior { padding: 30px; }
+    .cover-btn { background: #D4A843 !important; color: #fff !important; }
+    @page { margin: 0; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .cover { padding: 40px 20px 30px; }
+    .interior { padding: 20px; }
+    .cover h1 { font-size: 28px; }
+    .cover h2 { font-size: 22px; }
+    .cover h2 span { font-size: 20px; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .plans-table { font-size: 12px; }
+    .plans-table th,
+    .plans-table td { padding: 8px 6px; }
+    body { padding: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="brochure">
+
+  <!-- ═══════════ PORTADA ═══════════ -->
+  <div class="cover">
+    <div class="cover-bar"></div>
+
+    <div class="cover-logo">✂</div>
+    <h1>BarberShifts</h1>
+    <p class="cover-sub">Gestión para barberías</p>
+    <div class="cover-line"></div>
+
+    <h2>Gestioná tu barbería <span>desde un solo lugar</span></h2>
+
+    <a class="cover-btn" href="#planes">Ver Planes →</a>
+
+    <p class="cover-footer">WhatsApp · Web · @barbershifts</p>
+  </div>
+
+  <!-- ═══════════ INTERIOR ═══════════ -->
+  <div class="interior">
+
+    <!-- Problema -->
+    <div class="section">
+      <div class="section-title">❌ ¿Perdés clientes por no tener una agenda digital?</div>
+      <ul class="problem-list">
+        <li>Llamadas perdidas → clientes que no vuelven</li>
+        <li>Papel y lápiz → errores y <em>overbooking</em></li>
+        <li>Sin reportes → no sabés si ganás o perdés dinero</li>
+        <li>Tus clientes quieren reservar desde WhatsApp y no pueden</li>
+      </ul>
+      <div class="problem-close">Todo esto se acaba con BarberShifts.</div>
+    </div>
+
+    <!-- Features -->
+    <div class="section">
+      <div class="section-title">✅ Todo lo que necesitás en un solo lugar</div>
+      <div class="features-grid">
+        <div class="feature-card navy">📅 Reservas online</div>
+        <div class="feature-card navy">📋 Agenda digital</div>
+        <div class="feature-card navy">💰 Caja diaria</div>
+        <div class="feature-card gold">📦 Inventario</div>
+        <div class="feature-card gold">📊 Reportes</div>
+        <div class="feature-card gold">👥 Clientes</div>
+      </div>
+      <div class="features-note">+ Gestión de barberos, horarios, servicios y marketplace</div>
+    </div>
+
+    <!-- Planes -->
+    <div class="section" id="planes">
+      <div class="section-title">💰 Planes y precios</div>
+      <table class="plans-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Básico</th>
+            <th>Profesional</th>
+            <th>Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Precio</td>
+            <td><strong>100.000 Gs</strong><br><small style="color:#6B7280;">/mes</small></td>
+            <td><strong>150.000 Gs</strong><br><small style="color:#6B7280;">/mes</small></td>
+            <td><strong>200.000 Gs</strong><br><small style="color:#6B7280;">/mes</small></td>
+          </tr>
+          <tr>
+            <td>Barberos</td>
+            <td>Hasta 3</td>
+            <td>Hasta 10</td>
+            <td>Ilimitado</td>
+          </tr>
+          <tr>
+            <td>Sucursales</td>
+            <td>1</td>
+            <td>Hasta 3</td>
+            <td>Ilimitado</td>
+          </tr>
+          <tr class="highlight">
+            <td>Reservas/mes</td>
+            <td>Hasta 100</td>
+            <td>Hasta 500</td>
+            <td>Ilimitado</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <h3>¿Listo para digitalizar tu barbería?</h3>
+      <p>Contactanos por WhatsApp o visitá nuestra web</p>
+      <div class="brand">@barbershifts</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

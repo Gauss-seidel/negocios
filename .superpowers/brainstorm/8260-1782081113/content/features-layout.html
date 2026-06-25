@@ -1,0 +1,44 @@
+<h2>Grid de Funcionalidades</h2>
+<p class="subtitle">¿Cómo mostramos las features? Elegí un layout</p>
+
+<div class="cards">
+  <div class="card" data-choice="grid3x2" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>3×2 — Grid Grande</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:12px 0;">
+        <div style="background:#1B2A4A;color:white;padding:8px;border-radius:6px;text-align:center;font-size:11px;">📅 Reservas</div>
+        <div style="background:#1B2A4A;color:white;padding:8px;border-radius:6px;text-align:center;font-size:11px;">📋 Agenda</div>
+        <div style="background:#1B2A4A;color:white;padding:8px;border-radius:6px;text-align:center;font-size:11px;">💰 Caja</div>
+        <div style="background:#D4A843;color:#1B2A4A;padding:8px;border-radius:6px;text-align:center;font-size:11px;font-weight:bold;">📦 Inventario</div>
+        <div style="background:#D4A843;color:#1B2A4A;padding:8px;border-radius:6px;text-align:center;font-size:11px;font-weight:bold;">📊 Reportes</div>
+        <div style="background:#D4A843;color:#1B2A4A;padding:8px;border-radius:6px;text-align:center;font-size:11px;font-weight:bold;">📱 QR Pago</div>
+      </div>
+      <p>6 features en 2 filas, 3 columnas. Alternando azul y dorado. Visualmente completo.</p>
+    </div>
+  </div>
+  <div class="card" data-choice="list" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>📝 Lista Vertical</h3>
+      <div style="margin:12px 0;">
+        <div style="padding:6px 0;border-bottom:1px solid #eee;">✅ Reservas online</div>
+        <div style="padding:6px 0;border-bottom:1px solid #eee;">✅ Agenda digital compartida</div>
+        <div style="padding:6px 0;border-bottom:1px solid #eee;">✅ Caja diaria y movimientos</div>
+        <div style="padding:6px 0;border-bottom:1px solid #eee;">✅ Inventario de productos</div>
+        <div style="padding:6px 0;">✅ Reportes y estadísticas</div>
+      </div>
+      <p>Más texto, menos visual. Ocupa menos espacio.</p>
+    </div>
+  </div>
+  <div class="card" data-choice="cards" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>📇 Tarjetas Individuales</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0;">
+        <div style="border:2px solid #1B2A4A;padding:8px;border-radius:8px;text-align:center;font-size:11px;">📅<br><strong>Reservas</strong></div>
+        <div style="border:2px solid #1B2A4A;padding:8px;border-radius:8px;text-align:center;font-size:11px;">📋<br><strong>Agenda</strong></div>
+        <div style="border:2px solid #D4A843;padding:8px;border-radius:8px;text-align:center;font-size:11px;">💰<br><strong>Caja</strong></div>
+        <div style="border:2px solid #D4A843;padding:8px;border-radius:8px;text-align:center;font-size:11px;">📊<br><strong>Reportes</strong></div>
+      </div>
+      <p>Cada feature en su propia tarjeta con borde. Más aireado.</p>
+    </div>
+  </div>
+</div>
