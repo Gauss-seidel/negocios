@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
+import CompleteAppointmentModal from '../../components/CompleteAppointmentModal'
 
 /* ─── Helpers ─── */
 
@@ -32,6 +33,7 @@ export default function BarberDashboard() {
   // Other barbers' appointments available for transfer
   const [otherBarberApps, setOtherBarberApps] = useState([])
   const [transferringId, setTransferringId] = useState(null)
+  const [completingApp, setCompletingApp] = useState(null)
 
   useEffect(() => {
     if (user?.id && businessId) fetchAll()
@@ -69,7 +71,7 @@ export default function BarberDashboard() {
       const [myRes, unassignedRes, otherBarbersRes] = await Promise.all([
         supabase
           .from('appointments')
-          .select('*, services:appointment_services(service:services(name))')
+          .select('*, services:appointment_services( id, price, service:services(name, price) ), products:appointment_products( id, quantity, price, product:inventory_products(name, price, current_stock) )')
           .eq('barber_id', bid)
           .eq('business_id', businessId)
           .gte('date', date)
@@ -77,7 +79,7 @@ export default function BarberDashboard() {
           .order('start_time'),
         supabase
           .from('appointments')
-          .select('*, services:appointment_services(service:services(name))')
+          .select('*, services:appointment_services( id, price, service:services(name, price) ), products:appointment_products( id, quantity, price, product:inventory_products(name, price, current_stock) )')
           .is('barber_id', null)
           .eq('business_id', businessId)
           .gte('date', date)
@@ -85,7 +87,7 @@ export default function BarberDashboard() {
           .order('start_time'),
         supabase
           .from('appointments')
-          .select('*, client:client_id(name, phone), barber:barber_id(name), services:appointment_services(service:services(name))')
+          .select('*, client:client_id(name, phone), barber:barber_id(name), services:appointment_services( id, price, service:services(name, price) ), products:appointment_products( id, quantity, price, product:inventory_products(name, price, current_stock) )')
           .eq('business_id', businessId)
           .eq('date', date)
           .in('status', ['pending', 'confirmed'])
@@ -156,6 +158,27 @@ export default function BarberDashboard() {
       setError(err?.message || 'Error al transferir la reserva')
     } finally {
       setTransferringId(null)
+    }
+  }
+
+  function handleCompleteOpen(appointment) {
+    setCompletingApp(appointment)
+  }
+
+  async function handleCompleteConfirm(appointmentId, completedItems) {
+    try {
+      const { data, error } = await supabase.rpc('complete_appointment', {
+        p_appointment_id: appointmentId,
+        p_completed_products: completedItems.products || [],
+      })
+
+      if (error) throw error
+      if (!data?.success) throw new Error(data?.error || 'Error al completar')
+
+      setCompletingApp(null)
+      await fetchAll()
+    } catch (err) {
+      setError(err?.message || 'Error al completar la reserva')
     }
   }
 
@@ -234,7 +257,7 @@ export default function BarberDashboard() {
                 )}
                 {a.status === 'in_progress' && (
                   <button
-                    onClick={() => handleStatusChange(a.id, 'completed')}
+                    onClick={() => handleCompleteOpen(a)}
                     className="rounded-lg bg-emerald-500/10 px-2.5 py-1.5 text-xs font-medium text-emerald-400 transition-all hover:bg-emerald-500/20"
                     title="Completar"
                   >
@@ -509,6 +532,16 @@ export default function BarberDashboard() {
 
       {error && (
         <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>
+      )}
+
+      {completingApp && (
+        <CompleteAppointmentModal
+          appointment={completingApp}
+          services={completingApp.services || []}
+          products={completingApp.products || []}
+          onConfirm={(items) => handleCompleteConfirm(completingApp.id, items)}
+          onClose={() => setCompletingApp(null)}
+        />
       )}
     </div>
   )

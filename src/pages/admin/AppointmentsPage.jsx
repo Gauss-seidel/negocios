@@ -5,6 +5,7 @@ import { usePlan } from '../../hooks/usePlan'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
+import CompleteAppointmentModal from '../../components/CompleteAppointmentModal'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
 import { fmtCurrency as formatCurrency } from '../../utils/format'
 
@@ -68,6 +69,7 @@ export default function AppointmentsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [actionLoading, setActionLoading] = useState(false)
+  const [completingApp, setCompletingApp] = useState(null)
 
   const [statusFilter, setStatusFilter] = useState('')
   const [dateFilter, setDateFilter] = useState('')
@@ -85,14 +87,15 @@ export default function AppointmentsPage() {
     try {
       let query = supabase
         .from('appointments')
-        .select(
+          .select(
+            `
+            id, date, start_time, status, total, notes, created_at,
+            client:client_id (id, name, phone),
+            barber:barber_id (id, name),
+            services:appointment_services ( id, price, service:services ( name, price ) ),
+            products:appointment_products ( id, quantity, price, product:inventory_products ( name, price, current_stock ) )
           `
-          id, date, start_time, status, total, notes, created_at,
-          client:client_id (id, name, phone),
-          barber:barber_id (id, name),
-           services:appointment_services ( service:services ( name ) )
-        `
-        )
+          )
         .eq('business_id', businessId)
 
       if (statusFilter) {
@@ -126,6 +129,30 @@ export default function AppointmentsPage() {
       await fetchAppointments()
     } catch (err) {
       setError(err?.message || 'Error al actualizar estado')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  function handleCompleteOpen(appointment) {
+    setCompletingApp(appointment)
+  }
+
+  async function handleCompleteConfirm(appointmentId, completedItems) {
+    setActionLoading(true)
+    try {
+      const { data, error } = await supabase.rpc('complete_appointment', {
+        p_appointment_id: appointmentId,
+        p_completed_products: completedItems.products || [],
+      })
+
+      if (error) throw error
+      if (!data?.success) throw new Error(data?.error || 'Error al completar')
+
+      setCompletingApp(null)
+      await fetchAppointments()
+    } catch (err) {
+      setError(err?.message || 'Error al completar la reserva')
     } finally {
       setActionLoading(false)
     }
@@ -274,7 +301,7 @@ export default function AppointmentsPage() {
                         key={action.status}
                         variant={action.variant === 'danger' ? 'ghost' : 'ghost'}
                         size="sm"
-                        onClick={() => handleStatusChange(appt, action.status)}
+                        onClick={() => action.status === APPOINTMENT_STATUS.COMPLETED ? handleCompleteOpen(appt) : handleStatusChange(appt, action.status)}
                         disabled={actionLoading}
                         className={action.variant === 'danger' ? 'text-red-600 hover:bg-red-50' : ''}
                       >
@@ -330,21 +357,21 @@ export default function AppointmentsPage() {
                             key={action.status}
                             variant={action.variant === 'danger' ? 'ghost' : 'ghost'}
                             size="sm"
-                            onClick={() => handleStatusChange(appt, action.status)}
-                            disabled={actionLoading}
-                            className={action.variant === 'danger' ? 'text-red-600 hover:bg-red-50' : ''}
-                          >
-                            {action.label}
-                          </Button>
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                          onClick={() => action.status === APPOINTMENT_STATUS.COMPLETED ? handleCompleteOpen(appt) : handleStatusChange(appt, action.status)}
+                          disabled={actionLoading}
+                          className={action.variant === 'danger' ? 'text-red-600 hover:bg-red-50' : ''}
+                        >
+                          {action.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       </Card>
 
       {/* Summary */}
@@ -359,6 +386,16 @@ export default function AppointmentsPage() {
           )
         })}
       </div>
+
+      {completingApp && (
+        <CompleteAppointmentModal
+          appointment={completingApp}
+          services={completingApp.services || []}
+          products={completingApp.products || []}
+          onConfirm={(items) => handleCompleteConfirm(completingApp.id, items)}
+          onClose={() => setCompletingApp(null)}
+        />
+      )}
     </div>
   )
 }
