@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useBranch } from '../../contexts/BranchContext'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
@@ -46,19 +47,21 @@ export default function BusinessDashboard() {
   const isFirstLoad = useRef(true)
   const toastTimerRef = useRef(null)
 
+  const { currentBranch } = useBranch()
   const { isMobile } = useResponsiveTable()
 
   const fetchDashboard = useCallback(async () => {
+    if (!currentBranch?.id) return
     if (isFirstLoad.current) setLoading(true)
     setError(null)
     try {
       const { start, end } = getTodayRange()
       const [aR, tR, cR, pR, rR, clR] = await Promise.allSettled([
-        supabase.from('appointments').select(`id, date, start_time, status, total, client:client_id(name), barber:barber_id(name)`).eq('business_id', businessId).order('date', { ascending: false }).order('start_time', { ascending: false }).limit(10),
-        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).gte('date', start).lte('date', end),
-        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('status', APPOINTMENT_STATUS.CONFIRMED),
-        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('status', APPOINTMENT_STATUS.PENDING),
-        supabase.from('appointments').select('total').eq('business_id', businessId).gte('date', start).lte('date', end),
+        supabase.from('appointments').select(`id, date, start_time, status, total, client:client_id(name), barber:barber_id(name)`).eq('business_id', businessId).eq('branch_id', currentBranch.id).order('date', { ascending: false }).order('start_time', { ascending: false }).limit(10),
+        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).gte('date', start).lte('date', end),
+        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).eq('status', APPOINTMENT_STATUS.CONFIRMED),
+        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).eq('status', APPOINTMENT_STATUS.PENDING),
+        supabase.from('appointments').select('total').eq('business_id', businessId).eq('branch_id', currentBranch.id).gte('date', start).lte('date', end),
         supabase.from('clients').select('id', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', start),
       ])
       if (aR.status === 'fulfilled') setRecent(aR.value.data || [])
@@ -76,7 +79,7 @@ export default function BusinessDashboard() {
       }
       setLoading(false)
     }
-  }, [businessId])
+  }, [businessId, currentBranch?.id])
 
   // ── Carga inicial ──
   useEffect(() => { if (businessId) fetchDashboard() }, [businessId, fetchDashboard])

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useBranch } from '../../contexts/BranchContext'
 import { usePlan } from '../../hooks/usePlan'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import UpgradePrompt from '../../components/ui/UpgradePrompt'
@@ -26,6 +27,7 @@ const UNITS = ['pieza', 'litro', 'kilogramo', 'botella', 'tubo', 'pack', 'par']
 
 export default function InventoryPage() {
   const { businessId } = useAuth()
+  const { currentBranch } = useBranch()
   const { isProfessional, hasFeature, planName, loading: planLoading } = usePlan()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -47,10 +49,11 @@ export default function InventoryPage() {
   const { isMobile } = useResponsiveTable()
 
   useEffect(() => {
-    if (businessId) fetchProducts()
-  }, [businessId])
+    if (businessId && currentBranch?.id) fetchProducts()
+  }, [businessId, currentBranch?.id])
 
   async function fetchProducts() {
+    if (!currentBranch?.id) return
     setLoading(true)
     setError(null)
 
@@ -59,6 +62,7 @@ export default function InventoryPage() {
         .from('inventory_products')
         .select('*')
         .eq('business_id', businessId)
+        .eq('branch_id', currentBranch.id)
         .order('name')
 
       if (fetchErr) throw fetchErr
@@ -118,6 +122,7 @@ export default function InventoryPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     if (!validateForm()) return
+    if (!currentBranch?.id) return
 
     setActionLoading(true)
     setFormError(null)
@@ -125,6 +130,7 @@ export default function InventoryPage() {
     try {
       const payload = {
         business_id: businessId,
+        branch_id: currentBranch.id,
         name: form.name.trim(),
         description: form.description.trim() || null,
         current_stock: Number(form.stock),
@@ -199,8 +205,6 @@ export default function InventoryPage() {
     }
   }
 
-    const lowStockProducts = products.filter((p) => p.current_stock <= p.min_stock && p.min_stock > 0)
-
   if (loading || planLoading) {
     return (
       <div className="flex items-center justify-center py-32">
@@ -243,6 +247,8 @@ export default function InventoryPage() {
       </div>
     )
   }
+
+  const lowStockProducts = products.filter((p) => p.current_stock <= p.min_stock && p.min_stock > 0)
 
   return (
     <div className="space-y-6">

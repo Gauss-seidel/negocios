@@ -71,7 +71,7 @@ export default function BarberDashboard() {
       const [myRes, unassignedRes, otherBarbersRes] = await Promise.all([
         supabase
           .from('appointments')
-          .select('*, services:appointment_services( id, price, service:services(name, price) ), products:appointment_products( id, quantity, price, product:inventory_products(name, price, current_stock) )')
+          .select('*, client:client_id(name, phone), services:appointment_services( id, price, service:services(name, price) ), products:appointment_products( id, quantity, price, product:inventory_products(name, price, current_stock) )')
           .eq('barber_id', bid)
           .eq('business_id', businessId)
           .gte('date', date)
@@ -204,7 +204,7 @@ export default function BarberDashboard() {
       no_show: 'border-l-gray-500',
     }
     const borderColor = statusColors[a.status] || 'border-l-white/10'
-    const clientName = a.client_name || (a.client?.name) || a.client_name || 'Cliente'
+    const clientName = a.client?.name || a.client_name || 'Cliente'
 
     return (
       <div key={a.id} className={`border-l-4 ${borderColor} px-6 py-4 transition-colors hover:bg-white/[0.02]`}>

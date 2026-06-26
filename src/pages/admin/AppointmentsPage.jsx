@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useBranch } from '../../contexts/BranchContext'
 import { usePlan } from '../../hooks/usePlan'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
@@ -56,6 +57,12 @@ function formatDate(dateStr) {
   } catch { return '—' }
 }
 
+function computeTotal(appt) {
+  const svcTotal = (appt.services || []).reduce((s, svc) => s + Number(svc.price || 0), 0)
+  const prodTotal = (appt.products || []).reduce((s, prod) => s + Number(prod.price || 0) * (prod.quantity || 1), 0)
+  return svcTotal + prodTotal
+}
+
 function formatTime(time) {
   if (!time) return '--:--'
   const [h, m] = time.split(':')
@@ -64,6 +71,7 @@ function formatTime(time) {
 
 export default function AppointmentsPage() {
   const { businessId } = useAuth()
+  const { currentBranch } = useBranch()
   const { planName, limits, loading: planLoading } = usePlan()
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
@@ -77,10 +85,12 @@ export default function AppointmentsPage() {
   const { isMobile } = useResponsiveTable()
 
   useEffect(() => {
-    if (businessId) fetchAppointments()
-  }, [businessId])
+    if (businessId && currentBranch?.id) fetchAppointments()
+  }, [businessId, currentBranch?.id, statusFilter, dateFilter])
 
   async function fetchAppointments() {
+    if (!currentBranch?.id) return
+
     setLoading(true)
     setError(null)
 
@@ -97,6 +107,7 @@ export default function AppointmentsPage() {
           `
           )
         .eq('business_id', businessId)
+        .eq('branch_id', currentBranch.id)
 
       if (statusFilter) {
         query = query.eq('status', statusFilter)
@@ -278,7 +289,7 @@ export default function AppointmentsPage() {
                   </div>
                   <div>
                     <span className="text-xs text-gray-400">Servicio</span>
-                    <p className="truncate text-gray-700">{appt.services?.[0]?.service?.name || '—'}</p>
+                    <p className="truncate text-gray-700">{(appt.services || []).map(s => s.service?.name).filter(Boolean).join(', ') || '—'}</p>
                   </div>
                   <div>
                     <span className="text-xs text-gray-400">Fecha</span>
@@ -291,7 +302,7 @@ export default function AppointmentsPage() {
                 </div>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="font-semibold text-gray-900">
-                    {appt.total ? formatCurrency(appt.total) : '—'}
+                    {formatCurrency(computeTotal(appt))}
                   </span>
                 </div>
                 {STATUS_ACTIONS.some((a) => canShowAction(appt, a)) && (
@@ -339,11 +350,13 @@ export default function AppointmentsPage() {
                       )}
                     </td>
                     <td className="px-4 py-3 sm:px-6 text-gray-600">{appt.barber?.name || '—'}</td>
-                    <td className="px-4 py-3 sm:px-6 text-gray-600">{appt.services?.[0]?.service?.name || '—'}</td>
+                    <td className="px-4 py-3 sm:px-6 text-gray-600">
+                      {(appt.services || []).map(s => s.service?.name).filter(Boolean).join(', ') || '—'}
+                    </td>
                     <td className="whitespace-nowrap px-4 py-3 text-gray-600 sm:px-6">{formatDate(appt.date)}</td>
                     <td className="px-4 py-3 text-gray-600 sm:px-6">{formatTime(appt.start_time)}</td>
                     <td className="px-4 py-3 font-medium text-gray-900 sm:px-6">
-                      {appt.total ? formatCurrency(appt.total) : '—'}
+                      {formatCurrency(computeTotal(appt))}
                     </td>
                     <td className="px-4 py-3 sm:px-6">
                       <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE[appt.status] || 'bg-gray-100 text-gray-600'}`}>

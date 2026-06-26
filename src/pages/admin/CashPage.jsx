@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useBranch } from '../../contexts/BranchContext'
 import { usePlan } from '../../hooks/usePlan'
 import UpgradePrompt from '../../components/ui/UpgradePrompt'
 import Card from '../../components/ui/Card'
@@ -43,6 +44,7 @@ const MOVEMENT_ICONS = {
 
 export default function CashPage() {
   const { businessId } = useAuth()
+  const { currentBranch, loading: branchLoading } = useBranch()
   const { isProfessional, planName, loading: planLoading } = usePlan()
   const [register, setRegister] = useState(null)
   const [movements, setMovements] = useState([])
@@ -66,8 +68,8 @@ export default function CashPage() {
   const [openError, setOpenError] = useState(null)
 
   useEffect(() => {
-    if (businessId) fetchCashData()
-  }, [businessId])
+    if (businessId && currentBranch?.id) fetchCashData()
+  }, [businessId, currentBranch?.id])
 
   async function fetchCashData() {
     setLoading(true)
@@ -86,7 +88,7 @@ export default function CashPage() {
         supabase
           .from('cash_movements')
           .select('*')
-          .eq('business_id', businessId)
+          .eq('branch_id', currentBranch.id)
           .order('created_at', { ascending: false })
           .limit(50),
       ])
@@ -201,6 +203,7 @@ export default function CashPage() {
           type: movementForm.type,
           description: movementForm.description.trim(),
           amount: Number(movementForm.amount),
+          branch_id: currentBranch.id,
           register_id: register?.id || null,
         },
       ])
@@ -217,7 +220,7 @@ export default function CashPage() {
     }
   }
 
-  if (loading || planLoading) {
+  if (loading || planLoading || branchLoading) {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
@@ -227,6 +230,14 @@ export default function CashPage() {
           </svg>
           <p className="mt-4 text-sm text-gray-500">Cargando caja...</p>
         </div>
+      </div>
+    )
+  }
+
+  if (!currentBranch) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <p className="text-sm text-gray-500">Selecciona una sucursal para ver la caja</p>
       </div>
     )
   }

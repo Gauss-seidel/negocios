@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { BranchProvider } from './contexts/BranchContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 // Layouts
@@ -28,6 +29,7 @@ import ReportsPage from './pages/admin/ReportsPage'
 import ConfigPage from './pages/admin/ConfigPage'
 import AppearancePage from './pages/admin/AppearancePage'
 import PlansPage from './pages/admin/PlansPage'
+import SucursalesPage from './pages/admin/SucursalesPage'
 import SuperPlanesPage from './pages/admin/PlanesPage'
 import SuperConfigPage from './pages/admin/SuperConfigPage'
 import SuperBarberosPage from './pages/admin/SuperBarberosPage'
@@ -37,6 +39,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <BranchProvider>
         <Routes>
           {/* Páginas públicas */}
           <Route element={<PublicLayout />}>
@@ -94,11 +97,13 @@ export default function App() {
             <Route path="caja" element={<CashPage />} />
             <Route path="inventario" element={<InventoryPage />} />
             <Route path="reportes" element={<ReportsPage />} />
+            <Route path="sucursales" element={<SucursalesPage />} />
             <Route path="config" element={<ConfigPage />} />
             <Route path="apariencia" element={<AppearancePage />} />
             <Route path="planes" element={<PlansPage />} />
           </Route>
         </Routes>
+        </BranchProvider>
       </AuthProvider>
     </BrowserRouter>
   )

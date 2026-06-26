@@ -24,7 +24,8 @@ const METRICS = [
   { key: 'bookings', label: 'Total reservas', color: 'text-cyan-400', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
 ]
 
-const INITIAL_CREATE = { name: '', slug: '', email: '', phone: '', address: '', plan: 'basic', template_id: 'classic', password: '' }
+const INITIAL_CREATE = { name: '', slug: '', email: '', phone: '', address: '', plan: 'basic', template_id: 'classic', password: '',
+  branch_name: '', branch_phone: '', branch_address: '' }
 const INITIAL_EDIT = { name: '', slug: '', email: '', phone: '', address: '', plan: 'basic', template_id: 'classic', status: BUSINESS_STATUS.ACTIVE }
 
 /* ─── Helpers ─── */
@@ -76,6 +77,11 @@ export default function SuperDashboard() {
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [formError, setFormError] = useState(null)
 
+  const [showBranchManager, setShowBranchManager] = useState(false)
+  const [branchManagerTarget, setBranchManagerTarget] = useState(null)
+  const [managerBranches, setManagerBranches] = useState([])
+  const [managerLoading, setManagerLoading] = useState(false)
+
   const [createForm, setCreateForm] = useState({ ...INITIAL_CREATE })
   const [createErrors, setCreateErrors] = useState({})
   const [slugManual, setSlugManual] = useState(false)
@@ -112,6 +118,14 @@ export default function SuperDashboard() {
   async function fetchBusinesses() {
     const { data, error: e } = await supabase.from('businesses').select('*').order('created_at', { ascending: false })
     if (e) throw e
+    if (data?.length) {
+      const { data: branches } = await supabase.from('branches').select('id, business_id')
+      if (branches) {
+        const counts = {}
+        branches.forEach(b => { counts[b.business_id] = (counts[b.business_id] || 0) + 1 })
+        data.forEach(b => { b._branch_count = counts[b.id] || 0 })
+      }
+    }
     return data || []
   }
 
@@ -211,6 +225,18 @@ export default function SuperDashboard() {
       ])
       if (se) throw new Error(`Error al asignar staff: ${se.message}`)
 
+      // 5. Crear sucursal inicial
+      if (biz?.id) {
+        const { error: branchErr } = await supabase.from('branches').insert({
+          business_id: biz.id,
+          name: createForm.branch_name.trim() || 'Principal',
+          slug: genSlug(createForm.branch_name.trim() || 'principal'),
+          address: createForm.branch_address.trim() || createForm.address.trim() || null,
+          phone: createForm.branch_phone.trim() || createForm.phone.trim() || null,
+        })
+        if (branchErr) throw new Error(`Error al crear sucursal: ${branchErr.message}`)
+      }
+
       setShowCreate(false)
       setCreateForm({ ...INITIAL_CREATE })
       setCreateErrors({})
@@ -264,6 +290,17 @@ export default function SuperDashboard() {
       await fetchAll()
     } catch (err) { setError(err.message || 'Error al cambiar estado') }
     finally { setActionLoading(false) }
+  }
+
+  function openBranchManager(biz) {
+    setBranchManagerTarget(biz)
+    setManagerLoading(true)
+    setShowBranchManager(true)
+    supabase.from('branches').select('*').eq('business_id', biz.id).order('name')
+      .then(({ data }) => {
+        setManagerBranches(data || [])
+        setManagerLoading(false)
+      })
   }
 
   function confirmDelete(b) { setDeleteTarget(b); setShowDelete(true) }
@@ -427,6 +464,7 @@ export default function SuperDashboard() {
                   <th className="px-6 py-3.5">Nombre</th>
                   <th className="px-6 py-3.5">Estado</th>
                   <th className="px-6 py-3.5">Plan</th>
+                  <th className="px-6 py-3.5">Sucursales</th>
                   <th className="px-6 py-3.5">Creado</th>
                   <th className="px-6 py-3.5 text-right">Acciones</th>
                 </tr>
@@ -447,6 +485,13 @@ export default function SuperDashboard() {
                     </td>
                     <td className="px-6 py-4"><StatusBadge status={b.status} /></td>
                     <td className="px-6 py-4"><PlanBadge plan={b.plan} /></td>
+                    <td className="px-6 py-4">
+                      <span className="text-white/60">{b._branch_count || '—'}</span>
+                      <button onClick={() => openBranchManager(b)}
+                        className="ml-2 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                        Ver
+                      </button>
+                    </td>
                     <td className="whitespace-nowrap px-6 py-4 text-white/40">{fmtDate(b.created_at)}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-0.5">
@@ -516,6 +561,19 @@ export default function SuperDashboard() {
               </select>
             </div>
           </div>
+          <div className="border-t border-white/[0.06] pt-4 mt-4">
+            <h3 className="text-sm font-semibold text-white/70 mb-3">Sucursal inicial</h3>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Input label="Nombre de sucursal" name="branch_name" value={createForm.branch_name}
+                onChange={handleCreateChange} placeholder="Principal" dark />
+              <Input label="Teléfono de sucursal" name="branch_phone" value={createForm.branch_phone}
+                onChange={handleCreateChange} placeholder={createForm.phone || '+52...'} dark />
+            </div>
+            <div className="mt-3">
+              <Input label="Dirección de sucursal" name="branch_address" value={createForm.branch_address}
+                onChange={handleCreateChange} placeholder={createForm.address || 'Dirección...'} dark />
+            </div>
+          </div>
           <div className="flex items-center justify-end gap-3 border-t border-white/[0.06] pt-4">
             <Button type="button" variant="ghost" onClick={() => { setShowCreate(false); setCreateForm({ ...INITIAL_CREATE }) }}>Cancelar</Button>
             <Button type="submit" loading={actionLoading}>Crear Barbería</Button>
@@ -566,6 +624,39 @@ export default function SuperDashboard() {
             <Button type="submit" loading={actionLoading}>Guardar Cambios</Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Branch Manager Modal */}
+      <Modal open={showBranchManager} onClose={() => setShowBranchManager(false)}
+        title={branchManagerTarget ? `Sucursales: ${branchManagerTarget.name}` : 'Sucursales'} size="lg" dark>
+        {managerLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="flex gap-1.5">
+              <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+              <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+              <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+            </div>
+          </div>
+        ) : !managerBranches.length ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <svg className="h-10 w-10 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p className="mt-3 text-sm text-white/40">Sin sucursales registradas</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {managerBranches.map(br => (
+              <div key={br.id} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-white">{br.name}</p>
+                  {br.address && <p className="mt-0.5 text-xs text-white/40 truncate">{br.address}</p>}
+                </div>
+                {br.phone && <span className="ml-4 flex-shrink-0 text-xs text-white/30">{br.phone}</span>}
+              </div>
+            ))}
+          </div>
+        )}
       </Modal>
 
       {/* Delete Modal */}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { usePlan } from '../../hooks/usePlan'
+import { useBranch } from '../../contexts/BranchContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
@@ -27,6 +28,7 @@ export default function BarbersPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [actionLoading, setActionLoading] = useState(false)
+  const { currentBranch } = useBranch()
 
   const activeBarbers = barbers.filter(b => b.is_active)
   const atLimit = limits.max_barbers > 0 && activeBarbers.length >= limits.max_barbers
@@ -54,9 +56,10 @@ export default function BarbersPage() {
 
   useEffect(() => {
     if (businessId) fetchAll()
-  }, [businessId])
+  }, [businessId, currentBranch?.id])
 
   async function fetchAll() {
+    if (!currentBranch?.id) return
     setLoading(true)
     setError(null)
 
@@ -66,6 +69,7 @@ export default function BarbersPage() {
           .from('barbers')
           .select('*, barber_services(service_id)')
           .eq('business_id', businessId)
+          .eq('branch_id', currentBranch.id)
           .order('name'),
         supabase
           .from('services')
@@ -240,6 +244,7 @@ export default function BarbersPage() {
     try {
       const payload = {
         business_id: businessId,
+        branch_id: currentBranch.id,
         name: form.name.trim(),
         phone: form.phone.trim() || null,
         email: form.email.trim() || null,

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { getTemplateConfig, getAnimationStyle } from '../../templates/registry'
+import { getTemplateConfig } from '../../templates/registry'
+import { usePlan } from '../../hooks/usePlan'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 
@@ -178,10 +179,14 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
 
 export default function BookingPage() {
   const { slug } = useParams()
+  const location = useLocation()
+  const { plan } = usePlan()
   const [business, setBusiness] = useState(null)
   const [services, setServices] = useState([])
   const [barbers, setBarbers] = useState([])
   const [hours, setHours] = useState([])
+  const [branches, setBranches] = useState([])
+  const [selectedBranch, setSelectedBranch] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -201,6 +206,7 @@ export default function BookingPage() {
   const [step, setStep] = useState(1)
   const [products, setProducts] = useState([])
   const [selectedProducts, setSelectedProducts] = useState([])
+  const [imgErrors, setImgErrors] = useState({})
 
   const days = getNext7Days()
   const contentRef = useRef(null)
@@ -226,12 +232,39 @@ export default function BookingPage() {
         .from('services').select('*').eq('business_id', biz.id).eq('is_active', true).order('name')
       setServices(svc || [])
 
-      const { data: bar } = await supabase
+      const { data: branchData } = await supabase
+        .from('branches')
+        .select('*')
+        .eq('business_id', biz.id)
+        .eq('is_active', true)
+        .order('name')
+
+      let initialBranch = null
+      if (branchData && branchData.length > 0) {
+        setBranches(branchData)
+        const params = new URLSearchParams(location.search)
+        const branchSlug = params.get('branch')
+        const matchedBranch = branchSlug
+          ? branchData.find(b => b.slug === branchSlug)
+          : null
+        if (matchedBranch) {
+          initialBranch = matchedBranch
+        } else if (branchData.length === 1) {
+          initialBranch = branchData[0]
+        }
+      }
+      setSelectedBranch(initialBranch)
+
+      let barQuery = supabase
         .from('barbers').select('*').eq('business_id', biz.id).eq('is_active', true)
+      if (initialBranch) barQuery = barQuery.eq('branch_id', initialBranch.id)
+      const { data: bar } = await barQuery
       setBarbers(bar || [])
 
-      const { data: hrs } = await supabase
+      let hrsQuery = supabase
         .from('business_hours').select('*').eq('business_id', biz.id).order('day_of_week')
+      if (initialBranch) hrsQuery = hrsQuery.eq('branch_id', initialBranch.id)
+      const { data: hrs } = await hrsQuery
       setHours(hrs || [])
 
       const { data: prods } = await supabase
@@ -340,7 +373,7 @@ export default function BookingPage() {
       // Crear reserva
       const { data: appointment, error: insertApptErr } = await supabase
         .from('appointments').insert({
-          business_id: business.id, client_id: clientId, barber_id: selectedBarber || null,
+          business_id: business.id, branch_id: selectedBranch?.id || null, client_id: clientId, barber_id: selectedBarber || null,
           date: selectedDate, start_time: selectedTime, end_time: endTime, status: 'pending',
           total: Number(selectedService?.price || 0) + selectedProducts.reduce((sum, sp) => sum + Number(sp.price || 0) * (sp.quantity || 1), 0),
         }).select().single()
@@ -419,6 +452,7 @@ export default function BookingPage() {
 
   // Obtener clase de animación para el template actual
   const getStepAnimationClass = () => `animate-${business.template_id || 'classic'}-card`
+  const showProductStep = plan !== 'basic' && products.length > 0
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
@@ -462,6 +496,52 @@ export default function BookingPage() {
 
       {/* Content */}
       <div ref={contentRef} className="mx-auto max-w-3xl px-4 pb-20">
+        {/* Branch Selector (multi branch) */}
+        {branches.length > 1 && !selectedBranch && (
+          <div className="mb-8">
+            <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+              Elegí tu sucursal
+            </h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {branches.map(branch => (
+                <button
+                  key={branch.id}
+                  onClick={() => setSelectedBranch(branch)}
+                  className="rounded-xl border-2 border-gray-200 bg-white p-5 text-left transition-all hover:border-[var(--color-accent)] hover:shadow-md"
+                >
+                  <h3 className="font-semibold text-gray-900">{branch.name}</h3>
+                  {branch.address && (
+                    <p className="mt-1 text-sm text-gray-500">{branch.address}</p>
+                  )}
+                  {branch.phone && (
+                    <p className="mt-1 text-sm text-gray-500">{branch.phone}</p>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Branch indicator (always visible when branch is selected) */}
+        {selectedBranch && (
+          <div
+            className="mb-6 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
+            style={{ backgroundColor: `${colors.accent}08`, border: `1px solid ${colors.accent}20` }}
+          >
+            <svg className="h-4 w-4" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+            <span style={{ color: colors.text }}>
+              <strong>{selectedBranch.name}</strong>
+              {selectedBranch.address && <span className="ml-1 opacity-60">— {selectedBranch.address}</span>}
+            </span>
+          </div>
+        )}
+
+        {/* Guard: don't show booking form until branch is selected when multiple exist */}
+        {branches.length > 1 && !selectedBranch ? null : (
+        <>
         {/* Step 1: Service */}
         {step === 1 && (
           <div className={step === 1 ? getStepAnimationClass() : ''}>
@@ -631,7 +711,7 @@ export default function BookingPage() {
                   return (
                     <button
                       key={slot}
-                      onClick={() => { setSelectedTime(slot); setStep(5) }}
+                      onClick={() => { setSelectedTime(slot); setStep(showProductStep ? 5 : 6) }}
                       className="rounded-2xl border px-3 py-3.5 text-center font-semibold transition-all duration-300 hover:-translate-y-0.5"
                       style={{
                         borderColor: isSelected ? colors.accent : `${colors.primary}12`,
@@ -693,9 +773,9 @@ export default function BookingPage() {
                       >
                         {/* Image */}
                         <div className="h-32 flex items-center justify-center overflow-hidden bg-gray-50">
-                          {product.image_url ? (
+                          {product.image_url && !imgErrors[product.id] ? (
                             <img src={product.image_url} alt={product.name} className="h-full w-full object-cover"
-                              onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<div class="flex items-center justify-center h-full text-2xl font-bold" style="color:${colors.accent}44">${product.name.charAt(0)}</div>` }}
+                              onError={() => setImgErrors(prev => ({ ...prev, [product.id]: true }))}
                             />
                           ) : (
                             <span className="text-2xl font-bold" style={{ color: `${colors.accent}44` }}>
@@ -812,13 +892,15 @@ export default function BookingPage() {
               <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
                 Completá tus datos para confirmar la reserva
               </p>
-              <button
-                onClick={() => setStep(5)}
-                className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-                style={{ color: colors.textSecondary }}
-              >
-                ← Volver a productos
-              </button>
+              {showProductStep && (
+                <button
+                  onClick={() => setStep(5)}
+                  className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
+                  style={{ color: colors.textSecondary }}
+                >
+                  ← Volver a productos
+                </button>
+              )}
             </div>
 
             <div className="space-y-5 rounded-2xl border p-6" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
@@ -849,6 +931,10 @@ export default function BookingPage() {
               <div className="rounded-xl p-4" style={{ backgroundColor: `${colors.primary}05` }}>
                 <p className="mb-3 text-sm font-semibold" style={{ color: colors.text }}>Resumen de la reserva</p>
                 <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span style={{ color: colors.textSecondary }}>Sucursal</span>
+                    <span className="font-medium" style={{ color: colors.text }}>{selectedBranch?.name}</span>
+                  </div>
                   <div className="flex justify-between">
                     <span style={{ color: colors.textSecondary }}>Servicio</span>
                     <span className="font-medium" style={{ color: colors.text }}>{selectedService?.name}</span>
@@ -962,6 +1048,8 @@ export default function BookingPage() {
               </div>
             </div>
           </div>
+        )}
+        </>
         )}
       </div>
     </div>

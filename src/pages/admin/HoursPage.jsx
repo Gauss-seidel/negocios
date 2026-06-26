@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useBranch } from '../../contexts/BranchContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import { DAYS_OF_WEEK } from '../../lib/constants'
@@ -23,6 +24,7 @@ function createEmptyDays() {
 
 export default function HoursPage() {
   const { businessId } = useAuth()
+  const { currentBranch } = useBranch()
   const [days, setDays] = useState(createEmptyDays())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -30,8 +32,9 @@ export default function HoursPage() {
   const [saveSuccess, setSaveSuccess] = useState(false)
 
   useEffect(() => {
+    if (!currentBranch?.id) return
     if (businessId) fetchHours()
-  }, [businessId])
+  }, [businessId, currentBranch?.id])
 
   async function fetchHours() {
     setLoading(true)
@@ -42,6 +45,7 @@ export default function HoursPage() {
         .from('business_hours')
         .select('*')
         .eq('business_id', businessId)
+        .eq('branch_id', currentBranch.id)
 
       if (fetchErr) throw fetchErr
 
@@ -90,10 +94,13 @@ export default function HoursPage() {
 
     try {
       // Delete existing and re-insert
-      await supabase.from('business_hours').delete().eq('business_id', businessId)
+      await supabase.from('business_hours').delete()
+        .eq('business_id', businessId)
+        .eq('branch_id', currentBranch.id)
 
       const records = Object.values(days).map((d) => ({
         business_id: businessId,
+        branch_id: currentBranch.id,
         day_of_week: d.day_of_week,
         is_closed: d.is_closed,
         open_time: d.open_time,
