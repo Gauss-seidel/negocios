@@ -148,6 +148,26 @@ default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' fonts.go
 
 ---
 
+### #10 — RLS: branches no tenía policy super_admin_all
+
+**Síntoma:** Al crear una nueva barbería desde SuperDashboard, falla con "Error al crear sucursal: new row violates row-level security policy for table 'branches'".
+
+**Causa:** La tabla `branches` era la **única tabla del sistema** sin una policy `super_admin_all`. El super_admin ejecuta el `INSERT INTO branches` pero ninguna policy lo permite. Las policies existentes (`business_admin_insert_branches`, etc.) checkean `business_staff` con `role = 'business_admin'`, pero quien ejecuta el INSERT es el super_admin, que no está en `business_staff`.
+
+**Fix:** Agregar policy `super_admin_all` en branches:
+```sql
+CREATE POLICY "super_admin_all" ON branches
+  FOR ALL
+  USING (is_super_admin())
+  WITH CHECK (is_super_admin());
+```
+
+**Migración:** `20260703_fix_rls_branches_super_admin.sql`
+
+**Lección: Cada vez que se agrega RLS a una tabla, verificar que tenga policy para super_admin (is_super_admin()). Si no, el super_admin no puede operar sobre esa tabla.**
+
+---
+
 ## 🔍 Checklist pre-commit
 
 Antes de committear cualquier cambio, verificar:
@@ -158,6 +178,7 @@ Antes de committear cualquier cambio, verificar:
 - [ ] Edge Functions: campos en la respuesta coinciden con los que lee el frontend
 - [ ] CSP: si se modifica, probar login + fonts + scripts externos
 - [ ] RLS: si se agrega, probar todas las operaciones (anon, staff, admin)
+- [ ] RLS: toda tabla debe tener policy `super_admin_all` (usando `is_super_admin()`)
 - [ ] No hay `efData.data.user_id` (usar `efData.data.user.id`)
 - [ ] No hay referencias a columnas que no existen en la DB
 - [ ] Los mensajes de error en el frontend muestran información útil para debugging
