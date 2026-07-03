@@ -58,7 +58,7 @@ function AppointmentCard({ appointment, isInProgress, isCompleted }) {
               className={`font-bold leading-tight mt-2 ${isInProgress ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}
               style={{ color: 'var(--tv-text, #f1f5f9)' }}
             >
-              {appointment.client_name || '—'}
+              {appointment.client?.name || '—'}
             </h2>
           </div>
         </div>
@@ -122,7 +122,8 @@ export default function TVQueue() {
       const { data: appts, error: apptErr } = await supabase
         .from('appointments')
         .select(`
-          id, date, start_time, end_time, status, client_name,
+          id, date, start_time, end_time, status,
+          client:client_id(name),
           barber:barber_id(id, name),
           services:appointment_services(service:service_id(name))
         `)
