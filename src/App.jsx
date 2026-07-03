@@ -14,6 +14,7 @@ import BarberLayout from './layouts/BarberLayout'
 const Marketplace = lazy(() => import('./pages/public/Marketplace'))
 const BarberiaPage = lazy(() => import('./pages/barberia/BarberiaPage'))
 const BookingPage = lazy(() => import('./pages/barberia/BookingPage'))
+const TVQueue = lazy(() => import('./pages/public/TVQueue'))
 
 const Login = lazy(() => import('./pages/admin/Login'))
 const SuperDashboard = lazy(() => import('./pages/admin/SuperDashboard'))
@@ -88,6 +89,9 @@ export default function App() {
             <Route path="/barberia/:slug" element={<BarberiaPage />} />
             <Route path="/barberia/:slug/reservar" element={<BookingPage />} />
           </Route>
+
+          {/* TV Mode - sin layout */}
+          <Route path="/barberia/:slug/tv" element={<TVQueue />} />
 
           {/* Login (sin layout) */}
           <Route path="/admin" element={<Login />} />

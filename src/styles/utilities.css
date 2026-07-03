@@ -387,6 +387,7 @@ table { border-collapse: collapse; }
 .from-white { --tw-grad-from: #ffffff; }
 .from-white\/\[0\.03\] { --tw-grad-from: rgba(255,255,255,0.03); }
 .from-\[var\(--color-accent\)\] { --tw-grad-from: var(--color-accent); }
+.from-\[var\(--color-accent\)\]\/5 { --tw-grad-from: color-mix(in srgb, var(--color-accent) 5%, transparent); }
 .from-\[var\(--color-accent\)\]\/10 { --tw-grad-from: color-mix(in srgb, var(--color-accent) 10%, transparent); }
 .from-\[var\(--color-accent\)\]\/20 { --tw-grad-from: color-mix(in srgb, var(--color-accent) 20%, transparent); }
 .from-\[var\(--color-accent-secondary\)\]\/10 { --tw-grad-from: color-mix(in srgb, var(--color-accent-secondary) 10%, transparent); }
@@ -449,6 +450,9 @@ table { border-collapse: collapse; }
 .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); }
 .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); }
 .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+
+/* Tabular numbers (monospace-aligned figures for financial data) */
+.tabular-nums { font-variant-numeric: tabular-nums; }
 
 /* ─── 11. TRANSITIONS & ANIMATIONS ─── */
 .transition-all { transition-property: all; }

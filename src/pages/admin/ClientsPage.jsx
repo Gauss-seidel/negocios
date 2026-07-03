@@ -5,6 +5,7 @@ import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
 import { fmtCurrency as formatCurrency } from '../../utils/format'
+import ClientHistoryModal from '../../components/ClientHistoryModal'
 
 function formatDate(dateStr) {
   if (!dateStr) return '—'
@@ -33,6 +34,7 @@ export default function ClientsPage() {
   const [expandedClient, setExpandedClient] = useState(null)
   const [clientHistory, setClientHistory] = useState([])
   const [historyLoading, setHistoryLoading] = useState(false)
+  const [historyClientId, setHistoryClientId] = useState(null)
 
   const { isMobile } = useResponsiveTable()
 
@@ -261,6 +263,16 @@ export default function ClientsPage() {
                   <p className="text-xs font-medium text-gray-900">{client.total_visits}</p>
                   <p className="text-[10px] text-gray-400">visitas</p>
                 </div>
+                {/* History button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setHistoryClientId(client.id)
+                  }}
+                  className="shrink-0 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50"
+                >
+                  Historial
+                </button>
                 <svg
                   className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
                     expandedClient === client.id ? 'rotate-180' : ''
@@ -344,6 +356,14 @@ export default function ClientsPage() {
             </Card>
           ))}
         </div>
+      )}
+
+      {/* Client History Modal */}
+      {historyClientId && (
+        <ClientHistoryModal
+          clientId={historyClientId}
+          onClose={() => setHistoryClientId(null)}
+        />
       )}
     </div>
   )
