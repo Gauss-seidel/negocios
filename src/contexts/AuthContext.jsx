@@ -47,10 +47,11 @@ export function AuthProvider({ children }) {
     setBusinessId(bizId)
   }
 
-  const login = useCallback(async (email, password) => {
+  const login = useCallback(async (email, password, captchaToken) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: captchaToken ? { captchaToken } : undefined,
     })
     if (error) throw error
     return data

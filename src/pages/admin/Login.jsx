@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { Link } from 'react-router-dom'
+
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -9,7 +11,27 @@ export default function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { login, isAuthenticated, userRole } = useAuth()
+  const captchaLoadedRef = useRef(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY || captchaLoadedRef.current) return
+    captchaLoadedRef.current = true
+    const el = document.createElement('script')
+    el.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
+    el.async = true
+    el.defer = true
+    document.head.appendChild(el)
+  }, [])
+
+  async function getCaptchaToken() {
+    if (!RECAPTCHA_SITE_KEY || typeof grecaptcha === 'undefined') return null
+    try {
+      return await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'login' })
+    } catch {
+      return null
+    }
+  }
 
   if (isAuthenticated) {
     if (userRole === 'super_admin') {
@@ -28,7 +50,8 @@ export default function Login() {
     setLoading(true)
 
     try {
-      await login(email, password)
+      const captchaToken = await getCaptchaToken()
+      await login(email, password, captchaToken)
     } catch (err) {
       setError(err.message === 'Invalid login credentials'
         ? 'Credenciales incorrectas'
