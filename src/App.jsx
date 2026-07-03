@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { BranchProvider } from './contexts/BranchContext'
@@ -9,32 +10,31 @@ import AdminLayout from './layouts/AdminLayout'
 import SuperAdminLayout from './layouts/SuperAdminLayout'
 import BarberLayout from './layouts/BarberLayout'
 
-// Páginas públicas
-import Marketplace from './pages/public/Marketplace'
-import BarberiaPage from './pages/barberia/BarberiaPage'
-import BookingPage from './pages/barberia/BookingPage'
+// Páginas lazy-loaded
+const Marketplace = lazy(() => import('./pages/public/Marketplace'))
+const BarberiaPage = lazy(() => import('./pages/barberia/BarberiaPage'))
+const BookingPage = lazy(() => import('./pages/barberia/BookingPage'))
 
-// Admin
-import Login from './pages/admin/Login'
-import SuperDashboard from './pages/admin/SuperDashboard'
-import BusinessDashboard from './pages/admin/BusinessDashboard'
-import ServicesPage from './pages/admin/ServicesPage'
-import BarbersPage from './pages/admin/BarbersPage'
-import HoursPage from './pages/admin/HoursPage'
-import AppointmentsPage from './pages/admin/AppointmentsPage'
-import ClientsPage from './pages/admin/ClientsPage'
-import CashPage from './pages/admin/CashPage'
-import InventoryPage from './pages/admin/InventoryPage'
-import ReportsPage from './pages/admin/ReportsPage'
-import ConfigPage from './pages/admin/ConfigPage'
-import AppearancePage from './pages/admin/AppearancePage'
-import PlansPage from './pages/admin/PlansPage'
-import SucursalesPage from './pages/admin/SucursalesPage'
-import SuperPlanesPage from './pages/admin/PlanesPage'
-import SuperConfigPage from './pages/admin/SuperConfigPage'
-import SuperBarberosPage from './pages/admin/SuperBarberosPage'
-import BarberDashboard from './pages/barber/BarberDashboard'
-import BarberProfile from './pages/barber/BarberProfile'
+const Login = lazy(() => import('./pages/admin/Login'))
+const SuperDashboard = lazy(() => import('./pages/admin/SuperDashboard'))
+const BusinessDashboard = lazy(() => import('./pages/admin/BusinessDashboard'))
+const ServicesPage = lazy(() => import('./pages/admin/ServicesPage'))
+const BarbersPage = lazy(() => import('./pages/admin/BarbersPage'))
+const HoursPage = lazy(() => import('./pages/admin/HoursPage'))
+const AppointmentsPage = lazy(() => import('./pages/admin/AppointmentsPage'))
+const ClientsPage = lazy(() => import('./pages/admin/ClientsPage'))
+const CashPage = lazy(() => import('./pages/admin/CashPage'))
+const InventoryPage = lazy(() => import('./pages/admin/InventoryPage'))
+const ReportsPage = lazy(() => import('./pages/admin/ReportsPage'))
+const ConfigPage = lazy(() => import('./pages/admin/ConfigPage'))
+const AppearancePage = lazy(() => import('./pages/admin/AppearancePage'))
+const PlansPage = lazy(() => import('./pages/admin/PlansPage'))
+const SucursalesPage = lazy(() => import('./pages/admin/SucursalesPage'))
+const SuperPlanesPage = lazy(() => import('./pages/admin/PlanesPage'))
+const SuperConfigPage = lazy(() => import('./pages/admin/SuperConfigPage'))
+const SuperBarberosPage = lazy(() => import('./pages/admin/SuperBarberosPage'))
+const BarberDashboard = lazy(() => import('./pages/barber/BarberDashboard'))
+const BarberProfile = lazy(() => import('./pages/barber/BarberProfile'))
 
 function NotFound() {
   return (
@@ -63,11 +63,24 @@ function NotFound() {
   )
 }
 
+function PageLoader() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex gap-1.5">
+        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <BranchProvider>
+        <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Páginas públicas */}
           <Route element={<PublicLayout />}>
@@ -135,6 +148,7 @@ export default function App() {
           {/* 404 - Catch all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
         </BranchProvider>
       </AuthProvider>
     </BrowserRouter>

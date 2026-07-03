@@ -1,28 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-
-function useIntersectionObserver(options = {}) {
-  const ref = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true)
-        observer.unobserve(element)
-      }
-    }, { threshold: 0.1, ...options })
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
-
-  return [ref, isVisible]
-}
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver'
 
 function AnimatedSection({ children, className = '', delay = 0 }) {
   const [ref, isVisible] = useIntersectionObserver()
@@ -58,7 +37,7 @@ function BusinessCard({ business, index }) {
           <div className="relative mb-5 flex items-start justify-between">
             <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 ring-1 ring-black/5 transition-all duration-500 group-hover:ring-2 group-hover:ring-[var(--color-accent)]/20">
               {business.logo_url ? (
-                <img src={business.logo_url} alt={business.name} className="h-full w-full object-cover" />
+                <img src={business.logo_url} alt={business.name} className="h-full w-full object-cover" loading="lazy" />
               ) : (
                 <span className="text-xl font-bold text-gray-400">{business.name.charAt(0)}</span>
               )}
@@ -195,8 +174,8 @@ export default function Marketplace() {
       <section className="relative min-h-[90dvh] overflow-hidden bg-[var(--color-primary)]">
         {/* Background gradient orbs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-[var(--color-accent)]/20 to-transparent blur-3xl" />
-          <div className="absolute -right-40 -top-20 h-[400px] w-[400px] rounded-full bg-gradient-to-br from-[var(--color-accent-secondary)]/15 to-transparent blur-3xl" />
+          <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-[var(--color-accent)]/20 to-transparent blur-3xl" style={{ willChange: 'transform' }} />
+          <div className="absolute -right-40 -top-20 h-[400px] w-[400px] rounded-full bg-gradient-to-br from-[var(--color-accent-secondary)]/15 to-transparent blur-3xl" style={{ willChange: 'transform' }} />
           <div className="absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 bg-gradient-to-t from-white/[0.03] to-transparent" />
         </div>
 

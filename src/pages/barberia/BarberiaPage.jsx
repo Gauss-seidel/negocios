@@ -1,28 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
 import { DAYS_OF_WEEK } from '../../lib/constants'
-
-function useIntersectionObserver(options = {}) {
-  const ref = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true)
-        observer.unobserve(element)
-      }
-    }, { threshold: 0.1, ...options })
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
-
-  return [ref, isVisible]
-}
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver'
 
 function AnimatedSection({ children, className = '', delay = 0 }) {
   const [ref, isVisible] = useIntersectionObserver()

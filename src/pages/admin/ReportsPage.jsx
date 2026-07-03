@@ -6,16 +6,6 @@ import UpgradePrompt from '../../components/ui/UpgradePrompt'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
-import { jsPDF } from 'jspdf'
-import { autoTable } from 'jspdf-autotable'
-import {
-  IncomeChart,
-  DayOfWeekChart,
-  StatusChart,
-  ServiceChart,
-  BarbersChart,
-  HoursChart,
-} from '../../components/charts/ChartsSection'
 
 function fmtCurrency(amount) {
   return new Intl.NumberFormat('es-PY', {
@@ -83,6 +73,7 @@ export default function ReportsPage() {
   const [statusBreakdown, setStatusBreakdown] = useState({ completed: 0, cancelled: 0 })
   const [serviceDistribution, setServiceDistribution] = useState([])
   const [apptsByHour, setApptsByHour] = useState([])
+  const [Charts, setCharts] = useState(null)
 
   // Calcular fechas segun periodo
   function getDateBounds() {
@@ -101,6 +92,7 @@ export default function ReportsPage() {
       supabase.from('businesses').select('name').eq('id', businessId).single()
         .then(({ data }) => { if (data) setBusinessName(data.name) })
       fetchReports()
+      import('../../components/charts/ChartsSection').then(m => setCharts(m))
     }
   }, [businessId, period, customStart, customEnd])
 
@@ -283,7 +275,10 @@ export default function ReportsPage() {
       })
   }
 
-  function exportPDF() {
+  async function exportPDF() {
+    const { default: jsPDF } = await import('jspdf')
+    const { default: autoTable } = await import('jspdf-autotable')
+
     const { start, end } = getDateBounds()
     setStatusMsg('Generando PDF...')
 
@@ -686,16 +681,20 @@ export default function ReportsPage() {
       <div className="space-y-6">
         <h2 className="text-xl font-bold text-gray-900">Gráficos</h2>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <IncomeChart data={incomeByDay} />
-          <DayOfWeekChart data={apptsByDayOfWeek} />
-          <StatusChart data={statusBreakdown} />
-          
-          {/* Premium only charts */}
-          {isPremium && (
+          {Charts && (
             <>
-              <ServiceChart data={topServices} />
-              <BarbersChart data={topBarbers} />
-              <HoursChart data={apptsByHour} />
+              <Charts.IncomeChart data={incomeByDay} />
+              <Charts.DayOfWeekChart data={apptsByDayOfWeek} />
+              <Charts.StatusChart data={statusBreakdown} />
+              
+              {/* Premium only charts */}
+              {isPremium && (
+                <>
+                  <Charts.ServiceChart data={topServices} />
+                  <Charts.BarbersChart data={topBarbers} />
+                  <Charts.HoursChart data={apptsByHour} />
+                </>
+              )}
             </>
           )}
         </div>
