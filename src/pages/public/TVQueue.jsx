@@ -93,17 +93,28 @@ function AppointmentCard({ appointment, isInProgress, isCompleted }) {
 export default function TVQueue() {
   const { slug } = useParams()
   const [business, setBusiness] = useState(null)
+  const [branches, setBranches] = useState([])
+  const [selectedBranchId, setSelectedBranchId] = useState(null)
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [lastRefresh, setLastRefresh] = useState(null)
   const intervalRef = useRef(null)
+  const branchRef = useRef(null)
+  branchRef.current = selectedBranchId
 
   useEffect(() => {
     loadData()
     intervalRef.current = setInterval(loadData, 30000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [slug])
+
+  function selectBranch(id) {
+    setSelectedBranchId(id)
+    // Re-fetch inmediato con la nueva sucursal
+    setLoading(true)
+    setTimeout(loadData, 0)
+  }
 
   async function loadData() {
     try {
@@ -118,11 +129,26 @@ export default function TVQueue() {
       if (!biz) throw new Error('Barbería no encontrada')
       setBusiness(biz)
 
+      // Cargar sucursales activas
+      const { data: branchList } = await supabase
+        .from('branches')
+        .select('id, name')
+        .eq('business_id', biz.id)
+        .eq('is_active', true)
+        .order('name')
+      const activeBranches = branchList || []
+      setBranches(activeBranches)
+
+      // Auto-seleccionar primera sucursal si no hay selección
+      if (activeBranches.length > 0 && !branchRef.current && !branches.length) {
+        setSelectedBranchId(activeBranches[0].id)
+      }
+
       const today = new Date().toISOString().split('T')[0]
-      const { data: appts, error: apptErr } = await supabase
+      let query = supabase
         .from('appointments')
         .select(`
-          id, date, start_time, end_time, status,
+          id, date, start_time, end_time, status, branch_id,
           client:client_id(name),
           barber:barber_id(id, name),
           services:appointment_services(service:service_id(name))
@@ -130,9 +156,20 @@ export default function TVQueue() {
         .eq('business_id', biz.id)
         .eq('date', today)
         .in('status', ['pending', 'confirmed', 'in_progress', 'completed'])
-        .order('start_time', { ascending: true })
+
+      // Filtrar por sucursal si hay selección
+      const branchFilter = branchRef.current || (activeBranches.length > 0 ? activeBranches[0].id : null)
+      if (branchFilter) query = query.eq('branch_id', branchFilter)
+
+      const { data: appts, error: apptErr } = await query.order('start_time', { ascending: true })
       if (apptErr) throw apptErr
-      setAppointments(appts || [])
+
+      // Mostrar nombre de sucursal en cada turno
+      const enriched = (appts || []).map(a => ({
+        ...a,
+        branch_name: activeBranches.find(b => b.id === a.branch_id)?.name || '',
+      }))
+      setAppointments(enriched)
       setError(null)
       setLastRefresh(new Date())
     } catch (err) {
@@ -223,6 +260,25 @@ export default function TVQueue() {
         </div>
 
         <div className="flex items-center gap-4 flex-shrink-0">
+          {/* Branch selector */}
+          {branches.length > 1 && (
+            <div className="flex items-center gap-1.5">
+              {branches.map(b => (
+                <button
+                  key={b.id}
+                  onClick={() => selectBranch(b.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    (branchRef.current || branches[0]?.id) === b.id
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/40 hover:text-white/60 hover:bg-white/5'
+                  }`}
+                >
+                  {b.name}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Live indicator */}
           <div className="flex items-center gap-2 text-xs sm:text-sm" style={{ color: tvColors.textSecondary }}>
             <span className="relative flex w-2.5 h-2.5">
