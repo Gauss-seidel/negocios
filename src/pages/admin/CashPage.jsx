@@ -400,7 +400,7 @@ export default function CashPage() {
           />
 
           <Input
-            label="Monto ($)"
+            label="Monto (Gs)"
             name="amount"
             type="number"
             min="0.01"
