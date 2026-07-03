@@ -39,6 +39,31 @@ export default function BarberDashboard() {
     if (user?.id && businessId) fetchAll()
   }, [user?.id, businessId, date])
 
+  // Realtime: actualizar cuando cambien reservas del negocio
+  useEffect(() => {
+    if (!businessId) return
+
+    const channel = supabase
+      .channel(`barber-dashboard-${businessId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'appointments',
+          filter: `business_id=eq.${businessId}`,
+        },
+        () => {
+          fetchAll()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [businessId])
+
   async function fetchAll() {
     setLoading(true)
     setError(null)

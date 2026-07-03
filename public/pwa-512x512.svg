@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#1a1a2e"/>
+  <g transform="translate(256,256)">
+    <!-- Tijeras -->
+    <path d="M-70-20 L20-90 M-70-20 L20 50" stroke="#c02626" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <path d="M70-20 L-20-90 M70-20 L-20 50" stroke="#c02626" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <!-- Círculo interior -->
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.3"/>
+  </g>
+</svg>

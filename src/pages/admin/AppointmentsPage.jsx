@@ -88,6 +88,31 @@ export default function AppointmentsPage() {
     if (businessId && currentBranch?.id) fetchAppointments()
   }, [businessId, currentBranch?.id, statusFilter, dateFilter])
 
+  // Realtime: actualizar cuando cambien reservas en DB
+  useEffect(() => {
+    if (!businessId) return
+
+    const channel = supabase
+      .channel(`appointments-realtime-${businessId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'appointments',
+          filter: `business_id=eq.${businessId}`,
+        },
+        () => {
+          fetchAppointments()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [businessId])
+
   async function fetchAppointments() {
     if (!currentBranch?.id) return
 

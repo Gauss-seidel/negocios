@@ -401,38 +401,17 @@ export default function BarberiaPage() {
       if (!biz) throw new Error('Barbería no encontrada')
       setBusiness(biz)
 
-      const { data: svc } = await supabase
-        .from('services')
-        .select('*')
-        .eq('business_id', biz.id)
-        .eq('is_active', true)
-        .order('name')
-      setServices(svc || [])
+      const [svcResult, hrsResult, prodsResult, brnResult] = await Promise.allSettled([
+        supabase.from('services').select('*').eq('business_id', biz.id).eq('is_active', true).order('name'),
+        supabase.from('business_hours').select('*').eq('business_id', biz.id).order('day_of_week'),
+        supabase.from('inventory_products').select('*').eq('business_id', biz.id).eq('is_product', true).eq('is_active', true).gt('current_stock', 0).order('name'),
+        supabase.from('branches').select('*').eq('business_id', biz.id).eq('is_active', true).order('name'),
+      ])
 
-      const { data: hrs } = await supabase
-        .from('business_hours')
-        .select('*')
-        .eq('business_id', biz.id)
-        .order('day_of_week')
-      setHours(hrs || [])
-
-      const { data: prods } = await supabase
-        .from('inventory_products')
-        .select('*')
-        .eq('business_id', biz.id)
-        .eq('is_product', true)
-        .eq('is_active', true)
-        .gt('current_stock', 0)
-        .order('name')
-      setProducts(prods || [])
-
-      const { data: brn } = await supabase
-        .from('branches')
-        .select('*')
-        .eq('business_id', biz.id)
-        .eq('is_active', true)
-        .order('name')
-      setBranches(brn || [])
+      setServices(svcResult.status === 'fulfilled' ? (svcResult.value.data || []) : [])
+      setHours(hrsResult.status === 'fulfilled' ? (hrsResult.value.data || []) : [])
+      setProducts(prodsResult.status === 'fulfilled' ? (prodsResult.value.data || []) : [])
+      setBranches(brnResult.status === 'fulfilled' ? (brnResult.value.data || []) : [])
     } catch (err) {
       setError(err.message)
     } finally {

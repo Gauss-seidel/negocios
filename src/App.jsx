@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { BranchProvider } from './contexts/BranchContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
@@ -34,6 +34,34 @@ import SuperPlanesPage from './pages/admin/PlanesPage'
 import SuperConfigPage from './pages/admin/SuperConfigPage'
 import SuperBarberosPage from './pages/admin/SuperBarberosPage'
 import BarberDashboard from './pages/barber/BarberDashboard'
+import BarberProfile from './pages/barber/BarberProfile'
+
+function NotFound() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)] px-4">
+      <div className="text-center">
+        <p className="text-[var(--color-accent)] font-bold text-7xl lg:text-8xl tracking-tight leading-[1.1]">
+          404
+        </p>
+        <h1 className="text-xl lg:text-2xl font-semibold text-[var(--color-text)] mt-4">
+          Página no encontrada
+        </h1>
+        <p className="text-[var(--color-text-secondary)] mt-2 max-w-sm mx-auto">
+          La página que buscas no existe o fue movida.
+        </p>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-xl bg-[var(--color-accent)] text-white font-medium hover:brightness-110 transition-all active:scale-[0.98]"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Volver al inicio
+        </Link>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -77,6 +105,7 @@ export default function App() {
             }
           >
             <Route index element={<BarberDashboard />} />
+            <Route path="perfil" element={<BarberProfile />} />
           </Route>
 
           {/* Business Admin */}
@@ -102,6 +131,9 @@ export default function App() {
             <Route path="apariencia" element={<AppearancePage />} />
             <Route path="planes" element={<PlansPage />} />
           </Route>
+
+          {/* 404 - Catch all */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         </BranchProvider>
       </AuthProvider>

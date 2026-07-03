@@ -135,11 +135,23 @@ function BusinessCard({ business, index }) {
   )
 }
 
+function extractCity(address) {
+  if (!address) return null
+  const parts = address.split(',').map(p => p.trim())
+  const last = parts[parts.length - 1]
+  return last
+    .replace(/^(CP|Código Postal|Zona|Barrio)\s+/i, '')
+    .trim()
+    || null
+}
+
 export default function Marketplace() {
   const [businesses, setBusinesses] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [heroLoaded, setHeroLoaded] = useState(false)
+  const [cityFilter, setCityFilter] = useState('')
+  const [availableCities, setAvailableCities] = useState([])
 
   useEffect(() => {
     loadBusinesses()
@@ -155,6 +167,8 @@ export default function Marketplace() {
         .order('name')
 
       if (error) throw error
+      const cities = [...new Set((data || []).map(b => extractCity(b.address)).filter(Boolean))]
+      setAvailableCities(cities.sort())
       setTimeout(() => {
         setBusinesses(data || [])
         setLoading(false)
@@ -166,10 +180,14 @@ export default function Marketplace() {
     }
   }
 
-  const filtered = businesses.filter((b) =>
-    b.name.toLowerCase().includes(search.toLowerCase()) ||
-    b.address?.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = businesses.filter((b) => {
+    const matchesSearch = !search ||
+      b.name.toLowerCase().includes(search.toLowerCase()) ||
+      b.address?.toLowerCase().includes(search.toLowerCase())
+    const matchesCity = !cityFilter ||
+      extractCity(b.address) === cityFilter
+    return matchesSearch && matchesCity
+  })
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
@@ -251,8 +269,37 @@ export default function Marketplace() {
               </div>
             </div>
 
+            {/* City filter pills */}
+            {availableCities.length > 0 && (
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  onClick={() => setCityFilter('')}
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                    !cityFilter
+                      ? 'bg-white/20 text-white'
+                      : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/70'
+                  }`}
+                >
+                  Todas
+                </button>
+                {availableCities.map(city => (
+                  <button
+                    key={city}
+                    onClick={() => setCityFilter(city === cityFilter ? '' : city)}
+                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                      cityFilter === city
+                        ? 'bg-white/20 text-white'
+                        : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/70'
+                    }`}
+                  >
+                    {city}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Stats */}
-            <div className="mt-12 flex flex-wrap justify-center gap-10 text-center">
+            <div className="mt-10 flex flex-wrap justify-center gap-10 text-center">
               <div>
                 <div className="text-2xl font-bold text-white">{businesses.length || '—'}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-wider text-white/40">Barberías</div>
@@ -284,10 +331,15 @@ export default function Marketplace() {
               }
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[var(--color-text-secondary)]">
-              {search
+              {search || cityFilter
                 ? `${filtered.length} barbería${filtered.length !== 1 ? 's' : ''} encontrada${filtered.length !== 1 ? 's' : ''}`
                 : 'Seleccioná tu barbería favorita y reservá al instante'
               }
+              {cityFilter && (
+                <span className="text-xs ml-2">
+                  en {cityFilter}
+                </span>
+              )}
             </p>
           </div>
         </AnimatedSection>
