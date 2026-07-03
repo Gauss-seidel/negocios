@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
@@ -207,6 +207,8 @@ export default function BookingPage() {
   const [products, setProducts] = useState([])
   const [selectedProducts, setSelectedProducts] = useState([])
   const [imgErrors, setImgErrors] = useState({})
+  const [cooldown, setCooldown] = useState(0)
+  const cooldownTimerRef = useRef(null)
 
   const days = getNext7Days()
   const contentRef = useRef(null)
@@ -219,6 +221,12 @@ export default function BookingPage() {
     contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
     if (submitError) setSubmitError(null)
   }, [step])
+
+  useEffect(() => {
+    return () => {
+      if (cooldownTimerRef.current) clearInterval(cooldownTimerRef.current)
+    }
+  }, [])
 
   async function loadBarberia() {
     setLoading(true)
@@ -341,8 +349,28 @@ export default function BookingPage() {
     return endTimeStr
   }
 
+  const canSubmit = useCallback(() => {
+    if (cooldown > 0) return false
+    setCooldown(30)
+    cooldownTimerRef.current = setInterval(() => {
+      setCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(cooldownTimerRef.current)
+          cooldownTimerRef.current = null
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return true
+  }, [cooldown])
+
   const handleSubmit = async () => {
     if (!clientName || !clientPhone || !selectedTime || !selectedService || !selectedDate) return
+    if (!canSubmit()) {
+      setSubmitError(`Ya realizaste una reserva recientemente. Podés agendar otra en ${cooldown} segundos.`)
+      return
+    }
     setSubmitting(true)
     setSubmitError(null)
     try {
@@ -989,11 +1017,12 @@ export default function BookingPage() {
               <Button
                 onClick={handleSubmit}
                 loading={submitting}
+                disabled={cooldown > 0}
                 className="w-full"
                 size="lg"
                 style={{ backgroundColor: colors.accent }}
               >
-                Confirmar reserva
+                {cooldown > 0 ? `Esperá ${cooldown}s para agendar otra` : 'Confirmar reserva'}
               </Button>
 
               {submitError && (
