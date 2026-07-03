@@ -193,7 +193,7 @@ export default function SuperDashboard() {
       })
       const efData = await efRes.json()
       if (!efData.success) throw new Error(`Error al crear usuario: ${efData.error}`)
-      const authUserId = efData.data.user_id
+      const authUserId = efData.data.user.id
 
       // 2. Crear negocio
       const { data: biz, error: be } = await supabase.from('businesses').insert([{
