@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react'
 
 export default function Modal({ open, onClose, title, children, size = 'md', dark = false }) {
   const modalRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
   useEffect(() => {
     if (open) {
@@ -18,7 +20,7 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
 
     function handleKeyDown(e) {
       if (e.key === 'Escape') {
-        onClose()
+        onCloseRef.current()
         return
       }
       if (e.key === 'Tab') {
@@ -39,21 +41,11 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
     }
 
     document.addEventListener('keydown', handleKeyDown)
-    // Auto-focus first focusable element
-    const timer = setTimeout(() => {
-      const el = modalRef.current
-      if (!el) return
-      const first = el.querySelector(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-      if (first) first.focus()
-    }, 50)
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
-      clearTimeout(timer)
     }
-  }, [open, onClose])
+  }, [open])
 
   if (!open) return null
 
