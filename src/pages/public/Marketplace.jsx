@@ -283,10 +283,6 @@ export default function Marketplace() {
                 <div className="text-2xl font-bold text-white">{businesses.length || '—'}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-wider text-white/40">Barberías</div>
               </div>
-              <div className="hidden sm:block">
-                <div className="text-2xl font-bold text-white">0</div>
-                <div className="mt-1 text-xs font-medium uppercase tracking-wider text-white/40">Reservas hoy</div>
-              </div>
               <div>
                 <div className="text-2xl font-bold text-white">100%</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-wider text-white/40">Sin filas</div>

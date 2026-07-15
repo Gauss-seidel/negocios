@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
 import { DAYS_OF_WEEK } from '../../lib/constants'
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver'
+import { fmtCurrency } from '../../utils/format'
 
 function AnimatedSection({ children, className = '', delay = 0 }) {
   const [ref, isVisible] = useIntersectionObserver()
@@ -135,7 +136,7 @@ function BarberiaServices({ services, colors, templateId = 'classic' }) {
                 className="absolute right-4 top-4 rounded-xl px-3 py-1 text-sm font-bold text-white"
                 style={{ backgroundColor: colors.accent }}
               >
-                ₲{service.price}
+                {fmtCurrency(service.price)}
               </div>
 
               <div
@@ -341,7 +342,7 @@ function BarberiaProducts({ products, colors }) {
                       Stock: {product.current_stock} {product.unit}
                     </span>
                     <span className="text-xl font-bold" style={{ color: colors.accent }}>
-                      ₲ {product.price}
+                      {fmtCurrency(product.price)}
                     </span>
                   </div>
                 </div>

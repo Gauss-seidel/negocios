@@ -24,7 +24,7 @@ const STATUS_LABELS = {
 function formatDate(dateStr) {
   if (!dateStr) return '—'
   try {
-    return new Intl.DateTimeFormat('es-MX', {
+    return new Intl.DateTimeFormat('es-PY', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -52,7 +52,7 @@ function StatusBadge({ status }) {
   )
 }
 
-export default function ClientHistoryModal({ clientId, onClose }) {
+export default function ClientHistoryModal({ clientId, branchId, onClose }) {
   const [client, setClient] = useState(null)
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
@@ -86,6 +86,7 @@ export default function ClientHistoryModal({ clientId, onClose }) {
             `
             )
             .eq('client_id', clientId)
+            .eq('branch_id', branchId)
             .order('date', { ascending: false })
             .limit(50),
         ])

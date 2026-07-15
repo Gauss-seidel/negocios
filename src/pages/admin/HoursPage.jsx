@@ -93,6 +93,17 @@ export default function HoursPage() {
     setSaveSuccess(false)
 
     try {
+      // Validate open < close for open days
+      for (const day of Object.values(days)) {
+        if (!day.is_closed && day.open_time && day.close_time) {
+          if (day.open_time >= day.close_time) {
+            setError(`El horario de ${getDayName(day.day_of_week)} tiene hora de apertura mayor o igual a la de cierre`)
+            setSaving(false)
+            return
+          }
+        }
+      }
+
       // Delete existing and re-insert
       await supabase.from('business_hours').delete()
         .eq('business_id', businessId)

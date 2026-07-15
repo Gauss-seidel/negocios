@@ -1,6 +1,7 @@
 import { supabase } from '../../lib/supabase'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { fmtCurrency } from '../../utils/format'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import CompleteAppointmentModal from '../../components/CompleteAppointmentModal'
@@ -22,6 +23,7 @@ export default function BarberDashboard() {
   const { user, businessId } = useAuth()
   const [barberId, setBarberId] = useState(null)
   const [barberName, setBarberName] = useState('')
+  const [business, setBusiness] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [date, setDate] = useState(todayStr)
@@ -92,6 +94,14 @@ export default function BarberDashboard() {
         .single()
       if (barber) setBarberName(barber.name)
 
+      // Get business data for invoice
+      const { data: biz } = await supabase
+        .from('businesses')
+        .select('name, address, phone, email')
+        .eq('id', businessId)
+        .single()
+      if (biz) setBusiness(biz)
+
       // Fetch all in parallel
       const [myRes, unassignedRes, otherBarbersRes] = await Promise.all([
         supabase
@@ -145,6 +155,20 @@ export default function BarberDashboard() {
       await fetchAll()
     } catch (err) {
       setError(err?.message || 'Error al actualizar estado')
+    }
+  }
+
+  async function handleCancelAppointment(appointmentId) {
+    if (!confirm('¿Seguro que querés cancelar esta reserva?')) return
+    try {
+      const { error: ue } = await supabase
+        .from('appointments')
+        .update({ status: 'cancelled' })
+        .eq('id', appointmentId)
+      if (ue) throw ue
+      await fetchAll()
+    } catch (err) {
+      setError(err?.message || 'Error al cancelar la reserva')
     }
   }
 
@@ -247,7 +271,7 @@ export default function BarberDashboard() {
                 {a.total && (
                   <>
                     <span className="text-white/20">•</span>
-                    <span className="text-xs text-white/50">₲ {Number(a.total).toLocaleString('es-PY')}</span>
+                    <span className="text-xs text-white/50">{fmtCurrency(a.total)}</span>
                   </>
                 )}
               </div>
@@ -272,13 +296,22 @@ export default function BarberDashboard() {
             {a.status !== 'completed' && a.status !== 'cancelled' && a.status !== 'no_show' && (
               <div className="flex gap-1">
                 {(a.status === 'pending' || a.status === 'confirmed') && (
-                  <button
-                    onClick={() => handleStatusChange(a.id, 'in_progress')}
-                    className="rounded-lg bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-400 transition-all hover:bg-blue-500/20"
-                    title="Iniciar"
-                  >
-                    Iniciar
-                  </button>
+                  <>
+                    <button
+                      onClick={() => handleStatusChange(a.id, 'in_progress')}
+                      className="rounded-lg bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-400 transition-all hover:bg-blue-500/20"
+                      title="Iniciar"
+                    >
+                      Iniciar
+                    </button>
+                    <button
+                      onClick={() => handleCancelAppointment(a.id)}
+                      className="rounded-lg bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20"
+                      title="Cancelar"
+                    >
+                      Cancelar
+                    </button>
+                  </>
                 )}
                 {a.status === 'in_progress' && (
                   <button
@@ -564,6 +597,7 @@ export default function BarberDashboard() {
           appointment={completingApp}
           services={completingApp.services || []}
           products={completingApp.products || []}
+          business={business}
           onConfirm={(items) => handleCompleteConfirm(completingApp.id, items)}
           onClose={() => setCompletingApp(null)}
         />

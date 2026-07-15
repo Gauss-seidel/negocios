@@ -1,6 +1,7 @@
 import { supabase } from '../../lib/supabase'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { fmtCurrency } from '../../utils/format'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
@@ -24,6 +25,7 @@ export default function SuperConfigPage() {
   const [createLoading, setCreateLoading] = useState(false)
   const [createError, setCreateError] = useState(null)
   const [createSuccess, setCreateSuccess] = useState(false)
+  const [createdEmail, setCreatedEmail] = useState('')
 
   useEffect(() => { fetchData() }, [])
 
@@ -127,6 +129,7 @@ export default function SuperConfigPage() {
       ])
       if (ie) throw new Error(`Error al registrar: ${ie.message}`)
 
+      setCreatedEmail(createForm.email.trim())
       setCreateSuccess(true)
       setCreateForm({ name: '', email: '', password: '' })
       await fetchData()
@@ -135,10 +138,6 @@ export default function SuperConfigPage() {
     } finally {
       setCreateLoading(false)
     }
-  }
-
-  function fmtRevenue(v) {
-    return new Intl.NumberFormat('es-PY', { style: 'currency', currency: 'PYG', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(v || 0)
   }
 
   /* ─── Render ─── */
@@ -200,7 +199,7 @@ export default function SuperConfigPage() {
               { label: 'Frontend', value: 'React + Vite' },
               { label: 'Entorno', value: import.meta.env.DEV ? 'Desarrollo' : 'Producción' },
               { label: 'Super Admin', value: session?.user?.email || '—' },
-              { label: 'Ingresos totales', value: fmtRevenue(stats?.revenue) },
+              { label: 'Ingresos totales', value: fmtCurrency(stats?.revenue) },
               { label: 'Moneda', value: 'Guaraníes (PYG)' },
               { label: 'Zona horaria', value: 'America/Asuncion' },
             ].map(({ label, value }) => (
@@ -235,7 +234,7 @@ export default function SuperConfigPage() {
             </button>
 
             <a
-              href="https://supabase.com/dashboard/project/mrktwxjlltqqxkvktkku"
+              href={`https://supabase.com/dashboard/project/${import.meta.env.VITE_SUPABASE_URL?.split('://')[1]?.split('.')[0]}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex w-full items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left text-sm text-white/70 transition-all hover:border-white/[0.12] hover:bg-white/[0.06] hover:text-white"
@@ -314,7 +313,7 @@ export default function SuperConfigPage() {
                     </td>
                     <td className="px-6 py-4 text-white/40">
                       {a.created_at
-                        ? new Intl.DateTimeFormat('es-MX', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(a.created_at))
+                        ? new Intl.DateTimeFormat('es-PY', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(a.created_at))
                         : '—'}
                     </td>
                   </tr>
@@ -335,7 +334,7 @@ export default function SuperConfigPage() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-white">Super Admin creado</h3>
-            <p className="text-sm text-white/40">{createForm.email} ya tiene acceso como super admin.</p>
+            <p className="text-sm text-white/40">{createdEmail} ya tiene acceso como super admin.</p>
             <Button variant="secondary" onClick={() => { setShowCreate(false); setCreateSuccess(false) }}>Cerrar</Button>
           </div>
         ) : (

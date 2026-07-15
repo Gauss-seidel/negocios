@@ -79,7 +79,8 @@ export function usePlan() {
         max_branches: planData.max_branches,
         max_monthly_bookings: planData.max_monthly_bookings,
       }
-    : { max_barbers: 0, max_branches: 0, max_monthly_bookings: 0 }
+    // ponytail: no plan = generous defaults so UI isn't blocked
+    : { max_barbers: 999, max_branches: 999, max_monthly_bookings: 999 }
 
   const planName = planData?.name || plan || ''
 

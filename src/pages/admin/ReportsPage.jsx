@@ -6,13 +6,7 @@ import UpgradePrompt from '../../components/ui/UpgradePrompt'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
-
-function fmtCurrency(amount) {
-  return new Intl.NumberFormat('es-PY', {
-    style: 'currency', currency: 'PYG',
-    minimumFractionDigits: 0, maximumFractionDigits: 0,
-  }).format(Number(amount) || 0)
-}
+import { fmtCurrency } from '../../utils/format'
 
 function fmtDate(d) {
   return d ? d.split('T')[0] : ''
@@ -251,15 +245,19 @@ export default function ReportsPage() {
         if (err) { setError('Error al exportar'); return }
 
         const header = 'Fecha,Hora,Cliente,Barbero,Servicio,Total,Estado'
+        const escapeCSV = (v) => {
+          const s = String(v ?? '')
+          return (s.includes(',') || s.includes('"') || s.includes('\n')) ? `"${s.replace(/"/g, '""')}"` : s
+        }
         const rows = (data || []).map(a => {
           const date = a.date || ''
           const time = a.start_time ? a.start_time.slice(0, 5) : ''
           const client = a.client?.name || ''
           const barber = a.barber?.name || ''
           const service = a.services?.[0]?.service?.name || ''
-          const total = Number(a.total || 0).toFixed(2)
+          const total = Number(a.total || 0).toFixed(0)
           const status = a.status || ''
-          return `"${date}","${time}","${client}","${barber}","${service}","${total}","${status}"`
+          return [date, time, client, barber, service, total, status].map(escapeCSV).join(',')
         }).join('\n')
 
         const csv = `${header}\n${rows}`
@@ -590,7 +588,7 @@ export default function ReportsPage() {
         </Card>
         <Card className="transition-shadow hover:shadow-md">
           <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Reservas</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">{apptCount.toLocaleString('es-MX')}</p>
+          <p className="mt-1 text-3xl font-bold text-gray-900">{apptCount.toLocaleString('es-PY')}</p>
           <p className="mt-1 text-xs text-gray-400">{periodLabel}</p>
         </Card>
         <Card className="transition-shadow hover:shadow-md">

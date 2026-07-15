@@ -2,13 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
-import { usePlan } from '../../hooks/usePlan'
+import { fmtCurrency } from '../../utils/format'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 
 /* ─── Utilities ─── */
 
-function generateTimeSlots(openTime, closeTime, durationMinutes, existingAppointments = []) {
+function generateTimeSlots(openTime, closeTime, durationMinutes, existingAppointments = [], selectedDate = null) {
   const slots = []
   const [openH, openM] = openTime.split(':').map(Number)
   const [closeH, closeM] = closeTime.split(':').map(Number)
@@ -16,7 +16,12 @@ function generateTimeSlots(openTime, closeTime, durationMinutes, existingAppoint
   const closeMinutes = closeH * 60 + closeM
   const busySlots = existingAppointments.map((a) => ({ start: a.start_time, end: a.end_time }))
 
-  for (let mins = openMinutes; mins + durationMinutes <= closeMinutes; mins += 30) {
+  // Ponytail: one-line now filter — skip past slots for today
+  const now = new Date()
+  const isToday = selectedDate && selectedDate === now.toISOString().split('T')[0]
+  const currentMinutes = isToday ? now.getHours() * 60 + now.getMinutes() : 0
+
+  for (let mins = openMinutes; mins + durationMinutes <= closeMinutes; mins += durationMinutes) {
     const sH = Math.floor(mins / 60)
     const sM = mins % 60
     const startStr = `${String(sH).padStart(2, '0')}:${String(sM).padStart(2, '0')}`
@@ -24,6 +29,9 @@ function generateTimeSlots(openTime, closeTime, durationMinutes, existingAppoint
     const eH = Math.floor(eMins / 60)
     const eM = eMins % 60
     const endStr = `${String(eH).padStart(2, '0')}:${String(eM).padStart(2, '0')}`
+
+    // Skip past slots for today
+    if (isToday && mins <= currentMinutes) continue
 
     const isBusy = busySlots.some((b) => startStr < b.end && endStr > b.start)
     if (!isBusy) slots.push(startStr)
@@ -162,7 +170,7 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
           )}
         </div>
         <div className="flex flex-col items-end gap-0.5">
-          <div className="text-lg font-bold" style={{ color: colors.accent }}>₲ {service.price}</div>
+          <div className="text-lg font-bold" style={{ color: colors.accent }}>{fmtCurrency(service.price)}</div>
           <div className="flex items-center gap-1 text-xs" style={{ color: colors.textSecondary }}>
             <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -180,7 +188,6 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
 export default function BookingPage() {
   const { slug } = useParams()
   const location = useLocation()
-  const { plan } = usePlan()
   const [business, setBusiness] = useState(null)
   const [services, setServices] = useState([])
   const [barbers, setBarbers] = useState([])
@@ -209,6 +216,9 @@ export default function BookingPage() {
   const [imgErrors, setImgErrors] = useState({})
   const [cooldown, setCooldown] = useState(0)
   const cooldownTimerRef = useRef(null)
+  const [formErrors, setFormErrors] = useState({})
+  const [holidays, setHolidays] = useState([])
+  const [businessPlan, setBusinessPlan] = useState(null) // BOOK-002: plan fetched directly
 
   const days = getNext7Days()
   const contentRef = useRef(null)
@@ -228,13 +238,47 @@ export default function BookingPage() {
     }
   }, [])
 
+  // BOOK-017: Re-fetch barbers and hours when branch changes
+  useEffect(() => {
+    if (!business || !selectedBranch) return
+
+    async function refetchBranchData() {
+      const { data: bar } = await supabase
+        .from('barbers').select('*')
+        .eq('business_id', business.id)
+        .eq('is_active', true)
+        .eq('branch_id', selectedBranch.id)
+      setBarbers(bar || [])
+
+      const { data: hrs } = await supabase
+        .from('business_hours').select('*')
+        .eq('business_id', business.id)
+        .eq('branch_id', selectedBranch.id)
+        .order('day_of_week')
+      setHours(hrs || [])
+
+      // Reset selections when branch changes
+      setSelectedService(null)
+      setSelectedBarber(null)
+      setSelectedDate(null)
+      setSelectedTime(null)
+      setStep(1)
+    }
+
+    refetchBranchData()
+  }, [selectedBranch?.id, business?.id])
+
   async function loadBarberia() {
     setLoading(true)
     try {
+      // BOOK-009: Filter to active businesses only
       const { data: biz } = await supabase
-        .from('businesses').select('*').eq('slug', slug).single()
-      if (!biz) throw new Error('Barbería no encontrada')
+        .from('businesses').select('*').eq('slug', slug).eq('status', 'active').single()
+      if (!biz) throw new Error('Barbería no encontrada o no disponible')
       setBusiness(biz)
+
+      // BOOK-002: Fetch plan directly from business row
+      setBusinessPlan(biz.plan || 'basic')
 
       const { data: svc } = await supabase
         .from('services').select('*').eq('business_id', biz.id).eq('is_active', true).order('name')
@@ -284,6 +328,18 @@ export default function BookingPage() {
         .gt('current_stock', 0)
         .order('name')
       setProducts(prods || [])
+
+      // BOOK-012: Pre-fetch holidays for the next 7 days
+      const dateStart = days[0].date
+      const dateEnd = days[days.length - 1].date
+      const { data: hol } = await supabase
+        .from('business_holidays')
+        .select('date, is_closed')
+        .eq('business_id', biz.id)
+        .gte('date', dateStart)
+        .lte('date', dateEnd)
+        .eq('is_closed', true)
+      setHolidays(hol || [])
     } catch (err) {
       setError(err.message)
     } finally {
@@ -291,34 +347,47 @@ export default function BookingPage() {
     }
   }
 
+  // BOOK-016: Added try-catch to loadSlots
   useEffect(() => {
     if (!selectedDate || !selectedService || !business) return
     setSlotsLoading(true)
     setSelectedTime(null)
 
     async function loadSlots() {
-      const dayOfWeek = new Date(selectedDate + 'T12:00:00').getDay() || 7
-      const dayHours = hours.find((h) => h.day_of_week === dayOfWeek)
-      if (!dayHours || dayHours.is_closed) { setAvailableSlots([]); setSlotsLoading(false); return }
+      try {
+        const dayOfWeek = new Date(selectedDate + 'T12:00:00').getDay() || 7
+        const dayHours = hours.find((h) => h.day_of_week === dayOfWeek)
+        if (!dayHours || dayHours.is_closed) { setAvailableSlots([]); setSlotsLoading(false); return }
 
-      const { data: holidays } = await supabase
-        .from('business_holidays').select('*')
-        .eq('business_id', business.id).eq('date', selectedDate).eq('is_closed', true)
-      if (holidays?.length > 0) { setAvailableSlots([]); setSlotsLoading(false); return }
+        const { data: holidaysOnDate } = await supabase
+          .from('business_holidays').select('*')
+          .eq('business_id', business.id).eq('date', selectedDate).eq('is_closed', true)
+        if (holidaysOnDate?.length > 0) { setAvailableSlots([]); setSlotsLoading(false); return }
 
-      let query = supabase
-        .from('appointments').select('start_time, end_time')
-        .eq('business_id', business.id).eq('date', selectedDate)
-        .not('status', 'in', '("cancelled","no_show")')
-      if (selectedBarber) query = query.eq('barber_id', selectedBarber)
+        let query = supabase
+          .from('appointments').select('start_time, end_time')
+          .eq('business_id', business.id).eq('date', selectedDate)
+          .not('status', 'in', '("cancelled","no_show")')
+        // BOOK-018: Filter by branch_id when a branch is selected
+        if (selectedBranch) query = query.eq('branch_id', selectedBranch.id)
+        if (selectedBarber) query = query.eq('barber_id', selectedBarber)
 
-      const { data: existing } = await query
-      const slots = generateTimeSlots(dayHours.open_time, dayHours.close_time, selectedService.duration, existing || [])
-      setAvailableSlots(slots)
-      setSlotsLoading(false)
+        const { data: existing, error: slotErr } = await query
+        if (slotErr) throw new Error('Error al cargar horarios disponibles')
+
+        // BOOK-006: Use slot_duration from business_hours instead of hardcoded 30
+        const slotDuration = dayHours.slot_duration || 30
+        const slots = generateTimeSlots(dayHours.open_time, dayHours.close_time, slotDuration, existing || [], selectedDate)
+        setAvailableSlots(slots)
+      } catch (err) {
+        console.error('Error loading slots:', err)
+        setAvailableSlots([])
+      } finally {
+        setSlotsLoading(false)
+      }
     }
     loadSlots()
-  }, [selectedDate, selectedService, selectedBarber, business?.id])
+  }, [selectedDate, selectedService, selectedBarber, business?.id, selectedBranch?.id])
 
   const checkSlotAvailable = async () => {
     const [h, m] = selectedTime.split(':').map(Number)
@@ -339,7 +408,13 @@ export default function BookingPage() {
 
     if (selectedBarber) {
       query = query.eq('barber_id', selectedBarber)
+    } else {
+      // BOOK-014: For "any barber", check if there's an existing "any barber" booking in the slot
+      query = query.is('barber_id', null)
     }
+
+    // BOOK-018: Also filter by branch
+    if (selectedBranch) query = query.eq('branch_id', selectedBranch.id)
 
     const { data: conflicts, error } = await query
     if (error) throw new Error('Error al verificar disponibilidad: ' + error.message)
@@ -365,8 +440,22 @@ export default function BookingPage() {
     return true
   }, [cooldown])
 
+  // BOOK-003: Form validation with visible errors
+  const validateForm = () => {
+    const errs = {}
+    if (!clientName.trim()) errs.clientName = 'El nombre es obligatorio'
+    if (!clientPhone.trim()) {
+      errs.clientPhone = 'El teléfono es obligatorio'
+    } else if (!/^\d[\d\s\-()]{6,}$/.test(clientPhone.replace(/\s/g, ''))) {
+      errs.clientPhone = 'Ingresá un número de teléfono válido (mínimo 7 dígitos)'
+    }
+    setFormErrors(errs)
+    return Object.keys(errs).length === 0
+  }
+
   const handleSubmit = async () => {
-    if (!clientName || !clientPhone || !selectedTime || !selectedService || !selectedDate) return
+    if (!validateForm()) return
+    if (!selectedTime || !selectedService || !selectedDate) return
     if (!canSubmit()) {
       setSubmitError(`Ya realizaste una reserva recientemente. Podés agendar otra en ${cooldown} segundos.`)
       return
@@ -391,7 +480,7 @@ export default function BookingPage() {
         // Crear nuevo cliente
         const { data: newClient, error: insertClientErr } = await supabase
           .from('clients').insert({
-            business_id: business.id, name: clientName, phone: clientPhone, email: clientEmail || null
+            business_id: business.id, name: clientName.trim(), phone: clientPhone.trim(), email: clientEmail.trim() || null
           }).select().single()
         if (insertClientErr) throw new Error('Error al crear cliente: ' + insertClientErr.message)
         if (!newClient) throw new Error('No se pudo crear el cliente')
@@ -421,6 +510,8 @@ export default function BookingPage() {
       if (insertSvcErr) throw new Error('Error al agregar servicio: ' + insertSvcErr.message)
 
       // Agregar productos a la reserva
+      // BOOK-007: Stock is decremented at completion time via complete_appointment function.
+      // This is intentional — stock is reserved, not consumed, at booking time.
       if (selectedProducts.length > 0) {
         const productInserts = selectedProducts.map(sp => ({
           appointment_id: appointment.id,
@@ -438,7 +529,7 @@ export default function BookingPage() {
       setStep(7)
     } catch (err) {
       setSubmitError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
-      console.error(err)
+      console.error('Booking error:', err.message)
     } finally {
       setSubmitting(false)
     }
@@ -480,7 +571,8 @@ export default function BookingPage() {
 
   // Obtener clase de animación para el template actual
   const getStepAnimationClass = () => `animate-${business.template_id || 'classic'}-card`
-  const showProductStep = plan !== 'basic' && products.length > 0
+  // BOOK-002: Use businessPlan instead of plan from usePlan hook
+  const showProductStep = businessPlan !== 'basic' && products.length > 0
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
@@ -577,24 +669,59 @@ export default function BookingPage() {
               <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí un servicio</h2>
               <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>Seleccioná el servicio que querés recibir</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {services.map((svc) => (
-                <ServiceCard
-                  key={svc.id}
-                  service={svc}
-                  isSelected={selectedService?.id === svc.id}
-                  onClick={() => { setSelectedService(svc); setStep(2) }}
-                  colors={colors}
-                />
-              ))}
-            </div>
+            {/* BOOK-001: Empty state when no services */}
+            {services.length === 0 ? (
+              <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
+                  <svg className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="mt-4 text-lg font-medium" style={{ color: colors.textSecondary }}>
+                  No hay servicios disponibles
+                </p>
+                <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
+                  Esta barbería aún no publicó sus servicios. Volvé pronto.
+                </p>
+                <Link
+                  to={`/barberia/${slug}`}
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                  style={{ color: colors.accent }}
+                >
+                  ← Volver a la barbería
+                </Link>
+              </div>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {services.map((svc) => (
+                  <ServiceCard
+                    key={svc.id}
+                    service={svc}
+                    isSelected={selectedService?.id === svc.id}
+                    onClick={() => { setSelectedService(svc); setStep(2) }}
+                    colors={colors}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {/* Step 2: Barber */}
         {step === 2 && (
           <div className={getStepAnimationClass()}>
+            {/* BOOK-011: Back button on step 2 */}
             <div className="mb-6">
+              <button
+                onClick={() => { setSelectedService(null); setStep(1) }}
+                className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
+                style={{ color: colors.textSecondary }}
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Volver a servicios
+              </button>
               <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>
                 Elegí un barbero
               </h2>
@@ -672,13 +799,16 @@ export default function BookingPage() {
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7">
               {days.map((day) => {
                 const isSelected = selectedDate === day.date
+                // BOOK-012: Check if date is a holiday (closed)
+                const isClosed = holidays.some(h => h.date === day.date)
                 return (
                   <button
                     key={day.date}
-                    onClick={() => { setSelectedDate(day.date); setStep(4) }}
-                    className="group rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-0.5"
+                    onClick={() => { if (!isClosed) { setSelectedDate(day.date); setStep(4) } }}
+                    disabled={isClosed}
+                    className="group rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     style={{
-                      borderColor: isSelected ? colors.accent : `${colors.primary}12`,
+                      borderColor: isSelected ? colors.accent : isClosed ? `${colors.primary}08` : `${colors.primary}12`,
                       backgroundColor: isSelected ? `${colors.accent}06` : 'white',
                       boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
                     }}
@@ -689,6 +819,11 @@ export default function BookingPage() {
                     <div className="mt-1.5 text-2xl font-bold" style={{ color: colors.text }}>
                       {day.label.split(' ')[1]}
                     </div>
+                    {isClosed && (
+                      <div className="mt-1 text-[9px] font-medium uppercase tracking-wider" style={{ color: '#ef4444' }}>
+                        Cerrado
+                      </div>
+                    )}
                   </button>
                 )
               })}
@@ -822,7 +957,7 @@ export default function BookingPage() {
                               </p>
                             </div>
                             <span className="text-lg font-bold" style={{ color: colors.accent }}>
-                              ₲ {product.price}
+                              {fmtCurrency(product.price)}
                             </span>
                           </div>
 
@@ -935,17 +1070,21 @@ export default function BookingPage() {
               <Input
                 label="Nombre completo"
                 value={clientName}
-                onChange={(e) => setClientName(e.target.value)}
+                onChange={(e) => { setClientName(e.target.value); if (formErrors.clientName) setFormErrors(prev => ({ ...prev, clientName: null })) }}
                 placeholder="Ej: Juan Pérez"
                 required
+                maxLength={100}
+                error={formErrors.clientName}
               />
               <Input
                 label="Teléfono"
                 type="tel"
                 value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
+                onChange={(e) => { setClientPhone(e.target.value); if (formErrors.clientPhone) setFormErrors(prev => ({ ...prev, clientPhone: null })) }}
                 placeholder="Ej: 11 1234 5678"
                 required
+                maxLength={20}
+                error={formErrors.clientPhone}
               />
               <Input
                 label="Correo electrónico (opcional)"
@@ -953,6 +1092,7 @@ export default function BookingPage() {
                 value={clientEmail}
                 onChange={(e) => setClientEmail(e.target.value)}
                 placeholder="ej: juan@email.com"
+                maxLength={100}
               />
 
               {/* Summary */}
@@ -993,7 +1133,7 @@ export default function BookingPage() {
                               {sp.name} ×{sp.quantity}
                             </span>
                             <span className="font-medium" style={{ color: colors.text }}>
-                              ₲ {Number(sp.price * sp.quantity).toLocaleString('es')}
+                              {fmtCurrency(sp.price * sp.quantity)}
                             </span>
                           </div>
                         ))}
@@ -1004,10 +1144,10 @@ export default function BookingPage() {
                     <div className="flex justify-between">
                       <span className="font-semibold" style={{ color: colors.text }}>Total</span>
                       <span className="text-lg font-bold" style={{ color: colors.accent }}>
-                        ₲ {(
+                        {fmtCurrency(
                           Number(selectedService?.price || 0) +
                           selectedProducts.reduce((sum, sp) => sum + sp.price * sp.quantity, 0)
-                        ).toLocaleString('es')}
+                        )}
                       </span>
                     </div>
                   </div>
@@ -1054,9 +1194,14 @@ export default function BookingPage() {
                 {' '}en {business.name}.
               </p>
 
+              {/* BOOK-005: Use branch address/phone when available */}
               <div className="mt-4 flex flex-col items-center gap-2 text-sm" style={{ color: colors.textSecondary }}>
-                {business.address && <span>📍 {business.address}</span>}
-                {business.phone && <span>📞 {business.phone}</span>}
+                {(selectedBranch?.address || business.address) && (
+                  <span>📍 {selectedBranch?.address || business.address}</span>
+                )}
+                {(selectedBranch?.phone || business.phone) && (
+                  <span>📞 {selectedBranch?.phone || business.phone}</span>
+                )}
               </div>
 
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">

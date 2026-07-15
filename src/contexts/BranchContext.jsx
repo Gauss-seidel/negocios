@@ -26,7 +26,14 @@ export function BranchProvider({ children }) {
       .eq('business_id', businessId)
       .eq('is_active', true)
       .order('name')
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('[BranchContext]', error)
+          setBranches([])
+          setCurrentBranch(null)
+          setLoading(false)
+          return
+        }
         const list = data || []
         setBranches(list)
 
@@ -38,6 +45,12 @@ export function BranchProvider({ children }) {
           selected = list[0]
         }
         setCurrentBranch(selected)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('[BranchContext]', err)
+        setBranches([])
+        setCurrentBranch(null)
         setLoading(false)
       })
   }, [businessId])

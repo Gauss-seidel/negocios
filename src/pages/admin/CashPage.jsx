@@ -14,7 +14,7 @@ import { fmtCurrencyWithCents as formatCurrency } from '../../utils/format'
 function formatDateTime(dateStr) {
   if (!dateStr) return '—'
   try {
-    return new Intl.DateTimeFormat('es-MX', {
+    return new Intl.DateTimeFormat('es-PY', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -85,23 +85,29 @@ export default function CashPage() {
           .order('opened_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
-        supabase
-          .from('cash_movements')
-          .select('*')
-          .eq('branch_id', currentBranch.id)
-          .order('created_at', { ascending: false })
-          .limit(50),
+        // Use the open register's ID to filter movements (or branch_id as fallback)
+        null, // placeholder, computed below
       ])
 
+      // Re-fetch movements filtered by current open register
+      const currentRegister = registerRes.status === 'fulfilled' ? registerRes.value.data : null
+      const movRes = await supabase
+        .from('cash_movements')
+        .select('*')
+        .eq('branch_id', currentBranch.id)
+        .eq('register_id', currentRegister?.id || null)
+        .order('created_at', { ascending: false })
+        .limit(50)
+
       if (registerRes.status === 'fulfilled') {
-        setRegister(registerRes.value.data || null)
+        setRegister(currentRegister)
       }
-      if (movementsRes.status === 'fulfilled') {
-        setMovements(movementsRes.value.data || [])
+      if (movRes) {
+        setMovements(movRes.data || [])
       }
 
-      // Calculate balance
-      const movs = movementsRes.status === 'fulfilled' ? movementsRes.value.data || [] : []
+      // Calculate balance from current register movements only
+      const movs = movRes?.data || []
       const calcBalance = movs.reduce((sum, m) => {
         if (m.type === CASH_MOVEMENT_TYPES.INCOME) return sum + Number(m.amount)
         return sum - Number(m.amount)

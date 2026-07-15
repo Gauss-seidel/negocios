@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
+import { useBranch } from '../../contexts/BranchContext'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
@@ -10,7 +11,7 @@ import ClientHistoryModal from '../../components/ClientHistoryModal'
 function formatDate(dateStr) {
   if (!dateStr) return '—'
   try {
-    return new Intl.DateTimeFormat('es-MX', {
+    return new Intl.DateTimeFormat('es-PY', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -26,6 +27,7 @@ function formatTime(time) {
 
 export default function ClientsPage() {
   const { businessId } = useAuth()
+  const { currentBranch } = useBranch()
   const [clients, setClients] = useState([])
   const [filteredClients, setFilteredClients] = useState([])
   const [loading, setLoading] = useState(true)
@@ -362,6 +364,7 @@ export default function ClientsPage() {
       {historyClientId && (
         <ClientHistoryModal
           clientId={historyClientId}
+          branchId={currentBranch?.id}
           onClose={() => setHistoryClientId(null)}
         />
       )}

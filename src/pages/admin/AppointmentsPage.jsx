@@ -49,7 +49,7 @@ const STATUS_LABEL = {
 function formatDate(dateStr) {
   if (!dateStr) return '—'
   try {
-    return new Intl.DateTimeFormat('es-MX', {
+    return new Intl.DateTimeFormat('es-PY', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -78,6 +78,7 @@ export default function AppointmentsPage() {
   const [error, setError] = useState(null)
   const [actionLoading, setActionLoading] = useState(false)
   const [completingApp, setCompletingApp] = useState(null)
+  const [business, setBusiness] = useState(null)
 
   const [statusFilter, setStatusFilter] = useState('')
   const [dateFilter, setDateFilter] = useState('')
@@ -87,6 +88,13 @@ export default function AppointmentsPage() {
   useEffect(() => {
     if (businessId && currentBranch?.id) fetchAppointments()
   }, [businessId, currentBranch?.id, statusFilter, dateFilter])
+
+  // Fetch business data once for invoice
+  useEffect(() => {
+    if (!businessId) return
+    supabase.from('businesses').select('name, address, phone, email').eq('id', businessId).single()
+      .then(({ data }) => { if (data) setBusiness(data) })
+  }, [businessId])
 
   // Realtime: actualizar cuando cambien reservas en DB
   useEffect(() => {
@@ -226,7 +234,7 @@ export default function AppointmentsPage() {
         <p className="mt-1 text-sm text-gray-500">Gestiona todas las reservas de tu negocio</p>
         {!planLoading && (
           <p className="mt-1 text-xs text-gray-400">
-            Plan {planName}: Limite de <strong>{limits.max_monthly_bookings.toLocaleString('es-MX')}</strong> reservas/mes
+            Plan {planName}: Limite de <strong>{limits.max_monthly_bookings.toLocaleString('es-PY')}</strong> reservas/mes
           </p>
         )}
       </div>
@@ -430,6 +438,7 @@ export default function AppointmentsPage() {
           appointment={completingApp}
           services={completingApp.services || []}
           products={completingApp.products || []}
+          business={business}
           onConfirm={(items) => handleCompleteConfirm(completingApp.id, items)}
           onClose={() => setCompletingApp(null)}
         />

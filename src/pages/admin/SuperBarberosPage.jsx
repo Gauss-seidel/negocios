@@ -137,6 +137,18 @@ export default function SuperBarberosPage() {
       await supabase.from('barber_services').delete().eq('barber_id', deleteTarget.id)
       // Delete business_staff entry if exists
       await supabase.from('business_staff').delete().eq('barber_id', deleteTarget.id)
+      // Delete auth user via Edge Function if barber has one
+      if (deleteTarget.has_user && deleteTarget.user_id && session?.access_token) {
+        const efUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-super`
+        await fetch(efUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ action: 'delete_user', user_id: deleteTarget.user_id }),
+        })
+      }
       // Delete barber
       const { error: de } = await supabase.from('barbers').delete().eq('id', deleteTarget.id)
       if (de) throw de
@@ -382,7 +394,7 @@ export default function SuperBarberosPage() {
           </p>
           <p className="text-sm text-white/40">
             {deleteTarget?.has_user
-              ? 'EL usuario asociado también será eliminado del sistema.'
+              ? 'El usuario asociado también será eliminado del sistema.'
               : 'Esta acción no se puede deshacer.'}
           </p>
           <div className="flex items-center justify-end gap-3 pt-2">

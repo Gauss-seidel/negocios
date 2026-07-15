@@ -15,7 +15,7 @@ const METRICS = [
   { key: 'newClients', label: 'Clientes nuevos hoy', color: 'text-rose-500', icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z' },
 ]
 const fmtTime = (t) => t ? (t.split(':').slice(0, 2).join(':')) : '--:--'
-const fmtShortDate = (d) => d ? new Intl.DateTimeFormat('es-MX', { day: 'numeric', month: 'short' }).format(new Date(d + 'T12:00:00')) : '—'
+const fmtShortDate = (d) => d ? new Intl.DateTimeFormat('es-PY', { day: 'numeric', month: 'short' }).format(new Date(d + 'T12:00:00')) : '—'
 
 function getTodayRange() {
   const s = new Date(); s.setHours(0, 0, 0, 0)
@@ -59,10 +59,10 @@ export default function BusinessDashboard() {
       const [aR, tR, cR, pR, rR, clR] = await Promise.allSettled([
         supabase.from('appointments').select(`id, date, start_time, status, total, client:client_id(name), barber:barber_id(name)`).eq('business_id', businessId).eq('branch_id', currentBranch.id).order('date', { ascending: false }).order('start_time', { ascending: false }).limit(10),
         supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).gte('date', start).lte('date', end),
-        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).eq('status', APPOINTMENT_STATUS.CONFIRMED),
-        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).eq('status', APPOINTMENT_STATUS.PENDING),
+        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).eq('status', APPOINTMENT_STATUS.CONFIRMED).gte('date', start).lte('date', end),
+        supabase.from('appointments').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).eq('status', APPOINTMENT_STATUS.PENDING).gte('date', start).lte('date', end),
         supabase.from('appointments').select('total').eq('business_id', businessId).eq('branch_id', currentBranch.id).gte('date', start).lte('date', end),
-        supabase.from('clients').select('id', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', start),
+        supabase.from('clients').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('branch_id', currentBranch.id).gte('created_at', start),
       ])
       if (aR.status === 'fulfilled') setRecent(aR.value.data || [])
       setMetrics({
@@ -225,7 +225,7 @@ export default function BusinessDashboard() {
         {METRICS.map(m => {
           let val = metrics[m.key]
           if (m.key === 'revenue') val = fmtCurrency(val)
-          else val = (val ?? 0).toLocaleString('es-MX')
+          else val = (val ?? 0).toLocaleString('es-PY')
           return (
             <Card key={m.key} hover>
               <div className="flex items-center gap-4">

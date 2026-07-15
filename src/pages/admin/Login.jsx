@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { supabase } from '../../lib/supabase'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const [showReset, setShowReset] = useState(false)
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetError, setResetError] = useState('')
   const { login, isAuthenticated, userRole } = useAuth()
   const navigate = useNavigate()
 
@@ -34,6 +40,24 @@ export default function Login() {
         : 'Error al iniciar sesión. Intenta de nuevo.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleForgotPassword(e) {
+    e.preventDefault()
+    if (!resetEmail.trim()) { setResetError('Ingresa tu email'); return }
+    setResetLoading(true)
+    setResetError('')
+    try {
+      const { error: resetErr } = await supabase.auth.resetPasswordForEmail(resetEmail.trim(), {
+        redirectTo: `${window.location.origin}/admin`,
+      })
+      if (resetErr) throw resetErr
+      setResetSent(true)
+    } catch (err) {
+      setResetError(err.message || 'Error al enviar email de recuperación')
+    } finally {
+      setResetLoading(false)
     }
   }
 
@@ -114,6 +138,16 @@ export default function Login() {
                 'Iniciar sesión'
               )}
             </button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => { setShowReset(true); setResetEmail(email); setResetSent(false); setResetError('') }}
+                className="text-sm text-white/40 transition-colors hover:text-white/70"
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
+            </div>
           </form>
         </div>
 
@@ -122,6 +156,64 @@ export default function Login() {
             Ver barberías disponibles
           </Link>
         </p>
+
+        {/* Forgot password modal */}
+        {showReset && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowReset(false)} />
+            <div className="relative w-full max-w-md rounded-3xl bg-gray-900 p-8 shadow-2xl">
+              <h3 className="text-lg font-semibold text-white">Recuperar contraseña</h3>
+              {resetSent ? (
+                <div className="mt-4 space-y-4">
+                  <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm text-emerald-400">
+                    Te enviamos un enlace de recuperación a <strong>{resetEmail}</strong>. Revisá tu bandeja de entrada.
+                  </div>
+                  <button
+                    onClick={() => setShowReset(false)}
+                    className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white transition-all hover:bg-white/20"
+                  >
+                    Volver al login
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotPassword} className="mt-4 space-y-4">
+                  <p className="text-sm text-white/50">
+                    Ingresá tu email y te enviaremos un enlace para restablecer tu contraseña.
+                  </p>
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    placeholder="admin@barberia.com"
+                    required
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                  />
+                  {resetError && (
+                    <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400">
+                      {resetError}
+                    </div>
+                  )}
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowReset(false)}
+                      className="flex-1 rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-white/60 transition-all hover:bg-white/10"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={resetLoading}
+                      className="flex-1 rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:opacity-60"
+                    >
+                      {resetLoading ? 'Enviando...' : 'Enviar enlace'}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

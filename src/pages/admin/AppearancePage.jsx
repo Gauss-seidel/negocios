@@ -13,6 +13,30 @@ const DEFAULT_COLORS = {
   text: '#1a1a2e',
 }
 
+// WCAG relative luminance + contrast ratio
+function hexToRgb(hex) {
+  const h = hex.replace('#', '')
+  return [parseInt(h.substring(0, 2), 16), parseInt(h.substring(2, 4), 16), parseInt(h.substring(4, 6), 16)]
+}
+
+function relativeLuminance(r, g, b) {
+  const [rs, gs, bs] = [r, g, b].map(c => {
+    c /= 255
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+  })
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs
+}
+
+function contrastRatio(hex1, hex2) {
+  const [r1, g1, b1] = hexToRgb(hex1)
+  const [r2, g2, b2] = hexToRgb(hex2)
+  const l1 = relativeLuminance(r1, g1, b1)
+  const l2 = relativeLuminance(r2, g2, b2)
+  const lighter = Math.max(l1, l2)
+  const darker = Math.min(l1, l2)
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
 export default function AppearancePage() {
   const { businessId } = useAuth()
   const [loading, setLoading] = useState(true)
@@ -204,6 +228,9 @@ export default function AppearancePage() {
             onChange={(v) => handleColorChange('text', v)}
           />
         </div>
+
+        {/* WCAG Contrast warnings */}
+        <ContrastWarnings colors={colors} />
       </Card>
 
       {/* Preview */}
@@ -307,6 +334,41 @@ function ColorPicker({ label, value, onChange }) {
           className="h-8 w-8 shrink-0 rounded-full border border-gray-200"
           style={{ backgroundColor: value }}
         />
+      </div>
+    </div>
+  )
+}
+
+function ContrastWarnings({ colors }) {
+  const pairs = [
+    { label: 'Texto sobre fondo', fg: colors.text, bg: colors.background },
+    { label: 'Acento sobre fondo', fg: colors.accent, bg: colors.background },
+    { label: 'Texto sobre primario', fg: '#ffffff', bg: colors.primary },
+    { label: 'Acento sobre primario', fg: colors.accent, bg: colors.primary },
+  ]
+
+  const warnings = pairs
+    .map(p => ({ ...p, ratio: contrastRatio(p.fg, p.bg) }))
+    .filter(p => p.ratio < 4.5)
+
+  if (warnings.length === 0) return null
+
+  return (
+    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+      <div className="flex items-start gap-2">
+        <svg className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p className="text-sm font-medium text-amber-800">Contraste insuficiente (WCAG AA)</p>
+          <ul className="mt-1 space-y-1 text-xs text-amber-700">
+            {warnings.map((w, i) => (
+              <li key={i}>
+                {w.label}: {w.ratio.toFixed(1)}:1 (mínimo 4.5:1)
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   )

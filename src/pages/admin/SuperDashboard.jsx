@@ -34,7 +34,7 @@ function genSlug(name) {
   return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
 }
 
-const fmtDate = (d) => d ? new Intl.DateTimeFormat('es-MX', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(d)) : '—'
+const fmtDate = (d) => d ? new Intl.DateTimeFormat('es-PY', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(d)) : '—'
 
 function StatusBadge({ status }) {
   const map = {
@@ -308,6 +308,28 @@ export default function SuperDashboard() {
     if (!deleteTarget) return
     setActionLoading(true)
     try {
+      // Find business_staff entries to delete auth users before cascade
+      const { data: staff } = await supabase
+        .from('business_staff')
+        .select('user_id')
+        .eq('business_id', deleteTarget.id)
+
+      if (staff?.length && session?.access_token) {
+        const efUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-super`
+        for (const s of staff) {
+          if (s.user_id) {
+            await fetch(efUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`,
+              },
+              body: JSON.stringify({ action: 'delete_user', user_id: s.user_id }),
+            })
+          }
+        }
+      }
+
       await supabase.from('businesses').delete().eq('id', deleteTarget.id)
       setShowDelete(false)
       setDeleteTarget(null)
@@ -364,7 +386,7 @@ export default function SuperDashboard() {
         {METRICS.map(m => {
           let val = metrics[m.key]
           if (m.key === 'revenue') val = fmtCurrency(val)
-          else if (m.key === 'bookings') val = val.toLocaleString('es-MX')
+          else if (m.key === 'bookings') val = val.toLocaleString('es-PY')
           return (
             <div key={m.key} className="group rounded-2xl border border-white/[0.06] bg-card-dark p-4 transition-all duration-300 hover:border-white/[0.12] hover:-translate-y-0.5">
               <div className="flex items-center gap-3">
@@ -665,7 +687,7 @@ export default function SuperDashboard() {
           <p className="text-sm text-white/60">
             ¿Estás seguro de eliminar <strong className="text-white">{deleteTarget?.name}</strong>?
           </p>
-          <p className="text-sm text-white/40">Esta acción no se puede deshacer.</p>
+          <p className="text-sm text-white/40">Esta acción eliminará también los usuarios administradores asociados. No se puede deshacer.</p>
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => { setShowDelete(false); setDeleteTarget(null) }}>Cancelar</Button>
             <Button type="button" variant="danger" onClick={handleDelete} loading={actionLoading}>Eliminar</Button>
