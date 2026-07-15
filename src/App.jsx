@@ -34,6 +34,7 @@ const SucursalesPage = lazy(() => import('./pages/admin/SucursalesPage'))
 const SuperPlanesPage = lazy(() => import('./pages/admin/PlanesPage'))
 const SuperConfigPage = lazy(() => import('./pages/admin/SuperConfigPage'))
 const SuperBarberosPage = lazy(() => import('./pages/admin/SuperBarberosPage'))
+const ResetPassword = lazy(() => import('./pages/admin/ResetPassword'))
 const BarberDashboard = lazy(() => import('./pages/barber/BarberDashboard'))
 const BarberProfile = lazy(() => import('./pages/barber/BarberProfile'))
 
@@ -95,6 +96,7 @@ export default function App() {
 
           {/* Login (sin layout) */}
           <Route path="/admin" element={<Login />} />
+          <Route path="/admin/reset-password" element={<ResetPassword />} />
 
           {/* Super Admin */}
           <Route
