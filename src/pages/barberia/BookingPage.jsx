@@ -525,6 +525,8 @@ export default function BookingPage() {
         if (insertProdErr) throw new Error('Error al agregar productos: ' + insertProdErr.message)
       }
 
+      // Notificación: el trigger on_appointment_created crea la notificación automáticamente
+
       setSuccess(true)
       setStep(7)
     } catch (err) {

@@ -1,7 +1,8 @@
 import { supabase } from '../../lib/supabase'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { fmtCurrency } from '../../utils/format'
+import { useNotifications } from '../../hooks/useNotifications'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import CompleteAppointmentModal from '../../components/CompleteAppointmentModal'
@@ -36,10 +37,24 @@ export default function BarberDashboard() {
   const [otherBarberApps, setOtherBarberApps] = useState([])
   const [transferringId, setTransferringId] = useState(null)
   const [completingApp, setCompletingApp] = useState(null)
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications()
+  const [showNotifications, setShowNotifications] = useState(false)
+  const notifRef = useRef(null)
 
   useEffect(() => {
     if (user?.id && businessId) fetchAll()
   }, [user?.id, businessId, date])
+
+  // Close notifications dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifications(false)
+      }
+    }
+    if (showNotifications) document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showNotifications])
 
   // Realtime: actualizar cuando cambien reservas del negocio
   useEffect(() => {
@@ -368,6 +383,75 @@ export default function BarberDashboard() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Notifications bell */}
+          <div className="relative" ref={notifRef}>
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className={`relative flex h-9 w-9 items-center justify-center rounded-xl border transition-all ${
+                unreadCount > 0
+                  ? 'border-amber-400/30 bg-amber-400/10 text-amber-400 hover:bg-amber-400/20'
+                  : 'border-white/[0.06] bg-white/[0.03] text-white/40 hover:bg-white/5 hover:text-white'
+              }`}
+              title="Notificaciones"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-white/10 bg-[#1a1a2e] shadow-2xl">
+                <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                  <h3 className="text-sm font-semibold text-white">Notificaciones</h3>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={() => markAllAsRead()}
+                      className="text-xs text-[var(--color-accent)] hover:underline"
+                    >
+                      Marcar todo leído
+                    </button>
+                  )}
+                </div>
+                <div className="max-h-80 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center text-sm text-white/30">
+                      Sin notificaciones
+                    </div>
+                  ) : (
+                    notifications.map(n => (
+                      <button
+                        key={n.id}
+                        onClick={() => { markAsRead(n.id); setShowNotifications(false) }}
+                        className={`w-full border-b border-white/5 px-4 py-3 text-left transition-colors hover:bg-white/[0.03] ${
+                          !n.is_read ? 'bg-white/[0.02]' : ''
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          {!n.is_read && (
+                            <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[var(--color-accent)]" />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-white">{n.title}</p>
+                            <p className="mt-0.5 text-xs text-white/40 truncate">{n.body}</p>
+                            <p className="mt-1 text-[10px] text-white/20">
+                              {new Intl.DateTimeFormat('es-PY', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(n.created_at))}
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={() => goDay(-1)}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-white/40 transition-all hover:bg-white/5 hover:text-white"
