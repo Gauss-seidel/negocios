@@ -1,3 +1,4 @@
+/* global process */
 import { test, expect } from '@playwright/test'
 
 const BASE = process.env.E2E_BASE_URL

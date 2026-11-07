@@ -40,7 +40,7 @@ function formatTime(timeStr) {
   }
 }
 
-export default function InvoiceModal({ appointment, onClose }) {
+export default function InvoiceModal({ appointment, business, onClose }) {
   const cardRef = useRef(null)
   const appt = appointment
 
@@ -180,9 +180,9 @@ export default function InvoiceModal({ appointment, onClose }) {
 
           {/* ─── BUSINESS INFO ─── */}
           <div className="px-6 py-3 text-center">
-            <p className="text-sm font-medium text-gray-900">BarberShifts Studio</p>
-            <p className="mt-0.5 text-xs text-gray-500">Av. Mariscal López 1845</p>
-            <p className="text-xs text-gray-500">+595 981 234 567</p>
+            <p className="text-sm font-medium text-gray-900">{business?.name || 'BarberShifts Studio'}</p>
+            {business?.address && <p className="mt-0.5 text-xs text-gray-500">{business.address}</p>}
+            {business?.phone && <p className="text-xs text-gray-500">{business.phone}</p>}
           </div>
 
           <DividerDashed />

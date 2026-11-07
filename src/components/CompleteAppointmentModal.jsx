@@ -19,7 +19,10 @@ function PlusIcon() {
   )
 }
 
-export default function CompleteAppointmentModal({ appointment, services, products, onConfirm, onClose }) {
+export default function CompleteAppointmentModal({ appointment, services, products, business, onConfirm, onClose }) {
+  const [checkedServices, setCheckedServices] = useState(
+    Object.fromEntries((services || []).map(s => [s.id, true]))
+  )
   const [checkedProducts, setCheckedProducts] = useState(
     Object.fromEntries((products || []).map(p => [p.id, true]))
   )
@@ -29,6 +32,11 @@ export default function CompleteAppointmentModal({ appointment, services, produc
   const [saving, setSaving] = useState(false)
   const [showInvoice, setShowInvoice] = useState(false)
   const [completedAppt, setCompletedAppt] = useState(null)
+  const [stockWarning, setStockWarning] = useState(null)
+
+  function toggleService(id) {
+    setCheckedServices(prev => ({ ...prev, [id]: !prev[id] }))
+  }
 
   function toggleProduct(id) {
     setCheckedProducts(prev => ({ ...prev, [id]: !prev[id] }))
@@ -43,7 +51,10 @@ export default function CompleteAppointmentModal({ appointment, services, produc
   }
 
   function calcTotal() {
-    const servicesTotal = (services || []).reduce((sum, s) => sum + Number(s.price || 0), 0)
+    const servicesTotal = (services || []).reduce((sum, s) => {
+      if (!checkedServices[s.id]) return sum
+      return sum + Number(s.price || 0)
+    }, 0)
     const productsTotal = (products || []).reduce((sum, p) => {
       if (!checkedProducts[p.id]) return sum
       return sum + Number(p.price || 0) * (quantities[p.id] || 1)
@@ -51,7 +62,26 @@ export default function CompleteAppointmentModal({ appointment, services, produc
     return servicesTotal + productsTotal
   }
 
+  function checkStock() {
+    for (const p of products || []) {
+      if (!checkedProducts[p.id]) continue
+      const qty = quantities[p.id] || 1
+      const available = p.product?.current_stock ?? p.current_stock ?? Infinity
+      if (qty > available) {
+        return `${p.product?.name || p.name || 'Producto'}: pedís ${qty} pero solo hay ${available} en stock`
+      }
+    }
+    return null
+  }
+
   async function handleConfirm() {
+    const stockErr = checkStock()
+    if (stockErr) {
+      setStockWarning(stockErr)
+      return
+    }
+    setStockWarning(null)
+
     setSaving(true)
     try {
       const completedProducts = (products || [])
@@ -60,11 +90,9 @@ export default function CompleteAppointmentModal({ appointment, services, produc
 
       const result = await onConfirm({ products: completedProducts })
 
-      // Build invoice data from current appointment + selected items
-      const usedServices = (services || []).map(s => ({
-        ...s,
-        price: s.price || 0,
-      }))
+      const usedServices = (services || [])
+        .filter(s => checkedServices[s.id])
+        .map(s => ({ ...s, price: s.price || 0 }))
 
       const usedProducts = (products || [])
         .filter(p => checkedProducts[p.id])
@@ -115,11 +143,13 @@ export default function CompleteAppointmentModal({ appointment, services, produc
                 <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400">Servicios</h3>
                 <div className="space-y-2">
                   {services.map(s => (
-                    <label key={s.id} className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3">
+                    <label key={s.id} className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
+                      checkedServices[s.id] ? 'bg-gray-50' : 'bg-gray-50/50 opacity-60'
+                    }`}>
                       <input
                         type="checkbox"
-                        checked={true}
-                        disabled
+                        checked={checkedServices[s.id] || false}
+                        onChange={() => toggleService(s.id)}
                         className="h-4 w-4 rounded border-gray-300 text-emerald-600 accent-emerald-600"
                       />
                       <span className="flex-1 text-sm text-gray-700">{s.service?.name || s.name || 'Servicio'}</span>
@@ -135,57 +165,74 @@ export default function CompleteAppointmentModal({ appointment, services, produc
               <div>
                 <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400">Productos</h3>
                 <div className="space-y-2">
-                  {products.map(p => (
-                    <div
-                      key={p.id}
-                      className={`rounded-lg border px-4 py-3 transition-colors ${
-                        checkedProducts[p.id]
-                          ? 'border-emerald-200 bg-emerald-50'
-                          : 'border-gray-200 bg-gray-50 opacity-60'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={checkedProducts[p.id] || false}
-                          onChange={() => toggleProduct(p.id)}
-                          className="h-4 w-4 rounded border-gray-300 text-emerald-600 accent-emerald-600"
-                        />
-                        <span className="flex-1 text-sm text-gray-700">{p.product?.name || p.name || 'Producto'}</span>
-                        <span className="text-sm font-medium text-gray-900">{fmtCurrency(p.price)}</span>
-                      </div>
-
-                      {checkedProducts[p.id] && (
-                        <div className="mt-2 ml-7 flex items-center gap-2">
-                          <span className="text-xs text-gray-400">Cant:</span>
-                          <button
-                            onClick={() => updateQuantity(p.id, -1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-emerald-300 hover:text-emerald-600"
-                          >
-                            <MinusIcon />
-                          </button>
-                          <span className="w-6 text-center text-sm font-medium text-gray-800">
-                            {quantities[p.id] || 1}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(p.id, 1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-emerald-300 hover:text-emerald-600"
-                          >
-                            <PlusIcon />
-                          </button>
-                          <span className="ml-2 text-xs text-gray-400">
-                            = {fmtCurrency((p.price || 0) * (quantities[p.id] || 1))}
-                          </span>
+                  {products.map(p => {
+                    const available = p.product?.current_stock ?? p.current_stock
+                    const qty = quantities[p.id] || 1
+                    const isOverStock = available != null && qty > available
+                    return (
+                      <div
+                        key={p.id}
+                        className={`rounded-lg border px-4 py-3 transition-colors ${
+                          checkedProducts[p.id]
+                            ? isOverStock ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'
+                            : 'border-gray-200 bg-gray-50 opacity-60'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={checkedProducts[p.id] || false}
+                            onChange={() => toggleProduct(p.id)}
+                            className="h-4 w-4 rounded border-gray-300 text-emerald-600 accent-emerald-600"
+                          />
+                          <span className="flex-1 text-sm text-gray-700">{p.product?.name || p.name || 'Producto'}</span>
+                          <span className="text-sm font-medium text-gray-900">{fmtCurrency(p.price)}</span>
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {checkedProducts[p.id] && (
+                          <div className="mt-2 ml-7 flex items-center gap-2">
+                            <span className="text-xs text-gray-400">Cant:</span>
+                            <button
+                              onClick={() => updateQuantity(p.id, -1)}
+                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-emerald-300 hover:text-emerald-600"
+                            >
+                              <MinusIcon />
+                            </button>
+                            <span className="w-6 text-center text-sm font-medium text-gray-800">
+                              {qty}
+                            </span>
+                            <button
+                              onClick={() => updateQuantity(p.id, 1)}
+                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-emerald-300 hover:text-emerald-600"
+                            >
+                              <PlusIcon />
+                            </button>
+                            <span className="ml-2 text-xs text-gray-400">
+                              = {fmtCurrency((p.price || 0) * qty)}
+                            </span>
+                            {available != null && (
+                              <span className="ml-2 text-[10px] text-gray-400">
+                                (stock: {available})
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )}
 
             {!hasServices && !hasProducts && (
               <p className="py-8 text-center text-sm text-gray-400">Esta reserva no tiene servicios ni productos.</p>
+            )}
+
+            {/* Stock warning */}
+            {stockWarning && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {stockWarning}
+              </div>
             )}
 
             {/* Total */}
@@ -214,6 +261,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
       {showInvoice && completedAppt && (
         <InvoiceModal
           appointment={completedAppt}
+          business={business}
           onClose={() => { setShowInvoice(false); onClose() }}
         />
       )}

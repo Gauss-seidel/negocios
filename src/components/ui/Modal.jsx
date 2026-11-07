@@ -1,6 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export default function Modal({ open, onClose, title, children, size = 'md', dark = false }) {
+  const modalRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden'
@@ -8,6 +12,39 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
       document.body.style.overflow = ''
     }
     return () => { document.body.style.overflow = '' }
+  }, [open])
+
+  // Focus trap + Escape
+  useEffect(() => {
+    if (!open) return
+
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') {
+        onCloseRef.current()
+        return
+      }
+      if (e.key === 'Tab') {
+        const el = modalRef.current
+        if (!el) return
+        const focusable = el.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus() }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus() }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [open])
 
   if (!open) return null
@@ -33,12 +70,17 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
         onClick={onClose}
       />
       <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
         className={`relative z-10 mx-4 w-full ${sizes[size]} rounded-2xl shadow-2xl ${bgClass}`}
       >
         <div className={`flex items-center justify-between border-b px-6 py-4 ${borderClass}`}>
           <h3 className={`text-lg font-semibold tracking-tight ${titleClass}`}>{title}</h3>
           <button
             onClick={onClose}
+            aria-label="Cerrar"
             className="flex h-8 w-8 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600 dark:hover:bg-white/5"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

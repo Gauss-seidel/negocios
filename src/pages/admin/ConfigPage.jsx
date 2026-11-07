@@ -85,6 +85,17 @@ export default function ConfigPage() {
     return Object.keys(errors).length === 0
   }
 
+  async function checkSlugUnique(slug) {
+    if (!slug) return true
+    const { data } = await supabase
+      .from('businesses')
+      .select('id')
+      .eq('slug', slug)
+      .neq('id', businessId)
+      .maybeSingle()
+    return !data
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     if (!validateForm()) return
@@ -94,6 +105,14 @@ export default function ConfigPage() {
     setSuccess(false)
 
     try {
+      // Check slug uniqueness
+      const slugOk = await checkSlugUnique(form.slug.trim())
+      if (!slugOk) {
+        setFormErrors(prev => ({ ...prev, slug: 'Este slug ya está en uso' }))
+        setSaving(false)
+        return
+      }
+
       const { error: updateErr } = await supabase
         .from('businesses')
         .update({

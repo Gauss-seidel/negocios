@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* global process, console */
 /**
  * Prueba de concurrencia controlada contra el RPC de reservas.
  * NO crea reservas persistentes si se usa contra un entorno con la migración 20260710
