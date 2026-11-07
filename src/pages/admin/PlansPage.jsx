@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
 import { fmtCurrency } from '../../utils/format'
+import { isUnlimited } from '../../utils/limits'
 import Card from '../../components/ui/Card'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 
@@ -22,16 +23,14 @@ function MinusIcon() {
 }
 
 function formatLimit(value, label) {
-  if (label === 'Empleados' || label === 'Barberos') {
-    return value >= 999 ? 'Ilimitados' : String(value)
+  if (isUnlimited(value)) {
+    if (label === 'Empleados' || label === 'Barberos') return 'Ilimitados'
+    if (label === 'Sucursales' || label === 'Sucursal') return 'Ilimitadas'
+    if (label === 'Reservas/mes' || label === 'Reservas') return 'Ilimitadas'
+    return 'Ilimitado'
   }
-  if (label === 'Sucursales' || label === 'Sucursal') {
-    return value >= 999 ? 'Ilimitadas' : String(value)
-  }
-  if (label === 'Reservas/mes' || label === 'Reservas') {
-    return value >= 999999 ? 'Ilimitadas' : value.toLocaleString()
-  }
-  return value >= 999 ? 'Ilimitado' : String(value)
+  if (label === 'Reservas/mes' || label === 'Reservas') return Number(value).toLocaleString('es-PY')
+  return String(value)
 }
 
 const LIMIT_LABELS = [

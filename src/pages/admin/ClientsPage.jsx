@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
@@ -27,7 +27,7 @@ function formatTime(time) {
 export default function ClientsPage() {
   const { businessId } = useAuth()
   const [clients, setClients] = useState([])
-  const [filteredClients, setFilteredClients] = useState([])
+  // filteredClients derived from search/clients via useMemo below
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
@@ -42,19 +42,14 @@ export default function ClientsPage() {
     if (businessId) fetchClients()
   }, [businessId])
 
-  useEffect(() => {
-    if (!search.trim()) {
-      setFilteredClients(clients)
-      return
-    }
+  const filteredClients = useMemo(() => {
+    if (!search.trim()) return clients
     const q = search.toLowerCase()
-    setFilteredClients(
-      clients.filter(
-        (c) =>
-          (c.name || '').toLowerCase().includes(q) ||
-          (c.phone || '').includes(q) ||
-          (c.email || '').toLowerCase().includes(q)
-      )
+    return clients.filter(
+      (c) =>
+        (c.name || '').toLowerCase().includes(q) ||
+        (c.phone || '').includes(q) ||
+        (c.email || '').toLowerCase().includes(q)
     )
   }, [search, clients])
 
@@ -97,7 +92,6 @@ export default function ClientsPage() {
       )
 
       setClients(enriched)
-      setFilteredClients(enriched)
     } catch (err) {
       setError(err?.message || 'Error al cargar clientes')
     } finally {

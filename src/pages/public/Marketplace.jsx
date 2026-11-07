@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver'
@@ -132,12 +132,7 @@ export default function Marketplace() {
   const [cityFilter, setCityFilter] = useState('')
   const [availableCities, setAvailableCities] = useState([])
 
-  useEffect(() => {
-    loadBusinesses()
-    setTimeout(() => setHeroLoaded(true), 100)
-  }, [])
-
-  async function loadBusinesses() {
+  const loadBusinesses = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('businesses')
@@ -157,7 +152,13 @@ export default function Marketplace() {
       setBusinesses([])
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadBusinesses()
+    setTimeout(() => setHeroLoaded(true), 100)
+  }, [loadBusinesses])
 
   const filtered = businesses.filter((b) => {
     const matchesSearch = !search ||

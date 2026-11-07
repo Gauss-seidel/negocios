@@ -7,6 +7,7 @@ import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
+import { isUnlimited, formatLimitShort } from '../../utils/limits'
 
 const EF_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-super`
 
@@ -31,7 +32,7 @@ export default function BarbersPage() {
   const { currentBranch } = useBranch()
 
   const activeBarbers = barbers.filter(b => b.is_active)
-  const atLimit = limits.max_barbers > 0 && activeBarbers.length >= limits.max_barbers
+  const atLimit = !isUnlimited(limits.max_barbers) && limits.max_barbers > 0 && activeBarbers.length >= limits.max_barbers
 
   const [showModal, setShowModal] = useState(false)
   const [editTarget, setEditTarget] = useState(null)
@@ -396,13 +397,13 @@ export default function BarbersPage() {
               <div className="flex items-center gap-1.5 text-xs">
                 <span className="text-gray-400">Plan {planName}:</span>
                 <span className={`font-semibold ${atLimit ? 'text-red-600' : 'text-emerald-600'}`}>
-                  {activeBarbers.length}/{limits.max_barbers} barberos activos
+                  {activeBarbers.length}/{formatLimitShort(limits.max_barbers)} barberos activos
                 </span>
               </div>
             </div>
           )}
         </div>
-        <Button onClick={openCreateModal} disabled={atLimit} title={atLimit ? `Limite de ${limits.max_barbers} barberos alcanzado para tu plan` : ''}>
+        <Button onClick={openCreateModal} disabled={atLimit} title={atLimit ? `Limite de ${formatLimitShort(limits.max_barbers)} barberos alcanzado para tu plan` : ''}>
           <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>

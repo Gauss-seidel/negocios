@@ -44,7 +44,7 @@ export default function SuperConfigPage() {
       try {
         const { data: apps } = await supabase.from('appointments').select('total')
         if (apps) totalRevenue = apps.reduce((s, x) => s + (Number(x.total) || 0), 0)
-      } catch {}
+      } catch { /* ignore revenue fetch errors */ }
 
       setStats({
         businesses: bizCount || 0,
@@ -115,17 +115,11 @@ export default function SuperConfigPage() {
           email: createForm.email.trim(),
           password: createForm.password,
           role: 'super_admin',
+          name: createForm.name.trim(),
         }),
       })
       const efData = await efRes.json()
       if (!efData.success) throw new Error(efData.error)
-      const userId = efData.data.user.id
-
-      // 2. Insert into super_admins table
-      const { error: ie } = await supabase.from('super_admins').insert([
-        { id: userId, name: createForm.name.trim() },
-      ])
-      if (ie) throw new Error(`Error al registrar: ${ie.message}`)
 
       setCreateSuccess(true)
       setCreateForm({ name: '', email: '', password: '' })

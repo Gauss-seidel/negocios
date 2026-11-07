@@ -12,8 +12,11 @@ export function BranchProvider({ children }) {
 
   useEffect(() => {
     if (!businessId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset derived branch state when business changes to avoid stale selections
       setBranches([])
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentBranch(null)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false)
       return
     }
@@ -63,6 +66,7 @@ export function BranchProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- useBranch hook co-located with BranchProvider by design
 export function useBranch() {
   const context = useContext(BranchContext)
   if (!context) {

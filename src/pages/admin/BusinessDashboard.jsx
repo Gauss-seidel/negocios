@@ -79,9 +79,10 @@ export default function BusinessDashboard() {
       }
       setLoading(false)
     }
-  }, [businessId, currentBranch?.id])
+  }, [businessId, currentBranch])
 
   // ── Carga inicial ──
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- fetchDashboard loads data on mount/branch change
   useEffect(() => { if (businessId) fetchDashboard() }, [businessId, fetchDashboard])
 
   // ── Realtime: notificar al admin cuando alguien reserva ──

@@ -1,0 +1,844 @@
+{
+  "pre_migration": "20260710",
+  "counts": [
+    {
+      "t": "appointment_products",
+      "n": 6
+    },
+    {
+      "t": "appointment_services",
+      "n": 26
+    },
+    {
+      "t": "appointments",
+      "n": 26
+    },
+    {
+      "t": "clients",
+      "n": 22
+    },
+    {
+      "t": "inventory_products",
+      "n": 4
+    }
+  ],
+  "policies": [
+    {
+      "tablename": "appointment_logs",
+      "policyname": "admin_read_logs",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM appointments\n  WHERE ((appointments.id = appointment_logs.appointment_id) AND (appointments.business_id = current_user_business_id()))))) OR (current_user_role() = 'super_admin'::text))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_logs",
+      "policyname": "barber_insert",
+      "cmd": "INSERT",
+      "roles": "{public}",
+      "qual": "",
+      "with_check": "((current_user_role() = 'barber'::text) AND (EXISTS ( SELECT 1\n   FROM (appointments a\n     JOIN barbers b ON ((b.business_id = current_user_business_id())))\n  WHERE ((a.id = appointment_logs.appointment_id) AND (a.business_id = b.business_id)))))"
+    },
+    {
+      "tablename": "appointment_logs",
+      "policyname": "barber_read_logs",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (EXISTS ( SELECT 1\n   FROM appointments\n  WHERE ((appointments.id = appointment_logs.appointment_id) AND (appointments.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_logs",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM appointments\n  WHERE ((appointments.id = appointment_logs.appointment_id) AND (appointments.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_logs",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_products",
+      "policyname": "barber_read_appointment_products",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM (appointments a\n     JOIN business_staff bs ON (((bs.business_id = a.business_id) AND (bs.user_id = auth.uid()))))\n  WHERE ((a.id = appointment_products.appointment_id) AND (bs.role = 'barber'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_products",
+      "policyname": "business_admin_all_appointment_products",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM (appointments a\n     JOIN business_staff bs ON (((bs.business_id = a.business_id) AND (bs.user_id = auth.uid()))))\n  WHERE ((a.id = appointment_products.appointment_id) AND (bs.role = 'business_admin'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_products",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{authenticated}",
+      "qual": "is_super_admin()",
+      "with_check": "is_super_admin()"
+    },
+    {
+      "tablename": "appointment_products",
+      "policyname": "super_admin_all_appointment_products",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM super_admins\n  WHERE (super_admins.id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_services",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM appointments\n  WHERE ((appointments.id = appointment_services.appointment_id) AND (appointments.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointment_services",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointments",
+      "policyname": "barber_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointments",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointments",
+      "policyname": "staff_select_appointments",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "appointments",
+      "policyname": "staff_update_appointments",
+      "cmd": "UPDATE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "appointments",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "audit_log",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{authenticated}",
+      "qual": "is_super_admin()",
+      "with_check": "is_super_admin()"
+    },
+    {
+      "tablename": "audit_logs",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "audit_logs",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_schedule",
+      "policyname": "barber_read_own",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (EXISTS ( SELECT 1\n   FROM barbers\n  WHERE ((barbers.id = barber_schedule.barber_id) AND (barbers.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_schedule",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM barbers\n  WHERE ((barbers.id = barber_schedule.barber_id) AND (barbers.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_schedule",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_services",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (EXISTS ( SELECT 1\n   FROM barbers\n  WHERE ((barbers.id = barber_services.barber_id) AND (barbers.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_services",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM barbers\n  WHERE ((barbers.id = barber_services.barber_id) AND (barbers.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_services",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM (barbers b\n     JOIN businesses bs ON ((b.business_id = bs.id)))\n  WHERE ((b.id = barber_services.barber_id) AND (bs.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_services",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_vacations",
+      "policyname": "barber_read_own",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (EXISTS ( SELECT 1\n   FROM barbers\n  WHERE ((barbers.id = barber_vacations.barber_id) AND (barbers.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_vacations",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM barbers\n  WHERE ((barbers.id = barber_vacations.barber_id) AND (barbers.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barber_vacations",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "barbers",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barbers",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barbers",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM businesses\n  WHERE ((businesses.id = barbers.business_id) AND (businesses.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "barbers",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "branches",
+      "policyname": "anon_select_active_branches",
+      "cmd": "SELECT",
+      "roles": "{anon,authenticated}",
+      "qual": "((is_active = true) AND (EXISTS ( SELECT 1\n   FROM businesses b\n  WHERE ((b.id = branches.business_id) AND (b.status = 'active'::text)))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "branches",
+      "policyname": "business_admin_delete_branches",
+      "cmd": "DELETE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE ((business_staff.user_id = auth.uid()) AND (business_staff.role = 'business_admin'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "branches",
+      "policyname": "business_admin_insert_branches",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE ((business_staff.user_id = auth.uid()) AND (business_staff.role = 'business_admin'::text))))"
+    },
+    {
+      "tablename": "branches",
+      "policyname": "business_admin_update_branches",
+      "cmd": "UPDATE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE ((business_staff.user_id = auth.uid()) AND (business_staff.role = 'business_admin'::text))))",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE ((business_staff.user_id = auth.uid()) AND (business_staff.role = 'business_admin'::text))))"
+    },
+    {
+      "tablename": "branches",
+      "policyname": "business_staff_select_branches",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "branches",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": "is_super_admin()"
+    },
+    {
+      "tablename": "business_holidays",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_holidays",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_holidays",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM businesses\n  WHERE ((businesses.id = business_holidays.business_id) AND (businesses.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_holidays",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_hours",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_hours",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_hours",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM businesses\n  WHERE ((businesses.id = business_hours.business_id) AND (businesses.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_hours",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_staff",
+      "policyname": "staff_manage_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((business_id = current_user_business_id()) AND (current_user_role() = 'business_admin'::text))",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_staff",
+      "policyname": "staff_read_own",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(user_id = current_user_id())",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_staff",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_templates",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "true",
+      "with_check": ""
+    },
+    {
+      "tablename": "business_templates",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "businesses",
+      "policyname": "barber_read_own",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "businesses",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "businesses",
+      "policyname": "public_read_active",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(status = 'active'::text)",
+      "with_check": ""
+    },
+    {
+      "tablename": "businesses",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "cash_movements",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM cash_register\n  WHERE ((cash_register.id = cash_movements.register_id) AND (cash_register.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "cash_movements",
+      "policyname": "staff_insert_cash_movements",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "(branch_id IN ( SELECT branches.id\n   FROM branches\n  WHERE (branches.business_id IN ( SELECT business_staff.business_id\n           FROM business_staff\n          WHERE (business_staff.user_id = auth.uid())))))"
+    },
+    {
+      "tablename": "cash_movements",
+      "policyname": "staff_select_cash_movements",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(branch_id IN ( SELECT branches.id\n   FROM branches\n  WHERE (branches.business_id IN ( SELECT business_staff.business_id\n           FROM business_staff\n          WHERE (business_staff.user_id = auth.uid())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "cash_movements",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "cash_register",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "cash_register",
+      "policyname": "staff_insert_cash_register",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "cash_register",
+      "policyname": "staff_select_cash_register",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "cash_register",
+      "policyname": "staff_update_cash_register",
+      "cmd": "UPDATE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "cash_register",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "clients",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "clients",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "clients",
+      "policyname": "staff_insert_clients",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "clients",
+      "policyname": "staff_select_clients",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "clients",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_movements",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (EXISTS ( SELECT 1\n   FROM inventory_products\n  WHERE ((inventory_products.id = inventory_movements.product_id) AND (inventory_products.business_id = current_user_business_id())))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_movements",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM businesses\n  WHERE ((businesses.id = inventory_products.business_id) AND (businesses.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "staff_delete_inventory",
+      "cmd": "DELETE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "staff_insert_inventory",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "staff_select_inventory",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "staff_update_inventory",
+      "cmd": "UPDATE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "inventory_products",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "notifications",
+      "policyname": "barber_read_notifications",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "notifications",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "notifications",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "plans",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "true",
+      "with_check": ""
+    },
+    {
+      "tablename": "plans",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "service_categories",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "service_categories",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "service_categories",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM businesses\n  WHERE ((businesses.id = service_categories.business_id) AND (businesses.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "service_categories",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "services",
+      "policyname": "barber_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'barber'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "services",
+      "policyname": "business_admin_own",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "((current_user_role() = 'business_admin'::text) AND (business_id = current_user_business_id()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "services",
+      "policyname": "public_read",
+      "cmd": "SELECT",
+      "roles": "{public}",
+      "qual": "(EXISTS ( SELECT 1\n   FROM businesses\n  WHERE ((businesses.id = services.business_id) AND (businesses.status = 'active'::text))))",
+      "with_check": ""
+    },
+    {
+      "tablename": "services",
+      "policyname": "staff_delete_services",
+      "cmd": "DELETE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "services",
+      "policyname": "staff_insert_services",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "services",
+      "policyname": "staff_select_services",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": ""
+    },
+    {
+      "tablename": "services",
+      "policyname": "staff_update_services",
+      "cmd": "UPDATE",
+      "roles": "{authenticated}",
+      "qual": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))",
+      "with_check": "(business_id IN ( SELECT business_staff.business_id\n   FROM business_staff\n  WHERE (business_staff.user_id = auth.uid())))"
+    },
+    {
+      "tablename": "services",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{public}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "super_admins",
+      "policyname": "super_admin_all",
+      "cmd": "ALL",
+      "roles": "{authenticated}",
+      "qual": "is_super_admin()",
+      "with_check": "is_super_admin()"
+    },
+    {
+      "tablename": "super_admins",
+      "policyname": "super_admin_delete",
+      "cmd": "DELETE",
+      "roles": "{authenticated}",
+      "qual": "is_super_admin()",
+      "with_check": ""
+    },
+    {
+      "tablename": "super_admins",
+      "policyname": "super_admin_insert",
+      "cmd": "INSERT",
+      "roles": "{authenticated}",
+      "qual": "",
+      "with_check": "is_super_admin()"
+    },
+    {
+      "tablename": "super_admins",
+      "policyname": "super_admin_select_self",
+      "cmd": "SELECT",
+      "roles": "{authenticated}",
+      "qual": "(is_super_admin() OR (id = auth.uid()))",
+      "with_check": ""
+    },
+    {
+      "tablename": "super_admins",
+      "policyname": "super_admin_update",
+      "cmd": "UPDATE",
+      "roles": "{authenticated}",
+      "qual": "is_super_admin()",
+      "with_check": "is_super_admin()"
+    }
+  ],
+  "policy_count": 102
+}

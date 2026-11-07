@@ -1,4 +1,5 @@
 import { useBranch } from '../../contexts/BranchContext'
+import { formatLimitShort } from '../../utils/limits'
 
 export default function BranchSelector({ planLimit, variant = 'dark' }) {
   const { branches, currentBranch, switchBranch, branchCount } = useBranch()
@@ -23,7 +24,7 @@ export default function BranchSelector({ planLimit, variant = 'dark' }) {
         ))}
       </select>
       <p className={`mt-1 text-[10px] text-center ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
-        {branchCount}/{typeof planLimit === 'number' && planLimit >= 999 ? '∞' : planLimit || '?'} sucursales
+        {branchCount}/{planLimit === undefined || planLimit === null ? '?' : formatLimitShort(planLimit)} sucursales
       </p>
     </div>
   )

@@ -1,5 +1,5 @@
 import { supabase } from '../../lib/supabase'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import Card from '../../components/ui/Card'
 
@@ -10,11 +10,8 @@ export default function BarberProfile() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    if (user?.id && businessId) fetchBarber()
-  }, [user?.id, businessId])
-
-  async function fetchBarber() {
+  const fetchBarber = useCallback(async () => {
+    if (!user?.id || !businessId) return
     setLoading(true)
     setError(null)
     try {
@@ -46,7 +43,12 @@ export default function BarberProfile() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user, businessId])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (user?.id && businessId) fetchBarber()
+  }, [user, businessId, fetchBarber])
 
   /* ── Loading ── */
   if (loading) return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
@@ -20,9 +20,7 @@ function AnimatedSection({ children, className = '', delay = 0 }) {
 
 function BarberiaHero({ business, templateConfig, branches }) {
   const { colors } = templateConfig
-  const [loaded, setLoaded] = useState(false)
-  useEffect(() => { setTimeout(() => setLoaded(true), 100) }, [])
-
+  // loaded state removed (unused)
   // Determinar clase de animación basada en el template
   const getAnimationClass = () => {
     const templateId = business.template_id || 'classic'
@@ -101,7 +99,7 @@ function BarberiaHero({ business, templateConfig, branches }) {
 function BarberiaServices({ services, colors, templateId = 'classic' }) {
   if (!services?.length) return null
 
-  const getCardAnimationClass = (index) => {
+  const getCardAnimationClass = () => {
     return `animate-${templateId}-card`
   }
 
@@ -277,10 +275,8 @@ function BarberiaBranches({ branches, colors, slug }) {
 }
 
 function BarberiaProducts({ products, colors }) {
-  if (!products?.length) return null
-
   const [imgErrors, setImgErrors] = useState({})
-
+  if (!products?.length) return null
   return (
     <AnimatedSection delay={50}>
       <section className="border-t py-16 lg:py-20" style={{ borderColor: `${colors.primary}08` }}>
@@ -364,11 +360,7 @@ export default function BarberiaPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    loadBarberia()
-  }, [slug])
-
-  async function loadBarberia() {
+  const loadBarberia = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
@@ -398,7 +390,12 @@ export default function BarberiaPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [slug])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadBarberia()
+  }, [slug, loadBarberia])
 
   if (loading) {
     return (

@@ -94,11 +94,7 @@ export default function SuperDashboard() {
 
   useEffect(() => { fetchAll() }, [])
 
-  useEffect(() => {
-    if (slugManual || !createForm.name) return
-    setCreateForm(p => ({ ...p, slug: genSlug(createForm.name) }))
-  }, [createForm.name, slugManual])
-
+  // slug auto-generation handled in handleCreateChange to avoid setState-in-effect
   async function fetchAll() {
     setLoading(true)
     setError(null)
@@ -134,18 +130,24 @@ export default function SuperDashboard() {
     try {
       const { data: a } = await supabase.from('appointments').select('total')
       if (a) r.revenue = a.reduce((s, x) => s + (Number(x.total) || 0), 0)
-    } catch {}
+    } catch { /* ignore */ }
     try {
       const { count } = await supabase.from('appointments').select('*', { count: 'exact', head: true })
       if (count !== null) r.bookings = count
-    } catch {}
+    } catch { /* ignore */ }
     return r
   }
 
   /* Forms */
   function handleCreateChange(e) {
     const { name, value } = e.target
-    setCreateForm(p => ({ ...p, [name]: value }))
+    setCreateForm(p => {
+      const next = { ...p, [name]: value }
+      if (name === 'name' && !slugManual) {
+        next.slug = genSlug(value)
+      }
+      return next
+    })
     if (createErrors[name]) setCreateErrors(p => ({ ...p, [name]: '' }))
     if (formError) setFormError(null)
   }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
@@ -101,22 +101,19 @@ export default function TVQueue() {
   const [lastRefresh, setLastRefresh] = useState(null)
   const intervalRef = useRef(null)
   const branchRef = useRef(null)
-  branchRef.current = selectedBranchId
-
-  useEffect(() => {
-    loadData()
-    intervalRef.current = setInterval(loadData, 30000)
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
-  }, [slug])
+  const branchInitRef = useRef(false)
+  const hasLoadedRef = useRef(false)
 
   function selectBranch(id) {
+    branchRef.current = id
+    branchInitRef.current = true
     setSelectedBranchId(id)
     // Re-fetch inmediato con la nueva sucursal
-    setLoading(true)
-    setTimeout(loadData, 0)
+    loadData({ showLoader: true })
   }
 
-  async function loadData() {
+  const loadData = useCallback(async ({ showLoader = false } = {}) => {
+    if (showLoader) setLoading(true)
     try {
       if (!slug) throw new Error('Slug no proporcionado')
 
@@ -140,28 +137,25 @@ export default function TVQueue() {
       setBranches(activeBranches)
 
       // Auto-seleccionar primera sucursal si no hay selección
-      if (activeBranches.length > 0 && !branchRef.current && !branches.length) {
+      if (activeBranches.length > 0 && !branchInitRef.current) {
+        branchInitRef.current = true
+        branchRef.current = activeBranches[0].id
         setSelectedBranchId(activeBranches[0].id)
       }
 
-      const today = new Date().toISOString().split('T')[0]
-      let query = supabase
-        .from('appointments')
-        .select(`
-          id, date, start_time, end_time, status, branch_id,
-          client:client_id(name),
-          barber:barber_id(id, name),
-          services:appointment_services(service:service_id(name))
-        `)
-        .eq('business_id', biz.id)
-        .eq('date', today)
-        .in('status', ['pending', 'confirmed', 'in_progress', 'completed'])
+      // Fecha local (no UTC): evita mostrar el día equivocado después de las 21:00.
+      const now = new Date()
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
       // Filtrar por sucursal si hay selección
       const branchFilter = branchRef.current || (activeBranches.length > 0 ? activeBranches[0].id : null)
-      if (branchFilter) query = query.eq('branch_id', branchFilter)
 
-      const { data: appts, error: apptErr } = await query.order('start_time', { ascending: true })
+      // Cola vía RPC: anon ya no puede leer clients/appointments directamente.
+      const { data: appts, error: apptErr } = await supabase.rpc('get_public_queue', {
+        p_business_id: biz.id,
+        p_branch_id: branchFilter,
+        p_date: today,
+      })
       if (apptErr) throw apptErr
 
       // Mostrar nombre de sucursal en cada turno
@@ -172,13 +166,20 @@ export default function TVQueue() {
       setAppointments(enriched)
       setError(null)
       setLastRefresh(new Date())
+      hasLoadedRef.current = true
     } catch (err) {
       console.error('TVQueue error:', err)
       setError(err.message || 'Error al cargar datos')
     } finally {
       setLoading(false)
     }
-  }
+  }, [slug])
+
+  useEffect(() => {
+    loadData({ showLoader: true })
+    intervalRef.current = setInterval(() => loadData(), 30000)
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+  }, [slug, loadData])
 
   /* ─── Derived colors ─── */
   const templateColors = business?.template_colors || {}
@@ -268,7 +269,7 @@ export default function TVQueue() {
                   key={b.id}
                   onClick={() => selectBranch(b.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                    (branchRef.current || branches[0]?.id) === b.id
+                    (selectedBranchId || branches[0]?.id) === b.id
                       ? 'bg-white/10 text-white'
                       : 'text-white/40 hover:text-white/60 hover:bg-white/5'
                   }`}

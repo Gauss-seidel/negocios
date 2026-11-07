@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import { usePlan } from '../../hooks/usePlan'
@@ -14,21 +14,11 @@ function fmtCurrency(amount) {
   }).format(Number(amount) || 0)
 }
 
-function fmtDate(d) {
-  return d ? d.split('T')[0] : ''
-}
-
 function todayStr() { return new Date().toISOString().split('T')[0] }
 
 function daysAgoStr(n) {
   const d = new Date()
   d.setDate(d.getDate() - n)
-  return d.toISOString().split('T')[0]
-}
-
-function monthStartStr() {
-  const d = new Date()
-  d.setDate(1)
   return d.toISOString().split('T')[0]
 }
 
@@ -51,7 +41,7 @@ const PERIODS = [
 
 export default function ReportsPage() {
   const { businessId } = useAuth()
-  const { isProfessional, isPremium, planName, loading: planLoading } = usePlan()
+  const { isProfessional, isPremium, loading: planLoading } = usePlan()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [statusMsg, setStatusMsg] = useState(null)
@@ -71,7 +61,7 @@ export default function ReportsPage() {
   const [incomeByDay, setIncomeByDay] = useState([])
   const [apptsByDayOfWeek, setApptsByDayOfWeek] = useState([])
   const [statusBreakdown, setStatusBreakdown] = useState({ completed: 0, cancelled: 0 })
-  const [serviceDistribution, setServiceDistribution] = useState([])
+  // serviceDistribution removed (unused)
   const [apptsByHour, setApptsByHour] = useState([])
   const [Charts, setCharts] = useState(null)
 

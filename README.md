@@ -67,10 +67,29 @@ npm run preview
 
 ## Variables de entorno
 
-```
+```env
 VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
 VITE_SUPABASE_ANON_KEY=tu-anon-key-de-supabase
 ```
+
+Para aplicar migraciones SQL en Supabase:
+
+```bash
+# Instalar Supabase CLI (si no está)
+npm install -g supabase
+
+# Vincular proyecto
+supabase link --project-ref TU_PROJECT_REF
+
+# Ver el estado y el procedimiento ANTES de aplicar nada:
+#   supabase/migrations/README.md
+# Nota: `supabase db push` está bloqueado por el historial de 20260703
+# hasta ejecutar `supabase migration repair --status applied 20260703`.
+```
+
+Las migraciones también pueden aplicarse manualmente desde el SQL Editor del
+dashboard. El procedimiento verificado, el rollback y las queries de verificación
+están en [`supabase/migrations/README.md`](supabase/migrations/README.md).
 
 ## Scripts
 
@@ -80,6 +99,8 @@ VITE_SUPABASE_ANON_KEY=tu-anon-key-de-supabase
 | `npm run build` | Build producción |
 | `npm run preview` | Vista previa del build |
 | `npm run lint` | ESLint |
+| `npm run test` | Tests unitarios (Vitest) |
+| `npm run test:watch` | Tests en modo watch |
 
 ## Estructura
 

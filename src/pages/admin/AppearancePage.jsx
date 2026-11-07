@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
-import { TEMPLATES, getTemplate } from '../../templates/registry'
+import { TEMPLATES } from '../../templates/registry'
 
 const DEFAULT_COLORS = {
   primary: '#1a1a2e',
@@ -23,11 +23,8 @@ export default function AppearancePage() {
   const [selectedTemplate, setSelectedTemplate] = useState('classic')
   const [colors, setColors] = useState({ ...DEFAULT_COLORS })
 
-  useEffect(() => {
-    if (businessId) fetchAppearance()
-  }, [businessId])
-
-  async function fetchAppearance() {
+  const fetchAppearance = useCallback(async () => {
+    if (!businessId) return
     setLoading(true)
     setError(null)
 
@@ -56,7 +53,12 @@ export default function AppearancePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [businessId])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (businessId) fetchAppearance()
+  }, [businessId, fetchAppearance])
 
   function handleColorChange(key, value) {
     setColors((prev) => ({ ...prev, [key]: value }))

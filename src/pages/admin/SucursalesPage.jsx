@@ -8,6 +8,7 @@ import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
 import UpgradePrompt from '../../components/ui/UpgradePrompt'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
+import { isUnlimited, formatLimitShort } from '../../utils/limits'
 
 function genSlug(name) {
   return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -29,7 +30,7 @@ export default function SucursalesPage() {
   const [formErrors, setFormErrors] = useState({})
   const [formError, setFormError] = useState(null)
 
-  const atLimit = list.length >= (limits.max_branches || 999)
+  const atLimit = !planLoading && !isUnlimited(limits.max_branches) && limits.max_branches > 0 && list.length >= limits.max_branches
 
   useEffect(() => {
     if (businessId) fetchBranches()
@@ -164,7 +165,7 @@ export default function SucursalesPage() {
           <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>Sucursales</h1>
           {!planLoading && (
             <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              {list.length} de {limits.max_branches >= 999 ? '∞' : limits.max_branches} sucursales
+              {list.length} de {formatLimitShort(limits.max_branches)} sucursales
             </p>
           )}
         </div>

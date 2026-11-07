@@ -45,7 +45,7 @@ const MOVEMENT_ICONS = {
 export default function CashPage() {
   const { businessId } = useAuth()
   const { currentBranch, loading: branchLoading } = useBranch()
-  const { isProfessional, planName, loading: planLoading } = usePlan()
+  const { isProfessional, loading: planLoading } = usePlan()
   const [register, setRegister] = useState(null)
   const [movements, setMovements] = useState([])
   const [balance, setBalance] = useState(0)
