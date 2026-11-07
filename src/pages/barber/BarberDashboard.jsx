@@ -278,15 +278,15 @@ export default function BarberDashboard() {
               {timeStr}
             </div>
             <div>
-              <p className="font-medium text-white">{clientName}</p>
+              <p className="font-medium text-[var(--color-text)]">{clientName}</p>
               <div className="mt-0.5 flex flex-wrap items-center gap-2">
                 {a.services?.length > 0 && a.services[0]?.service?.name && (
-                  <span className="text-xs text-white/40">{a.services[0].service.name}</span>
+                  <span className="text-xs text-[var(--color-muted)]">{a.services[0].service.name}</span>
                 )}
                 {a.total && (
                   <>
-                    <span className="text-white/20">•</span>
-                    <span className="text-xs text-white/50">{fmtCurrency(a.total)}</span>
+                    <span className="text-[var(--color-muted)]">•</span>
+                    <span className="text-xs text-[var(--color-text)]/50">{fmtCurrency(a.total)}</span>
                   </>
                 )}
               </div>
@@ -314,14 +314,14 @@ export default function BarberDashboard() {
                   <>
                     <button
                       onClick={() => handleStatusChange(a.id, 'in_progress')}
-                      className="rounded-lg bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-400 transition-all hover:bg-blue-500/20"
+                      className="rounded-lg bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-400 transition hover:bg-blue-500/20"
                       title="Iniciar"
                     >
                       Iniciar
                     </button>
                     <button
                       onClick={() => handleCancelAppointment(a.id)}
-                      className="rounded-lg bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20"
+                      className="rounded-lg bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-400 transition hover:bg-red-500/20"
                       title="Cancelar"
                     >
                       Cancelar
@@ -331,7 +331,7 @@ export default function BarberDashboard() {
                 {a.status === 'in_progress' && (
                   <button
                     onClick={() => handleCompleteOpen(a)}
-                    className="rounded-lg bg-emerald-500/10 px-2.5 py-1.5 text-xs font-medium text-emerald-400 transition-all hover:bg-emerald-500/20"
+                    className="rounded-lg bg-emerald-500/10 px-2.5 py-1.5 text-xs font-medium text-emerald-400 transition hover:bg-emerald-500/20"
                     title="Completar"
                   >
                     Completar
@@ -349,9 +349,9 @@ export default function BarberDashboard() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -361,12 +361,12 @@ export default function BarberDashboard() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10">
-          <svg className="h-8 w-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-white">Perfil no encontrado</h3>
-        <p className="mt-2 text-sm text-white/40">Tu usuario aún no está vinculado a un perfil de barbero. Contactá al administrador de tu barbería.</p>
+        <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Perfil no encontrado</h3>
+        <p className="mt-2 text-sm text-[var(--color-muted)]">Tu usuario aún no está vinculado a un perfil de barbero. Contactá al administrador de tu barbería.</p>
       </div>
     </div>
   )
@@ -376,10 +376,10 @@ export default function BarberDashboard() {
       {/* Header + Date nav */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">
             Hola, {barberName || 'Barbero'}
           </h1>
-          <p className="mt-1 text-sm text-white/40 capitalize">{formatDate(date)}</p>
+          <p className="mt-1 text-sm text-[var(--color-muted)] capitalize">{formatDate(date)}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -387,18 +387,18 @@ export default function BarberDashboard() {
           <div className="relative" ref={notifRef}>
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className={`relative flex h-9 w-9 items-center justify-center rounded-xl border transition-all ${
+              className={`relative flex h-9 w-9 items-center justify-center rounded-xl border transition ${
                 unreadCount > 0
                   ? 'border-amber-400/30 bg-amber-400/10 text-amber-400 hover:bg-amber-400/20'
-                  : 'border-white/[0.06] bg-white/[0.03] text-white/40 hover:bg-white/5 hover:text-white'
+                  : 'border-[var(--color-border)] bg-white/[0.03] text-[var(--color-muted)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]'
               }`}
               title="Notificaciones"
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
               </svg>
               {unreadCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-[var(--color-text)]">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
@@ -406,9 +406,9 @@ export default function BarberDashboard() {
 
             {/* Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-white/10 bg-[#1a1a2e] shadow-2xl">
-                <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-                  <h3 className="text-sm font-semibold text-white">Notificaciones</h3>
+              <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[#1a1a2e] shadow-2xl">
+                <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
+                  <h3 className="text-sm font-semibold text-[var(--color-text)]">Notificaciones</h3>
                   {unreadCount > 0 && (
                     <button
                       onClick={() => markAllAsRead()}
@@ -420,7 +420,7 @@ export default function BarberDashboard() {
                 </div>
                 <div className="max-h-80 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <div className="px-4 py-8 text-center text-sm text-white/30">
+                    <div className="px-4 py-8 text-center text-sm text-[var(--color-muted)]">
                       Sin notificaciones
                     </div>
                   ) : (
@@ -428,7 +428,7 @@ export default function BarberDashboard() {
                       <button
                         key={n.id}
                         onClick={() => { markAsRead(n.id); setShowNotifications(false) }}
-                        className={`w-full border-b border-white/5 px-4 py-3 text-left transition-colors hover:bg-white/[0.03] ${
+                        className={`w-full border-b border-[var(--color-border)] px-4 py-3 text-left transition-colors hover:bg-white/[0.03] ${
                           !n.is_read ? 'bg-white/[0.02]' : ''
                         }`}
                       >
@@ -437,9 +437,9 @@ export default function BarberDashboard() {
                             <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[var(--color-accent)]" />
                           )}
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white">{n.title}</p>
-                            <p className="mt-0.5 text-xs text-white/40 truncate">{n.body}</p>
-                            <p className="mt-1 text-[10px] text-white/20">
+                            <p className="text-sm font-medium text-[var(--color-text)]">{n.title}</p>
+                            <p className="mt-0.5 text-xs text-[var(--color-muted)] truncate">{n.body}</p>
+                            <p className="mt-1 text-[10px] text-[var(--color-muted)]">
                               {new Intl.DateTimeFormat('es-PY', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(n.created_at))}
                             </p>
                           </div>
@@ -454,9 +454,9 @@ export default function BarberDashboard() {
 
           <button
             onClick={() => goDay(-1)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-white/40 transition-all hover:bg-white/5 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--color-border)] bg-white/[0.03] text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -465,14 +465,14 @@ export default function BarberDashboard() {
             type="date"
             value={date}
             onChange={e => setDate(e.target.value)}
-            className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm text-white transition-all focus:border-white/20 focus:bg-white/5 focus:outline-none [color-scheme:dark]"
+            className="rounded-xl border border-[var(--color-border)] bg-white/[0.03] px-3 py-2 text-sm text-[var(--color-text)] transition focus:border-[var(--color-border)] focus:bg-[var(--color-paper)] focus:outline-none [color-scheme:dark]"
           />
 
           <button
             onClick={() => goDay(1)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] text-white/40 transition-all hover:bg-white/5 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--color-border)] bg-white/[0.03] text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
@@ -480,7 +480,7 @@ export default function BarberDashboard() {
           {!isToday && (
             <button
               onClick={() => setDate(todayStr())}
-              className="rounded-xl border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/10 px-3 py-2 text-xs font-medium text-[var(--color-accent)] transition-all hover:bg-[var(--color-accent)]/20"
+              className="rounded-xl border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/10 px-3 py-2 text-xs font-medium text-[var(--color-accent)] transition hover:bg-[var(--color-accent)]/20"
             >
               Hoy
             </button>
@@ -493,12 +493,12 @@ export default function BarberDashboard() {
         <Card dark hover>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
-              <svg className="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <p className="text-xs font-medium text-white/40">Pendientes</p>
+              <p className="text-xs font-medium text-[var(--color-muted)]">Pendientes</p>
               <p className="text-lg font-bold text-amber-400">{pendingApps.length}</p>
             </div>
           </div>
@@ -506,12 +506,12 @@ export default function BarberDashboard() {
         <Card dark hover>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
-              <svg className="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
             <div>
-              <p className="text-xs font-medium text-white/40">En curso</p>
+              <p className="text-xs font-medium text-[var(--color-muted)]">En curso</p>
               <p className="text-lg font-bold text-blue-400">{inProgressApps.length}</p>
             </div>
           </div>
@@ -519,12 +519,12 @@ export default function BarberDashboard() {
         <Card dark hover>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
-              <svg className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <p className="text-xs font-medium text-white/40">Completados</p>
+              <p className="text-xs font-medium text-[var(--color-muted)]">Completados</p>
               <p className="text-lg font-bold text-emerald-400">{completedApps.length}</p>
             </div>
           </div>
@@ -533,18 +533,18 @@ export default function BarberDashboard() {
 
       {/* My appointments */}
       <Card dark padding={false}>
-        <div className="border-b border-white/[0.06] px-6 py-4">
-          <h2 className="text-lg font-semibold text-white">Mis Reservas</h2>
-          <p className="mt-0.5 text-sm text-white/40">{myApps.length} {myApps.length === 1 ? 'reserva' : 'reservas'}</p>
+        <div className="border-b border-[var(--color-border)] px-6 py-4">
+          <h2 className="text-lg font-semibold text-[var(--color-text)]">Mis Reservas</h2>
+          <p className="mt-0.5 text-sm text-[var(--color-muted)]">{myApps.length} {myApps.length === 1 ? 'reserva' : 'reservas'}</p>
         </div>
 
         {myApps.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-6 py-12">
-            <svg className="h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-white/60">Sin reservas para este día</h3>
-            <p className="mt-1 text-sm text-white/30">No tenés reservas asignadas para esta fecha.</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text-secondary)]">Sin reservas para este día</h3>
+            <p className="mt-1 text-sm text-[var(--color-muted)]">No tenés reservas asignadas para esta fecha.</p>
           </div>
         ) : (
           <div className="divide-y divide-white/[0.04]">
@@ -556,14 +556,14 @@ export default function BarberDashboard() {
       {/* Unassigned appointments */}
       {unassignedApps.length > 0 && (
         <Card dark padding={false}>
-          <div className="border-b border-white/[0.06] px-6 py-4">
+          <div className="border-b border-[var(--color-border)] px-6 py-4">
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
               </svg>
-              <h2 className="text-lg font-semibold text-white">Reservas Sin Asignar</h2>
+              <h2 className="text-lg font-semibold text-[var(--color-text)]">Reservas Sin Asignar</h2>
             </div>
-            <p className="mt-0.5 text-sm text-white/40">{unassignedApps.length} {unassignedApps.length === 1 ? 'reserva esperando barbero' : 'reservas esperando barbero'}</p>
+            <p className="mt-0.5 text-sm text-[var(--color-muted)]">{unassignedApps.length} {unassignedApps.length === 1 ? 'reserva esperando barbero' : 'reservas esperando barbero'}</p>
           </div>
 
           <div className="divide-y divide-white/[0.04]">
@@ -579,10 +579,10 @@ export default function BarberDashboard() {
                         {timeStr}
                       </div>
                       <div>
-                        <p className="font-medium text-white">{clientName}</p>
+                        <p className="font-medium text-[var(--color-text)]">{clientName}</p>
                         <div className="mt-0.5 flex flex-wrap items-center gap-2">
                           {a.services?.length > 0 && a.services[0]?.service?.name && (
-                            <span className="text-xs text-white/40">{a.services[0].service.name}</span>
+                            <span className="text-xs text-[var(--color-muted)]">{a.services[0].service.name}</span>
                           )}
                         </div>
                       </div>
@@ -604,14 +604,14 @@ export default function BarberDashboard() {
       {/* Otros barberos — reservas transferibles */}
       {otherBarberApps.length > 0 && (
         <Card dark padding={false}>
-          <div className="border-b border-white/[0.06] px-6 py-4">
+          <div className="border-b border-[var(--color-border)] px-6 py-4">
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
-              <h2 className="text-lg font-semibold text-white">Reservas de Otros Barberos</h2>
+              <h2 className="text-lg font-semibold text-[var(--color-text)]">Reservas de Otros Barberos</h2>
             </div>
-            <p className="mt-0.5 text-sm text-white/40">
+            <p className="mt-0.5 text-sm text-[var(--color-muted)]">
               {otherBarberApps.length} {otherBarberApps.length === 1 ? 'reserva disponible' : 'reservas disponibles'} para tomar
             </p>
           </div>
@@ -630,18 +630,18 @@ export default function BarberDashboard() {
                         {timeStr}
                       </div>
                       <div>
-                        <p className="font-medium text-white">{clientName}</p>
+                        <p className="font-medium text-[var(--color-text)]">{clientName}</p>
                         <div className="mt-0.5 flex flex-wrap items-center gap-2">
-                          <span className="inline-flex items-center gap-1 text-xs text-white/50">
-                            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <span className="inline-flex items-center gap-1 text-xs text-[var(--color-text)]/50">
+                            <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                             </svg>
                             {barberName}
                           </span>
                           {a.services?.length > 0 && a.services[0]?.service?.name && (
                             <>
-                              <span className="text-white/20">•</span>
-                              <span className="text-xs text-white/40">{a.services[0].service.name}</span>
+                              <span className="text-[var(--color-muted)]">•</span>
+                              <span className="text-xs text-[var(--color-muted)]">{a.services[0].service.name}</span>
                             </>
                           )}
                         </div>

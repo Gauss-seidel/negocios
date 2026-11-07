@@ -72,7 +72,7 @@ function StepProgress({ step, colors }) {
           <div key={label} className="flex items-center">
             <div className="flex flex-col items-center gap-1">
               <div
-                className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold transition-all duration-500 ${
+                className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold transition duration-500 ${
                   isDone
                     ? 'scale-100'
                     : isCurrent
@@ -81,12 +81,12 @@ function StepProgress({ step, colors }) {
                 }`}
                 style={{
                   backgroundColor: isDone || isCurrent ? colors.accent : `${colors.primary}10`,
-                  color: isDone || isCurrent ? '#fff' : colors.textSecondary,
+                  color: isDone || isCurrent ? colors.onAccent : colors.textSecondary,
                   boxShadow: isCurrent ? `0 4px 20px ${colors.accent}40` : 'none',
                 }}
               >
                 {isDone ? (
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (
@@ -126,7 +126,7 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
   return (
     <button
       onClick={onClick}
-      className="group relative w-full rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5"
+      className="group relative w-full rounded-2xl border p-5 text-left transition duration-300 hover:-translate-y-0.5"
       style={{
         borderColor: isSelected ? colors.accent : `${colors.primary}12`,
         backgroundColor: isSelected ? `${colors.accent}06` : 'white',
@@ -135,10 +135,10 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
     >
       {isSelected && (
         <div
-          className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-white"
-          style={{ backgroundColor: colors.accent }}
+          className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full"
+          style={{ backgroundColor: colors.accent, color: colors.onAccent }}
         >
-          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         </div>
@@ -146,8 +146,8 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div
-            className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold text-white"
-            style={{ backgroundColor: colors.primary }}
+            className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold"
+            style={{ backgroundColor: colors.primary, color: colors.onPrimary }}
           >
             {service.name.charAt(0)}
           </div>
@@ -161,7 +161,7 @@ function ServiceCard({ service, isSelected, onClick, colors }) {
         <div className="flex flex-col items-end gap-0.5">
           <div className="text-lg font-bold" style={{ color: colors.accent }}>{fmtCurrency(service.price)}</div>
           <div className="flex items-center gap-1 text-xs" style={{ color: colors.textSecondary }}>
-            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             {service.duration} min
@@ -233,6 +233,17 @@ export default function BookingPage() {
       if (cooldownTimerRef.current) clearInterval(cooldownTimerRef.current)
     }
   }, [])
+
+  useEffect(() => {
+    if (!business) return
+    const cfg = getTemplateConfig(business.template_id, business.template_colors)
+    const href = cfg.fonts?.google
+    const id = 'barber-font-preset'
+    let link = document.getElementById(id)
+    if (!href) { if (link) link.remove(); return }
+    if (!link) { link = document.createElement('link'); link.id = id; link.rel = 'stylesheet'; document.head.appendChild(link) }
+    if (link.href !== href) link.href = href
+  }, [business])
 
   // BOOK-017: Re-fetch barbers and hours when branch changes
   useEffect(() => {
@@ -486,9 +497,9 @@ export default function BookingPage() {
     return (
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
     )
@@ -499,7 +510,7 @@ export default function BookingPage() {
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div className="text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-            <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01" />
             </svg>
           </div>
@@ -522,7 +533,7 @@ export default function BookingPage() {
   const showProductStep = businessPlan !== 'basic' && products.length > 0
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
+    <div className="min-h-screen" style={{ backgroundColor: colors.background, color: colors.text, fontFamily: templateConfig.fonts?.body }}>
       <style>{`
         :root {
           --barber-primary: ${colors.primary};
@@ -531,6 +542,12 @@ export default function BookingPage() {
           --barber-bg: ${colors.background};
           --barber-text: ${colors.text};
           --barber-text-secondary: ${colors.textSecondary};
+          --barber-on-accent: ${colors.onAccent};
+          --barber-on-primary: ${colors.onPrimary};
+          --barber-on-secondary: ${colors.onSecondary};
+          --barber-on-background: ${colors.onBackground};
+          --barber-font-heading: ${templateConfig.fonts?.heading || 'inherit'};
+          --barber-font-body: ${templateConfig.fonts?.body || 'inherit'};
         }
       `}</style>
 
@@ -545,7 +562,7 @@ export default function BookingPage() {
             className="group flex items-center gap-1.5 text-sm font-medium transition-colors"
             style={{ color: colors.textSecondary }}
           >
-            <svg className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Volver
@@ -574,7 +591,7 @@ export default function BookingPage() {
                 <button
                   key={branch.id}
                   onClick={() => setSelectedBranch(branch)}
-                  className="rounded-xl border-2 border-gray-200 bg-white p-5 text-left transition-all hover:border-[var(--color-accent)] hover:shadow-md"
+                  className="rounded-xl border-2 border-gray-200 bg-white p-5 text-left transition hover:border-[var(--color-accent)] hover:shadow-md"
                 >
                   <h3 className="font-semibold text-gray-900">{branch.name}</h3>
                   {branch.address && (
@@ -595,7 +612,7 @@ export default function BookingPage() {
             className="mb-6 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
             style={{ backgroundColor: `${colors.accent}08`, border: `1px solid ${colors.accent}20` }}
           >
-            <svg className="h-4 w-4" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
             </svg>
@@ -620,7 +637,7 @@ export default function BookingPage() {
             {services.length === 0 ? (
               <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
-                  <svg className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -664,7 +681,7 @@ export default function BookingPage() {
                 className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
                 style={{ color: colors.textSecondary }}
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 Volver a servicios
@@ -679,19 +696,19 @@ export default function BookingPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <button
                 onClick={() => { setSelectedBarber(null); setStep(3) }}
-                className="group flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 hover:-translate-y-0.5"
+                className="group flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-8 text-center transition duration-300 hover:-translate-y-0.5"
                 style={{
                   borderColor: selectedBarber === null ? colors.accent : `${colors.primary}20`,
                   backgroundColor: selectedBarber === null ? `${colors.accent}06` : 'transparent',
                 }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-2xl transition-transform group-hover:scale-105">
-                  <svg className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-2xl">
+                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
                 <div>
-                  <div className="font-semibold" style={{ color: colors.text }}>Cualquier barbero</div>
+                  <div className="whitespace-nowrap font-semibold" style={{ color: colors.text }}>Cualquier barbero</div>
                   <div className="text-xs" style={{ color: colors.textSecondary }}>Sin preferencia</div>
                 </div>
               </button>
@@ -702,7 +719,7 @@ export default function BookingPage() {
                   <button
                     key={barber.id}
                     onClick={() => { setSelectedBarber(barber.id); setStep(3) }}
-                    className="group flex items-center gap-4 rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5"
+                    className="group flex items-center gap-4 rounded-2xl border p-5 text-left transition duration-300 hover:-translate-y-0.5"
                     style={{
                       borderColor: isSelected ? colors.accent : `${colors.primary}12`,
                       backgroundColor: isSelected ? `${colors.accent}06` : 'white',
@@ -723,8 +740,8 @@ export default function BookingPage() {
                       )}
                     </div>
                     {isSelected && (
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full text-white" style={{ backgroundColor: colors.accent }}>
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full" style={{ backgroundColor: colors.accent, color: colors.onAccent }}>
+                        <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
@@ -753,7 +770,7 @@ export default function BookingPage() {
                     key={day.date}
                     onClick={() => { if (!isClosed) { setSelectedDate(day.date); setStep(4) } }}
                     disabled={isClosed}
-                    className="group rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    className="group rounded-2xl border p-4 text-center transition duration-300 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     style={{
                       borderColor: isSelected ? colors.accent : isClosed ? `${colors.primary}08` : `${colors.primary}12`,
                       backgroundColor: isSelected ? `${colors.accent}06` : 'white',
@@ -791,15 +808,15 @@ export default function BookingPage() {
             {slotsLoading ? (
               <div className="flex justify-center py-16">
                 <div className="flex gap-1.5">
-                  <span className="h-2 w-2 animate-bounce rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '0ms' }} />
-                  <span className="h-2 w-2 animate-bounce rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '150ms' }} />
-                  <span className="h-2 w-2 animate-bounce rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '300ms' }} />
+                  <span className="h-2 w-2 animate-pulse-soft rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '0ms' }} />
+                  <span className="h-2 w-2 animate-pulse-soft rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '150ms' }} />
+                  <span className="h-2 w-2 animate-pulse-soft rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '300ms' }} />
                 </div>
               </div>
             ) : availableSlots.length === 0 ? (
               <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
-                  <svg className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -822,7 +839,7 @@ export default function BookingPage() {
                     <button
                       key={slot}
                       onClick={() => { setSelectedTime(slot); setStep(showProductStep ? 5 : 6) }}
-                      className="rounded-2xl border px-3 py-3.5 text-center font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                      className="rounded-2xl border px-3 py-3.5 text-center font-semibold transition duration-300 hover:-translate-y-0.5"
                       style={{
                         borderColor: isSelected ? colors.accent : `${colors.primary}12`,
                         backgroundColor: isSelected ? `${colors.accent}06` : 'white',
@@ -858,7 +875,7 @@ export default function BookingPage() {
                 </p>
                 <button
                   onClick={() => setStep(6)}
-                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                  className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-sm font-medium transition-colors"
                   style={{ color: colors.accent }}
                 >
                   Continuar sin productos →
@@ -873,7 +890,7 @@ export default function BookingPage() {
                     return (
                       <div
                         key={product.id}
-                        className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+                        className={`rounded-2xl border overflow-hidden transition duration-300 ${
                           qty > 0 ? 'shadow-lg' : ''
                         }`}
                         style={{
@@ -950,8 +967,8 @@ export default function BookingPage() {
                                     }]
                                   })
                                 }}
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-lg font-medium text-white transition-colors"
-                                style={{ backgroundColor: colors.accent }}
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-lg font-medium transition-colors"
+                                style={{ backgroundColor: colors.accent, color: colors.onAccent }}
                               >
                                 +
                               </button>
@@ -975,15 +992,15 @@ export default function BookingPage() {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => { setSelectedProducts([]); setStep(6) }}
-                      className="rounded-2xl border px-5 py-2.5 text-sm font-medium transition-all"
+                      className="rounded-2xl border px-5 py-2.5 text-sm font-medium transition"
                       style={{ borderColor: `${colors.primary}20`, color: colors.textSecondary }}
                     >
                       Saltar
                     </button>
                     <button
                       onClick={() => setStep(6)}
-                      className="rounded-2xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-                      style={{ backgroundColor: colors.accent }}
+                      className="rounded-2xl px-5 py-2.5 text-sm font-semibold transition-colors active:scale-[0.98]"
+                      style={{ backgroundColor: colors.accent, color: colors.onAccent }}
                     >
                       Continuar
                     </button>
@@ -1107,7 +1124,7 @@ export default function BookingPage() {
                 disabled={cooldown > 0}
                 className="w-full"
                 size="lg"
-                style={{ backgroundColor: colors.accent }}
+                style={{ backgroundColor: colors.accent, color: colors.onAccent }}
               >
                 {cooldown > 0 ? `Esperá ${cooldown}s para agendar otra` : 'Confirmar reserva'}
               </Button>
@@ -1125,7 +1142,7 @@ export default function BookingPage() {
             <div className="rounded-2xl border p-8 text-center" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
               {/* Celebration check */}
               <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl" style={{ backgroundColor: `${colors.accent}12` }}>
-                <svg className="h-10 w-10" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg aria-hidden="true" focusable="false" className="h-10 w-10" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -1154,14 +1171,14 @@ export default function BookingPage() {
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   to={`/barberia/${slug}`}
-                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-                  style={{ backgroundColor: colors.accent }}
+                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold transition-colors active:scale-[0.98]"
+                  style={{ backgroundColor: colors.accent, color: colors.onAccent }}
                 >
                   Volver a la barbería
                 </Link>
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold transition-all"
+                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold transition"
                   style={{ backgroundColor: `${colors.primary}08`, color: colors.text }}
                 >
                   Ver más barberías

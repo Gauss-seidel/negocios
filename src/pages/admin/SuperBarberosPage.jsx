@@ -165,9 +165,9 @@ export default function SuperBarberosPage() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -177,12 +177,12 @@ export default function SuperBarberosPage() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-          <svg className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-white">Error al cargar</h3>
-        <p className="mt-2 text-sm text-white/40">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+        <p className="mt-2 text-sm text-[var(--color-muted)]">{error}</p>
         <Button variant="secondary" className="mt-6" onClick={fetchAll}>Reintentar</Button>
       </div>
     </div>
@@ -195,8 +195,8 @@ export default function SuperBarberosPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">Barberos del Sistema</h1>
-        <p className="mt-1 text-sm text-white/40">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Barberos del Sistema</h1>
+        <p className="mt-1 text-sm text-[var(--color-muted)]">
           {barbers.length} {barbers.length === 1 ? 'barbero registrado' : 'barberos registrados'} ({activeCount} activos)
         </p>
       </div>
@@ -204,24 +204,24 @@ export default function SuperBarberosPage() {
       <Card dark padding={false}>
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center px-6 py-16">
-            <svg className="h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-white/60">No hay barberos registrados</h3>
-            <p className="mt-1 text-sm text-white/30">Los barberos se crean desde cada barbería</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text-secondary)]">No hay barberos registrados</h3>
+            <p className="mt-1 text-sm text-[var(--color-muted)]">Los barberos se crean desde cada barbería</p>
           </div>
         ) : isMobile ? (
             <div className="space-y-3 p-4">
               {barbers.map(b => (
-                <div key={b.id} className="rounded-2xl border border-white/[0.06] bg-card-dark p-4">
+                <div key={b.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)]/10 text-sm font-bold text-[var(--color-accent)]">
                         {(b.name || '?').charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-white">{b.name}</p>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-white/60">
+                        <p className="font-medium text-[var(--color-text)]">{b.name}</p>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
                           {b.business_name}
                         </span>
                       </div>
@@ -230,12 +230,12 @@ export default function SuperBarberosPage() {
 
                   <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                     <div>
-                      <span className="text-white/40">Contacto</span>
-                      <p className="text-white/70 truncate">{b.email || b.phone || '—'}</p>
+                      <span className="text-[var(--color-muted)]">Contacto</span>
+                      <p className="text-[var(--color-text-secondary)] truncate">{b.email || b.phone || '—'}</p>
                     </div>
                     <div>
-                      <span className="text-white/40">Especialidad</span>
-                      <p className="text-white/50 truncate">{b.specialty || '—'}</p>
+                      <span className="text-[var(--color-muted)]">Especialidad</span>
+                      <p className="text-[var(--color-text)]/50 truncate">{b.specialty || '—'}</p>
                     </div>
                   </div>
 
@@ -258,14 +258,14 @@ export default function SuperBarberosPage() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-end gap-1 border-t border-white/[0.06] pt-3">
-                    <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Editar">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <div className="flex items-center justify-end gap-1 border-t border-[var(--color-border)] pt-3">
+                    <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]" title="Editar">
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                       </svg>
                     </button>
-                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                       </svg>
                     </button>
@@ -277,7 +277,7 @@ export default function SuperBarberosPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-white/[0.06] text-xs font-semibold uppercase tracking-wider text-white/30">
+                  <tr className="border-b border-[var(--color-border)] text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)]">
                     <th className="px-6 py-3.5">Barbero</th>
                     <th className="px-6 py-3.5">Barbería</th>
                     <th className="px-6 py-3.5">Contacto</th>
@@ -295,22 +295,22 @@ export default function SuperBarberosPage() {
                           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)]/10 text-sm font-bold text-[var(--color-accent)]">
                             {(b.name || '?').charAt(0).toUpperCase()}
                           </div>
-                          <p className="font-medium text-white">{b.name}</p>
+                          <p className="font-medium text-[var(--color-text)]">{b.name}</p>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/5 bg-white/[0.04] px-2.5 py-0.5 text-xs font-medium text-white/60">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-white/[0.04] px-2.5 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
                           {b.business_name}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="space-y-0.5">
-                          {b.email && <p className="text-white/70">{b.email}</p>}
-                          {b.phone && <p className="text-xs text-white/40">{b.phone}</p>}
-                          {!b.email && !b.phone && <span className="text-white/20">—</span>}
+                          {b.email && <p className="text-[var(--color-text-secondary)]">{b.email}</p>}
+                          {b.phone && <p className="text-xs text-[var(--color-muted)]">{b.phone}</p>}
+                          {!b.email && !b.phone && <span className="text-[var(--color-muted)]">—</span>}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-white/50">{b.specialty || '—'}</td>
+                      <td className="px-6 py-4 text-[var(--color-text)]/50">{b.specialty || '—'}</td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                           b.has_user
@@ -335,19 +335,19 @@ export default function SuperBarberosPage() {
                         <div className="flex items-center justify-end gap-0.5">
                           <button
                             onClick={() => openEdit(b)}
-                            className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white"
+                            className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]"
                             title="Editar"
                           >
-                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                             </svg>
                           </button>
                           <button
                             onClick={() => confirmDelete(b)}
-                            className="rounded-lg p-2 text-white/30 transition-all hover:bg-red-500/10 hover:text-red-400"
+                            className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400"
                             title="Eliminar"
                           >
-                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                             </svg>
                           </button>
@@ -372,12 +372,12 @@ export default function SuperBarberosPage() {
             <Input label="Teléfono" name="phone" value={form.phone} onChange={handleChange} dark />
           </div>
           <Input label="Especialidad" name="specialty" value={form.specialty} onChange={handleChange} dark />
-          <label className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3">
+          <label className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-white/[0.03] px-4 py-3">
             <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange}
-              className="h-4 w-4 rounded border-white/20 bg-white/5 text-[var(--color-accent)] focus:ring-[var(--color-accent)]" />
-            <span className="text-sm font-medium text-white/70">Barbero activo</span>
+              className="h-4 w-4 rounded border-[var(--color-border)] bg-[var(--color-paper)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]" />
+            <span className="text-sm font-medium text-[var(--color-text-secondary)]">Barbero activo</span>
           </label>
-          <div className="flex items-center justify-end gap-3 border-t border-white/[0.06] pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => { setShowEdit(false); setEditTarget(null) }}>Cancelar</Button>
             <Button type="submit" loading={actionLoading}>Guardar Cambios</Button>
           </div>
@@ -387,10 +387,10 @@ export default function SuperBarberosPage() {
       {/* Delete Modal */}
       <Modal open={showDelete} onClose={() => { setShowDelete(false); setDeleteTarget(null) }} title="Confirmar eliminación" size="sm" dark>
         <div className="space-y-4">
-          <p className="text-sm text-white/60">
-            ¿Estás seguro de eliminar a <strong className="text-white">{deleteTarget?.name}</strong>?
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            ¿Estás seguro de eliminar a <strong className="text-[var(--color-text)]">{deleteTarget?.name}</strong>?
           </p>
-          <p className="text-sm text-white/40">
+          <p className="text-sm text-[var(--color-muted)]">
             {deleteTarget?.has_user
               ? 'El usuario asociado también será eliminado del sistema.'
               : 'Esta acción no se puede deshacer.'}

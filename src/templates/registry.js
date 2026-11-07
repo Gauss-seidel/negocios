@@ -1,5 +1,6 @@
 // Registro de plantillas visuales para barberías
 // Cada plantilla define su propia experiencia de animación y movimiento
+import { deriveTemplateTokens } from '../utils/color.js'
 
 // Definición de tipos de animación
 const ANIMATION_STYLES = {
@@ -35,14 +36,79 @@ const ANIMATION_STYLES = {
     buttonHover: { type: 'scale', scale: 1.03 },
     transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
   },
-  // Vibrant: animaciones rápidas y energéticas
+  // Vibrant: animaciones rápidas y energéticas (sin rebote)
   vibrant: {
     name: 'vibrant',
     cardEntry: { type: 'slideInUp', duration: 0.3, delay: 0.05 },
     heroEntry: { type: 'slideInDown', duration: 0.5, delay: 0 },
-    buttonHover: { type: 'bounce', scale: 1.1 },
-    transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+    buttonHover: { type: 'lift', y: -2 },
+    transition: 'all 0.25s ease-out',
   },
+}
+
+// Catálogo curado de tipografía para plantillas (admin selecciona preset; no fuente libre)
+export const FONT_PRESETS = {
+  classic: {
+    id: 'classic',
+    name: 'Clásica',
+    description: 'Serif en títulos, sans legible en texto',
+    heading: 'Georgia, "Times New Roman", serif',
+    body: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+    google: null,
+  },
+  modern: {
+    id: 'modern',
+    name: 'Moderna',
+    description: 'Sans limpia y contemporánea',
+    heading: '"Plus Jakarta Sans", system-ui, sans-serif',
+    body: '"Plus Jakarta Sans", system-ui, sans-serif',
+    google: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+  },
+  premium: {
+    id: 'premium',
+    name: 'Premium',
+    description: 'Editorial elegante para marcas de lujo',
+    heading: '"Playfair Display", Georgia, serif',
+    body: 'Inter, system-ui, sans-serif',
+    google: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap',
+  },
+  friendly: {
+    id: 'friendly',
+    name: 'Cercana',
+    description: 'Redondeada, cálida y approachable',
+    heading: '"Nunito", system-ui, sans-serif',
+    body: '"Nunito", system-ui, sans-serif',
+    google: 'https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap',
+  },
+  sharp: {
+    id: 'sharp',
+    name: 'Nítida',
+    description: 'Geométrica y precisa',
+    heading: 'Montserrat, system-ui, sans-serif',
+    body: 'Inter, system-ui, sans-serif',
+    google: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap',
+  },
+  system: {
+    id: 'system',
+    name: 'Sistema',
+    description: 'Rápida, sin cargar fuentes externas',
+    heading: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+    body: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+    google: null,
+  },
+}
+
+export const DEFAULT_FONT_PRESET_BY_TEMPLATE = {
+  classic: 'classic',
+  modern: 'modern',
+  dark: 'modern',
+  premium: 'premium',
+  vibrant: 'friendly',
+}
+
+export function getFontPreset(presetId, templateId = 'classic') {
+  const id = presetId || DEFAULT_FONT_PRESET_BY_TEMPLATE[templateId] || 'modern'
+  return FONT_PRESETS[id] || FONT_PRESETS.modern
 }
 
 export const TEMPLATES = {
@@ -121,19 +187,33 @@ export function getTemplate(templateId) {
   return TEMPLATES[templateId] || TEMPLATES.classic
 }
 
-export function getTemplateConfig(templateId, colors = {}) {
+export function getTemplateConfig(templateId, colors = {}, fontPreset = null) {
   const template = getTemplate(templateId)
+  const { fontPreset: colorFontPreset, __fontPreset, ...safeColors } = (colors && typeof colors === 'object') ? colors : {}
+  const resolvedFont = getFontPreset(fontPreset || colorFontPreset || __fontPreset, templateId)
+  const baseColors = {
+    primary: '#1a1a2e',
+    secondary: '#16213e',
+    accent: '#e94560',
+    background: '#ffffff',
+    text: '#1a1a2e',
+    textSecondary: '#64748b',
+    ...(template.config?.colors || {}),
+    ...safeColors,
+  }
+  const derived = deriveTemplateTokens(baseColors)
+  // keep any extra custom keys from admin JSON, but prefer normalized/derived core tokens
+  const mergedColors = { ...safeColors, ...derived }
   return {
     ...template.config,
-    colors: {
-      primary: '#1a1a2e',
-      secondary: '#16213e',
-      accent: '#e94560',
-      background: '#ffffff',
-      text: '#1a1a2e',
-      textSecondary: '#64748b',
-      ...colors,
+    fontPreset: resolvedFont.id,
+    fonts: {
+      ...(template.config.fonts || {}),
+      heading: resolvedFont.heading,
+      body: resolvedFont.body,
+      google: resolvedFont.google,
     },
+    colors: mergedColors,
   }
 }
 

@@ -44,7 +44,7 @@ function StatusBadge({ status }) {
   }
   const s = map[status] || { bg: 'bg-gray-500/10', text: 'text-gray-400', dot: 'bg-gray-400', label: status }
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border border-white/5 px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
       {s.label}
     </span>
@@ -58,7 +58,7 @@ function PlanBadge({ plan }) {
     premium: { bg: 'bg-amber-500/10', text: 'text-amber-400' },
   }
   const s = map[plan] || map.basic
-  return <span className={`inline-flex items-center rounded-full border border-white/5 px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>{PLAN_LABELS[plan] || plan}</span>
+  return <span className={`inline-flex items-center rounded-full border border-[var(--color-border)] px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>{PLAN_LABELS[plan] || plan}</span>
 }
 
 /* ─── Main ─── */
@@ -344,9 +344,9 @@ export default function SuperDashboard() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -356,12 +356,12 @@ export default function SuperDashboard() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-          <svg className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-white">Error al cargar</h3>
-        <p className="mt-2 text-sm text-white/40">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+        <p className="mt-2 text-sm text-[var(--color-muted)]">{error}</p>
         <Button variant="secondary" className="mt-6" onClick={fetchAll}>Reintentar</Button>
       </div>
     </div>
@@ -374,11 +374,11 @@ export default function SuperDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Panel de Administración</h1>
-          <p className="mt-1 text-sm text-white/40">Gestioná todas las barberías registradas</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Panel de Administración</h1>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">Gestioná todas las barberías registradas</p>
         </div>
         <Button onClick={() => { setCreateForm({ ...INITIAL_CREATE }); setCreateErrors({}); setSlugManual(false); setShowCreate(true) }}>
-          <svg className="-ml-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+          <svg aria-hidden="true" focusable="false" className="-ml-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
           Nueva Barbería
         </Button>
       </div>
@@ -390,15 +390,15 @@ export default function SuperDashboard() {
           if (m.key === 'revenue') val = fmtCurrency(val)
           else if (m.key === 'bookings') val = val.toLocaleString('es-PY')
           return (
-            <div key={m.key} className="group rounded-2xl border border-white/[0.06] bg-card-dark p-4 transition-all duration-300 hover:border-white/[0.12] hover:-translate-y-0.5">
+            <div key={m.key} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 transition duration-300 hover:border-white/[0.12] hover:-translate-y-0.5">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.06]">
-                  <svg className={`h-5 w-5 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <svg aria-hidden="true" focusable="false" className={`h-5 w-5 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={m.icon} />
                   </svg>
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-xs font-medium text-white/40">{m.label}</p>
+                  <p className="truncate text-xs font-medium text-[var(--color-muted)]">{m.label}</p>
                   <p className={`truncate text-base font-bold sm:text-lg ${m.color}`}>{val}</p>
                 </div>
               </div>
@@ -409,20 +409,20 @@ export default function SuperDashboard() {
 
       {/* Table Card */}
       <Card dark padding={false}>
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">Barberías Registradas</h2>
-            <p className="mt-0.5 text-sm text-white/40">{businesses.length} {businesses.length === 1 ? 'registrada' : 'registradas'}</p>
+            <h2 className="text-lg font-semibold text-[var(--color-text)]">Barberías Registradas</h2>
+            <p className="mt-0.5 text-sm text-[var(--color-muted)]">{businesses.length} {businesses.length === 1 ? 'registrada' : 'registradas'}</p>
           </div>
         </div>
 
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center px-6 py-16">
-            <svg className="h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-white/60">No hay barberías registradas</h3>
-            <p className="mt-1 text-sm text-white/30">Crea la primera barbería para comenzar</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text-secondary)]">No hay barberías registradas</h3>
+            <p className="mt-1 text-sm text-[var(--color-muted)]">Crea la primera barbería para comenzar</p>
             <Button variant="secondary" className="mt-4" onClick={() => { setCreateForm({ ...INITIAL_CREATE }); setShowCreate(true) }}>
               Crear Barbería
             </Button>
@@ -431,15 +431,15 @@ export default function SuperDashboard() {
           /* ── Mobile card layout ── */
           <div className="space-y-3 p-4">
             {businesses.map(b => (
-              <div key={b.id} className="rounded-2xl border border-white/10 bg-card-dark p-4">
+              <div key={b.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)]/10 text-sm font-bold text-[var(--color-accent)]">
                       {(b.name || '?').charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate font-medium text-white">{b.name}</p>
-                      {b.email && <p className="truncate text-xs text-white/30">{b.email}</p>}
+                      <p className="truncate font-medium text-[var(--color-text)]">{b.name}</p>
+                      {b.email && <p className="truncate text-xs text-[var(--color-muted)]">{b.email}</p>}
                     </div>
                   </div>
                   <StatusBadge status={b.status} />
@@ -447,30 +447,30 @@ export default function SuperDashboard() {
                 <div className="mt-3 flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <PlanBadge plan={b.plan} />
-                    <span className="text-xs text-white/30">{fmtDate(b.created_at)}</span>
+                    <span className="text-xs text-[var(--color-muted)]">{fmtDate(b.created_at)}</span>
                   </div>
                   <div className="flex items-center gap-0.5">
-                    <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Editar">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]" title="Editar">
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                       </svg>
                     </button>
-                    <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition-all hover:bg-white/5 disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-400 hover:text-emerald-300' : 'text-amber-400 hover:text-amber-300'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-400 hover:text-emerald-300' : 'text-amber-400 hover:text-amber-300'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         {b.status === BUSINESS_STATUS.SUSPENDED
                           ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           : <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                         }
                       </svg>
                     </button>
-                    <button onClick={() => window.open(`/barberia/${b.slug}`, '_blank')} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Ver pública">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <button onClick={() => window.open(`/barberia/${b.slug}`, '_blank')} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]" title="Ver pública">
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </button>
-                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                       </svg>
                     </button>
@@ -484,7 +484,7 @@ export default function SuperDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs font-semibold uppercase tracking-wider text-white/30">
+                <tr className="border-b border-[var(--color-border)] text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)]">
                   <th className="px-6 py-3.5">Nombre</th>
                   <th className="px-6 py-3.5">Estado</th>
                   <th className="px-6 py-3.5">Plan</th>
@@ -502,44 +502,44 @@ export default function SuperDashboard() {
                           {(b.name || '?').charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
-                          <p className="truncate font-medium text-white">{b.name}</p>
-                          {b.email && <p className="truncate text-xs text-white/30">{b.email}</p>}
+                          <p className="truncate font-medium text-[var(--color-text)]">{b.name}</p>
+                          {b.email && <p className="truncate text-xs text-[var(--color-muted)]">{b.email}</p>}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4"><StatusBadge status={b.status} /></td>
                     <td className="px-6 py-4"><PlanBadge plan={b.plan} /></td>
                     <td className="px-6 py-4">
-                      <span className="text-white/60">{b._branch_count || '—'}</span>
+                      <span className="text-[var(--color-text-secondary)]">{b._branch_count || '—'}</span>
                       <button onClick={() => openBranchManager(b)}
                         className="ml-2 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors">
                         Ver
                       </button>
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-white/40">{fmtDate(b.created_at)}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-[var(--color-muted)]">{fmtDate(b.created_at)}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-0.5">
-                        <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Editar">
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]" title="Editar">
+                          <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                           </svg>
                         </button>
-                        <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition-all hover:bg-white/5 disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-400 hover:text-emerald-300' : 'text-amber-400 hover:text-amber-300'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-400 hover:text-emerald-300' : 'text-amber-400 hover:text-amber-300'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
+                          <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             {b.status === BUSINESS_STATUS.SUSPENDED
                               ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                               : <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                             }
                           </svg>
                         </button>
-                        <button onClick={() => window.open(`/barberia/${b.slug}`, '_blank')} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Ver pública">
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <button onClick={() => window.open(`/barberia/${b.slug}`, '_blank')} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]" title="Ver pública">
+                          <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
                         </button>
-                        <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
+                          <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                           </svg>
                         </button>
@@ -569,24 +569,24 @@ export default function SuperDashboard() {
           <Input label="Contraseña del admin" name="password" type="password" value={createForm.password} onChange={handleCreateChange} placeholder="Mínimo 6 caracteres" error={createErrors.password} dark />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-white/70">Plan</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Plan</label>
               <select name="plan" value={createForm.plan} onChange={handleCreateChange}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none">
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-border)] focus:bg-[var(--color-surface)] focus:outline-none">
                 <option value="basic">Básico</option>
                 <option value="professional">Profesional</option>
                 <option value="premium">Premium</option>
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-white/70">Plantilla</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Plantilla</label>
               <select name="template_id" value={createForm.template_id} onChange={handleCreateChange}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none">
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-border)] focus:bg-[var(--color-surface)] focus:outline-none">
                 {Object.entries(TEMPLATES).map(([k, t]) => <option key={k} value={k}>{t.name}</option>)}
               </select>
             </div>
           </div>
-          <div className="border-t border-white/[0.06] pt-4 mt-4">
-            <h3 className="text-sm font-semibold text-white/70 mb-3">Sucursal inicial</h3>
+          <div className="border-t border-[var(--color-border)] pt-4 mt-4">
+            <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] mb-3">Sucursal inicial</h3>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Input label="Nombre de sucursal" name="branch_name" value={createForm.branch_name}
                 onChange={handleCreateChange} placeholder="Principal" dark />
@@ -598,7 +598,7 @@ export default function SuperDashboard() {
                 onChange={handleCreateChange} placeholder={createForm.address || 'Dirección...'} dark />
             </div>
           </div>
-          <div className="flex items-center justify-end gap-3 border-t border-white/[0.06] pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => { setShowCreate(false); setCreateForm({ ...INITIAL_CREATE }) }}>Cancelar</Button>
             <Button type="submit" loading={actionLoading}>Crear Barbería</Button>
           </div>
@@ -620,30 +620,30 @@ export default function SuperDashboard() {
           <Input label="Dirección" name="address" value={editForm.address} onChange={handleEditChange} dark />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-white/70">Plan</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Plan</label>
               <select name="plan" value={editForm.plan} onChange={handleEditChange}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none">
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-border)] focus:bg-[var(--color-surface)] focus:outline-none">
                 <option value="basic">Básico</option><option value="professional">Profesional</option><option value="premium">Premium</option>
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-white/70">Plantilla</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Plantilla</label>
               <select name="template_id" value={editForm.template_id} onChange={handleEditChange}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none">
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-border)] focus:bg-[var(--color-surface)] focus:outline-none">
                 {Object.entries(TEMPLATES).map(([k, t]) => <option key={k} value={k}>{t.name}</option>)}
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-white/70">Estado</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Estado</label>
               <select name="status" value={editForm.status} onChange={handleEditChange}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none">
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-border)] focus:bg-[var(--color-surface)] focus:outline-none">
                 <option value={BUSINESS_STATUS.ACTIVE}>Activa</option>
                 <option value={BUSINESS_STATUS.SUSPENDED}>Suspendida</option>
                 <option value={BUSINESS_STATUS.PENDING}>Pendiente</option>
               </select>
             </div>
           </div>
-          <div className="flex items-center justify-end gap-3 border-t border-white/[0.06] pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => { setShowEdit(false); setEditTarget(null) }}>Cancelar</Button>
             <Button type="submit" loading={actionLoading}>Guardar Cambios</Button>
           </div>
@@ -656,27 +656,27 @@ export default function SuperDashboard() {
         {managerLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="flex gap-1.5">
-              <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-              <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+              <span className="h-2 w-2 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+              <span className="h-2 w-2 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+              <span className="h-2 w-2 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
             </div>
           </div>
         ) : !managerBranches.length ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <svg className="h-10 w-10 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <p className="mt-3 text-sm text-white/40">Sin sucursales registradas</p>
+            <p className="mt-3 text-sm text-[var(--color-muted)]">Sin sucursales registradas</p>
           </div>
         ) : (
           <div className="space-y-2">
             {managerBranches.map(br => (
-              <div key={br.id} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+              <div key={br.id} className="flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-white/[0.02] px-4 py-3">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-white">{br.name}</p>
-                  {br.address && <p className="mt-0.5 text-xs text-white/40 truncate">{br.address}</p>}
+                  <p className="text-sm font-medium text-[var(--color-text)]">{br.name}</p>
+                  {br.address && <p className="mt-0.5 text-xs text-[var(--color-muted)] truncate">{br.address}</p>}
                 </div>
-                {br.phone && <span className="ml-4 flex-shrink-0 text-xs text-white/30">{br.phone}</span>}
+                {br.phone && <span className="ml-4 flex-shrink-0 text-xs text-[var(--color-muted)]">{br.phone}</span>}
               </div>
             ))}
           </div>
@@ -686,10 +686,10 @@ export default function SuperDashboard() {
       {/* Delete Modal */}
       <Modal open={showDelete} onClose={() => { setShowDelete(false); setDeleteTarget(null) }} title="Confirmar eliminación" size="sm" dark>
         <div className="space-y-4">
-          <p className="text-sm text-white/60">
-            ¿Estás seguro de eliminar <strong className="text-white">{deleteTarget?.name}</strong>?
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            ¿Estás seguro de eliminar <strong className="text-[var(--color-text)]">{deleteTarget?.name}</strong>?
           </p>
-          <p className="text-sm text-white/40">Esta acción eliminará también los usuarios administradores asociados. No se puede deshacer.</p>
+          <p className="text-sm text-[var(--color-muted)]">Esta acción eliminará también los usuarios administradores asociados. No se puede deshacer.</p>
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => { setShowDelete(false); setDeleteTarget(null) }}>Cancelar</Button>
             <Button type="button" variant="danger" onClick={handleDelete} loading={actionLoading}>Eliminar</Button>

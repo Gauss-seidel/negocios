@@ -13,7 +13,7 @@ const navItems = [
 
 function NavIcon({ path }) {
   return (
-    <svg className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+    <svg aria-hidden="true" focusable="false" className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d={path} />
     </svg>
   )
@@ -31,42 +31,41 @@ export default function SuperAdminLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-surface-dark">
-      {/* Mobile overlay */}
+    <div className="flex min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r border-white/[0.06] bg-surface-dark transition-transform duration-300 lg:relative lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r transition-transform duration-300 lg:relative lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
       >
-        <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-4">
-          <Link to="/admin/dashboard" className="text-lg font-bold tracking-tight text-white">
+        <div className="flex h-16 items-center justify-between border-b px-4" style={{ borderColor: 'var(--color-border)' }}>
+          <Link to="/admin/dashboard" className="text-lg font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
             BarberShifts
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-white/40 hover:bg-white/5 hover:text-white lg:hidden"
+            className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-[var(--color-paper-2)] lg:hidden"
+            style={{ color: 'var(--color-text-secondary)' }}
+            aria-label="Cerrar menú"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         <div className="px-3 py-3">
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2">
+          <div className="rounded-xl border px-3 py-2" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)' }}>
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-accent)] text-[9px] font-bold text-white">SA</div>
-              <div>
-                <p className="text-xs font-medium text-white">Super Admin</p>
-              </div>
+              <div className="flex h-6 w-6 items-center justify-center rounded-md text-[9px] font-bold" style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)' }}>SA</div>
+              <p className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>Super Admin</p>
             </div>
           </div>
         </div>
@@ -78,10 +77,10 @@ export default function SuperAdminLayout() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition duration-200 ${
                   isActive
-                    ? 'bg-[var(--color-accent)] text-white shadow-lg shadow-[var(--color-accent)]/20'
-                    : 'text-white/40 hover:bg-white/[0.06] hover:text-white/70'
+                    ? 'bg-[var(--color-accent-warm)] text-[var(--color-accent-ink)] shadow-sm'
+                    : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]'
                 }`}
               >
                 <NavIcon path={item.icon} />
@@ -91,13 +90,14 @@ export default function SuperAdminLayout() {
           })}
         </nav>
 
-        <div className="border-t border-white/[0.06] p-3">
-          <div className="mb-2 truncate px-2 text-xs text-white/30">{user?.email}</div>
+        <div className="border-t p-3" style={{ borderColor: 'var(--color-border)' }}>
+          <div className="mb-2 truncate px-2 text-xs" style={{ color: 'var(--color-muted)' }}>{user?.email}</div>
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-white/40 transition-all hover:bg-white/[0.06] hover:text-white/70"
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition hover:bg-[var(--color-paper-2)]"
+            style={{ color: 'var(--color-text-secondary)' }}
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Cerrar sesión
@@ -105,19 +105,19 @@ export default function SuperAdminLayout() {
         </div>
       </aside>
 
-      {/* Main */}
       <div className="flex flex-1 flex-col">
-        {/* Mobile header */}
-        <header className="flex h-16 items-center justify-between border-b border-white/[0.06] bg-surface-dark px-4 lg:hidden">
+        <header className="flex h-16 items-center justify-between border-b px-4 lg:hidden" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
           <button
             onClick={() => setSidebarOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-white/40 hover:bg-white/5 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-xl hover:bg-[var(--color-paper-2)]"
+            style={{ color: 'var(--color-text-secondary)' }}
+            aria-label="Abrir menú"
           >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <span className="text-sm font-bold text-white">BarberShifts</span>
+          <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>BarberShifts</span>
           <div className="w-9" />
         </header>
 

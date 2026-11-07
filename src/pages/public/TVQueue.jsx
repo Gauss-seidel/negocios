@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
+import { getTemplateConfig } from '../../templates/registry'
 
 /* ─── Status badges ─── */
 
@@ -32,7 +33,7 @@ function AppointmentCard({ appointment, isInProgress, isCompleted }) {
   return (
     <div
       className={`
-        rounded-2xl border transition-all duration-500
+        rounded-2xl border transition duration-500
         ${isInProgress
           ? 'border-emerald-500/30 bg-emerald-500/5 scale-[1.02] shadow-lg shadow-emerald-500/10'
           : isCompleted
@@ -67,7 +68,7 @@ function AppointmentCard({ appointment, isInProgress, isCompleted }) {
         <div className={`mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 ${isInProgress ? 'text-base sm:text-lg' : 'text-sm sm:text-base'}`} style={{ color: 'var(--tv-text-secondary, #94a3b8)' }}>
           {barberName !== '—' && (
             <span className="inline-flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
               </svg>
               {barberName}
@@ -75,7 +76,7 @@ function AppointmentCard({ appointment, isInProgress, isCompleted }) {
           )}
           {services && (
             <span className="inline-flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
               </svg>
@@ -182,19 +183,40 @@ export default function TVQueue() {
   }, [slug, loadData])
 
   /* ─── Derived colors ─── */
-  const templateColors = business?.template_colors || {}
-  const defaultColors = {
-    primary: '#0a0a0f',
-    accent: '#e94560',
-    text: '#f1f5f9',
-    textSecondary: '#94a3b8',
+  const rawTemplateColors = business?.template_colors
+  const parsedTemplateColors = typeof rawTemplateColors === 'string'
+    ? (() => { try { return JSON.parse(rawTemplateColors) } catch { return {} } })()
+    : (rawTemplateColors || {})
+  const templateConfig = getTemplateConfig(business?.template_id, parsedTemplateColors)
+  const tvEffective = {
+    primary: parsedTemplateColors?.primary ? templateConfig.colors.primary : '#0a0a0f',
+    accent: parsedTemplateColors?.accent ? templateConfig.colors.accent : (templateConfig.colors.accent || '#e94560'),
+    text: parsedTemplateColors?.text ? templateConfig.colors.text : '#f1f5f9',
+    textSecondary: parsedTemplateColors?.textSecondary ? templateConfig.colors.textSecondary : '#94a3b8',
+    background: parsedTemplateColors?.background ? templateConfig.colors.background : '#0a0a0f',
+    secondary: templateConfig.colors.secondary || '#16213e',
   }
+  // on-colors derived for effective TV palette (contrast-safe)
+  const tvOnAccent = templateConfig.colors.onAccent
+  const tvOnPrimary = templateConfig.colors.onPrimary
   const tvColors = {
-    primary:   templateColors.primary || defaultColors.primary,
-    accent:    templateColors.accent || defaultColors.accent,
-    text:      templateColors.text || defaultColors.text,
-    textSecondary: templateColors.textSecondary || defaultColors.textSecondary,
+    ...templateConfig.colors,
+    ...tvEffective,
+    onAccent: tvOnAccent,
+    onPrimary: tvOnPrimary,
   }
+  const tvFontHeading = templateConfig.fonts?.heading
+  const tvFontBody = templateConfig.fonts?.body
+  const tvFontGoogle = templateConfig.fonts?.google
+
+  useEffect(() => {
+    const href = tvFontGoogle
+    const id = 'barber-font-preset'
+    let link = document.getElementById(id)
+    if (!href) { if (link) link.remove(); return }
+    if (!link) { link = document.createElement('link'); link.id = id; link.rel = 'stylesheet'; document.head.appendChild(link) }
+    if (link.href !== href) link.href = href
+  }, [tvFontGoogle])
 
   /* ─── Grouped appointments ─── */
   const inProgress = appointments.filter(a => a.status === 'in_progress')
@@ -207,9 +229,9 @@ export default function TVQueue() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: tvColors.primary }}>
         <div className="flex gap-2">
-          <span className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: tvColors.accent, animationDelay: '0ms' }} />
-          <span className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: tvColors.accent, animationDelay: '150ms' }} />
-          <span className="w-3 h-3 rounded-full animate-bounce" style={{ backgroundColor: tvColors.accent, animationDelay: '300ms' }} />
+          <span className="w-3 h-3 rounded-full animate-pulse-soft" style={{ backgroundColor: tvColors.accent, animationDelay: '0ms' }} />
+          <span className="w-3 h-3 rounded-full animate-pulse-soft" style={{ backgroundColor: tvColors.accent, animationDelay: '150ms' }} />
+          <span className="w-3 h-3 rounded-full animate-pulse-soft" style={{ backgroundColor: tvColors.accent, animationDelay: '300ms' }} />
         </div>
       </div>
     )
@@ -220,7 +242,7 @@ export default function TVQueue() {
       <div className="min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: '#0a0a0f' }}>
         <div className="text-center max-w-md">
           <div className="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center bg-white/5 mb-4">
-            <svg className="w-8 h-8 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <svg aria-hidden="true" focusable="false" className="w-8 h-8 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -236,9 +258,13 @@ export default function TVQueue() {
       className="min-h-screen overflow-hidden flex flex-col select-none"
       style={{
         backgroundColor: tvColors.primary,
+        fontFamily: tvFontBody || undefined,
         '--tv-text': tvColors.text,
         '--tv-text-secondary': tvColors.textSecondary,
         '--tv-accent': tvColors.accent,
+        '--tv-on-accent': tvColors.onAccent,
+        '--tv-font-heading': tvFontHeading || 'inherit',
+        '--tv-font-body': tvFontBody || 'inherit',
       }}
     >
       {/* ── Top bar ── */}
@@ -268,7 +294,7 @@ export default function TVQueue() {
                 <button
                   key={b.id}
                   onClick={() => selectBranch(b.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                     (selectedBranchId || branches[0]?.id) === b.id
                       ? 'bg-white/10 text-white'
                       : 'text-white/40 hover:text-white/60 hover:bg-white/5'
@@ -301,7 +327,7 @@ export default function TVQueue() {
         {appointments.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center py-20">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.03] mb-4">
-              <svg className="w-8 h-8" style={{ color: tvColors.textSecondary }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="w-8 h-8" style={{ color: tvColors.textSecondary }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -346,7 +372,7 @@ export default function TVQueue() {
               <section>
                 <details className="group">
                   <summary className="text-xs font-semibold uppercase tracking-widest cursor-pointer py-2 flex items-center gap-2" style={{ color: tvColors.textSecondary }}>
-                    <svg className="w-3 h-3 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <svg aria-hidden="true" focusable="false" className="w-3 h-3 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                     Completados ({completed.length})

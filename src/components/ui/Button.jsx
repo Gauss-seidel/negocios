@@ -7,14 +7,14 @@ export default function Button({
   disabled = false,
   ...props
 }) {
-  const base = 'inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50'
+  const base = 'inline-flex items-center justify-center font-semibold transition duration-200 focus:outline-none active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50'
 
   const variants = {
-    primary: 'rounded-xl bg-[var(--color-accent)] text-white hover:brightness-110 shadow-lg shadow-[var(--color-accent)]/20',
-    secondary: 'rounded-xl bg-gray-100/80 text-gray-600 hover:bg-gray-200 hover:text-gray-800 border border-gray-200/60',
-    danger: 'rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 hover:text-red-600 border border-red-500/20',
-    ghost: 'rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100',
-    light: 'rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200',
+    primary: 'rounded-xl bg-[var(--color-accent)] text-[var(--color-accent-ink,#fff)] hover:brightness-110 shadow-sm',
+    secondary: 'rounded-xl bg-[var(--color-paper-2,#f3f4f6)] text-[var(--color-text,#374151)] hover:brightness-95 border border-[var(--color-border,rgba(0,0,0,.08))]',
+    danger: 'rounded-xl bg-red-500/10 text-red-600 hover:bg-red-500/15 border border-red-500/20',
+    ghost: 'rounded-xl text-[var(--color-text-secondary,#6b7280)] hover:text-[var(--color-text,#374151)] hover:bg-[var(--color-paper-2,#f3f4f6)]',
+    light: 'rounded-xl bg-[var(--color-surface,#f9fafb)] text-[var(--color-text,#374151)] hover:brightness-95 border border-[var(--color-border,rgba(0,0,0,.08))]',
   }
 
   const sizes = {
@@ -30,7 +30,7 @@ export default function Button({
       {...props}
     >
       {loading && (
-        <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+        <svg aria-hidden="true" focusable="false" className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
         </svg>

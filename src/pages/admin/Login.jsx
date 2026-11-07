@@ -17,13 +17,9 @@ export default function Login() {
   const navigate = useNavigate()
 
   if (isAuthenticated) {
-    if (userRole === 'super_admin') {
-      navigate('/admin/dashboard', { replace: true })
-    } else if (userRole === 'barber') {
-      navigate('/admin/mi-trabajo', { replace: true })
-    } else {
-      navigate('/admin/mi-negocio', { replace: true })
-    }
+    if (userRole === 'super_admin') navigate('/admin/dashboard', { replace: true })
+    else if (userRole === 'barber') navigate('/admin/mi-trabajo', { replace: true })
+    else navigate('/admin/mi-negocio', { replace: true })
     return null
   }
 
@@ -31,7 +27,6 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setLoading(true)
-
     try {
       await login(email, password)
     } catch (err) {
@@ -61,34 +56,28 @@ export default function Login() {
     }
   }
 
-  return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--color-primary)] px-4">
-      {/* Background orbs */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-[var(--color-accent)]/10 to-transparent blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-[var(--color-accent-secondary)]/10 to-transparent blur-3xl" />
-      </div>
+  const inputCls = "w-full rounded-xl border px-4 py-3 text-sm transition focus:outline-none focus:ring-2"
 
-      <div className="relative w-full max-w-md">
-        {/* Logo */}
+  return (
+    <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}>
+      <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <Link to="/" className="text-3xl font-bold tracking-tight text-white">
+          <Link to="/" className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text)' }}>
             BarberShifts
           </Link>
-          <p className="mt-2 text-sm text-white/40">
+          <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Panel de administración
           </p>
         </div>
 
-        {/* Card */}
-        <div className="glass-dark rounded-3xl p-8 shadow-2xl">
-          <h2 className="mb-6 text-lg font-semibold text-white">
+        <div className="rounded-2xl border p-7" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)', boxShadow: '0 12px 32px -24px rgba(31,26,23,.28)' }}>
+          <h2 className="mb-6 text-xl font-bold" style={{ color: 'var(--color-text)' }}>
             Iniciar sesión
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-white/70">
+              <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                 Correo electrónico
               </label>
               <input
@@ -97,12 +86,13 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@barberia.com"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                className={inputCls}
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }}
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-white/70">
+              <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                 Contraseña
               </label>
               <input
@@ -111,12 +101,13 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                className={inputCls}
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }}
               />
             </div>
 
             {error && (
-              <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400">
+              <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">
                 {error}
               </div>
             )}
@@ -124,7 +115,8 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="relative w-full overflow-hidden rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+              className="w-full rounded-xl px-4 py-3 text-sm font-bold transition hover:opacity-92 disabled:opacity-60"
+              style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)' }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -143,7 +135,8 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => { setShowReset(true); setResetEmail(email); setResetSent(false); setResetError('') }}
-                className="whitespace-nowrap text-sm text-white/40 transition-colors hover:text-white/70"
+                className="whitespace-nowrap text-sm font-semibold underline-offset-2 hover:underline"
+                style={{ color: 'var(--color-text-secondary)' }}
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -151,38 +144,34 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="mt-6 text-center text-sm text-white/30">
-          <Link to="/" className="font-medium text-white/50 transition-colors hover:text-white/80">
+        <p className="mt-6 text-center text-sm">
+          <Link to="/" className="font-semibold underline-offset-2 hover:underline" style={{ color: 'var(--color-text-secondary)' }}>
             ← Ver barberías disponibles
           </Link>
         </p>
-        <p className="mt-3 text-center text-xs text-white/30">
-          <Link to="/terminos" className="transition-colors hover:text-white/60">Términos</Link>
+        <p className="mt-3 text-center text-xs" style={{ color: 'var(--color-muted)' }}>
+          <Link to="/terminos" className="hover:underline">Términos</Link>
           <span className="mx-2">·</span>
-          <Link to="/privacidad" className="transition-colors hover:text-white/60">Privacidad</Link>
+          <Link to="/privacidad" className="hover:underline">Privacidad</Link>
         </p>
 
-        {/* Forgot password modal */}
         {showReset && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowReset(false)} />
-            <div className="relative w-full max-w-md rounded-3xl bg-gray-900 p-8 shadow-2xl">
-              <h3 className="text-lg font-semibold text-white">Recuperar contraseña</h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="reset-title">
+            <div className="absolute inset-0" style={{ backgroundColor: 'rgba(31,26,23,0.45)' }} onClick={() => setShowReset(false)} />
+            <div className="relative w-full max-w-md rounded-2xl border p-7" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)', boxShadow: '0 20px 50px -30px rgba(31,26,23,.4)' }}>
+              <h3 id="reset-title" className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Recuperar contraseña</h3>
               {resetSent ? (
                 <div className="mt-4 space-y-4">
-                  <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm text-emerald-400">
+                  <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#ecfdf5', borderColor: '#a7f3d0', color: '#047857' }}>
                     Te enviamos un enlace de recuperación a <strong>{resetEmail}</strong>. Revisá tu bandeja de entrada.
                   </div>
-                  <button
-                    onClick={() => setShowReset(false)}
-                    className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/20"
-                  >
+                  <button type="button" onClick={() => setShowReset(false)} className="w-full rounded-xl border px-4 py-3 text-sm font-semibold" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)', backgroundColor: 'var(--color-paper)' }}>
                     Volver al login
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleForgotPassword} className="mt-4 space-y-4">
-                  <p className="text-sm text-white/50">
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                     Ingresá tu email y te enviaremos un enlace para restablecer tu contraseña.
                   </p>
                   <input
@@ -191,26 +180,19 @@ export default function Login() {
                     onChange={(e) => setResetEmail(e.target.value)}
                     placeholder="admin@barberia.com"
                     required
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                    className={inputCls}
+                    style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }}
                   />
                   {resetError && (
-                    <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400">
+                    <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">
                       {resetError}
                     </div>
                   )}
                   <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setShowReset(false)}
-                      className="flex-1 rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-white/60 transition hover:bg-white/10"
-                    >
+                    <button type="button" onClick={() => setShowReset(false)} className="flex-1 rounded-xl border px-4 py-3 text-sm font-semibold" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)', backgroundColor: 'var(--color-paper)' }}>
                       Cancelar
                     </button>
-                    <button
-                      type="submit"
-                      disabled={resetLoading}
-                      className="flex-1 rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
-                    >
+                    <button type="submit" disabled={resetLoading} className="flex-1 rounded-xl px-4 py-3 text-sm font-bold transition hover:opacity-92 disabled:opacity-60" style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)' }}>
                       {resetLoading ? 'Enviando…' : 'Enviar enlace'}
                     </button>
                   </div>

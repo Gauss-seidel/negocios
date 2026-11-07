@@ -3,7 +3,8 @@ import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
-import { TEMPLATES } from '../../templates/registry'
+import { TEMPLATES, FONT_PRESETS, DEFAULT_FONT_PRESET_BY_TEMPLATE } from '../../templates/registry'
+import { deriveTemplateTokens, checkTemplateContrast } from '../../utils/color'
 
 const DEFAULT_COLORS = {
   primary: '#1a1a2e',
@@ -11,30 +12,6 @@ const DEFAULT_COLORS = {
   accent: '#e94560',
   background: '#ffffff',
   text: '#1a1a2e',
-}
-
-// WCAG relative luminance + contrast ratio
-function hexToRgb(hex) {
-  const h = hex.replace('#', '')
-  return [parseInt(h.substring(0, 2), 16), parseInt(h.substring(2, 4), 16), parseInt(h.substring(4, 6), 16)]
-}
-
-function relativeLuminance(r, g, b) {
-  const [rs, gs, bs] = [r, g, b].map(c => {
-    c /= 255
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
-  })
-  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs
-}
-
-function contrastRatio(hex1, hex2) {
-  const [r1, g1, b1] = hexToRgb(hex1)
-  const [r2, g2, b2] = hexToRgb(hex2)
-  const l1 = relativeLuminance(r1, g1, b1)
-  const l2 = relativeLuminance(r2, g2, b2)
-  const lighter = Math.max(l1, l2)
-  const darker = Math.min(l1, l2)
-  return (lighter + 0.05) / (darker + 0.05)
 }
 
 export default function AppearancePage() {
@@ -46,6 +23,9 @@ export default function AppearancePage() {
 
   const [selectedTemplate, setSelectedTemplate] = useState('classic')
   const [colors, setColors] = useState({ ...DEFAULT_COLORS })
+  const [fontPreset, setFontPreset] = useState(DEFAULT_FONT_PRESET_BY_TEMPLATE.classic)
+  const derivedColors = deriveTemplateTokens(colors)
+  const contrastChecks = checkTemplateContrast(colors)
 
   const fetchAppearance = useCallback(async () => {
     if (!businessId) return
@@ -62,14 +42,19 @@ export default function AppearancePage() {
       if (fetchErr) throw fetchErr
 
       if (data) {
-        setSelectedTemplate(data.template_id || 'classic')
+        const tpl = data.template_id || 'classic'
+        setSelectedTemplate(tpl)
         if (data.template_colors) {
           try {
             const parsed = typeof data.template_colors === 'string' ? JSON.parse(data.template_colors) : data.template_colors
-            setColors({ ...DEFAULT_COLORS, ...parsed })
+            const { fontPreset: fp, __fontPreset, ...colorValues } = parsed || {}
+            setColors({ ...DEFAULT_COLORS, ...colorValues })
+            setFontPreset(fp || __fontPreset || DEFAULT_FONT_PRESET_BY_TEMPLATE[tpl] || 'modern')
           } catch {
-            // keep defaults
+            setFontPreset(DEFAULT_FONT_PRESET_BY_TEMPLATE[tpl] || 'modern')
           }
+        } else {
+          setFontPreset(DEFAULT_FONT_PRESET_BY_TEMPLATE[tpl] || 'modern')
         }
       }
     } catch (err) {
@@ -90,6 +75,12 @@ export default function AppearancePage() {
   }
 
   async function handleSave() {
+    const contrastIssues = checkTemplateContrast(colors).filter(c => !c.pass && c.severity === 'error')
+    if (contrastIssues.length > 0) {
+      setError(`Contraste insuficiente en: ${contrastIssues.map(c => `${c.label} (${c.ratio.toFixed(1)}:1)`).join(', ')}. Ajustá los colores para que el texto sea legible.`)
+      setSuccess(false)
+      return
+    }
     setSaving(true)
     setError(null)
     setSuccess(false)
@@ -99,7 +90,7 @@ export default function AppearancePage() {
         .from('businesses')
         .update({
           template_id: selectedTemplate,
-          template_colors: colors,
+          template_colors: { ...colors, fontPreset },
         })
         .eq('id', businessId)
 
@@ -118,11 +109,11 @@ export default function AppearancePage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando apariencia...</p>
+          <p className="mt-4 text-sm text-gray-500">Cargando apariencia…</p>
         </div>
       </div>
     )
@@ -160,8 +151,8 @@ export default function AppearancePage() {
               <button
                 key={key}
                 type="button"
-                onClick={() => setSelectedTemplate(key)}
-                className={`relative overflow-hidden rounded-xl border-2 p-4 text-left transition-all hover:shadow-md ${
+                onClick={() => { setSelectedTemplate(key); setFontPreset(DEFAULT_FONT_PRESET_BY_TEMPLATE[key] || 'modern') }}
+                className={`relative overflow-hidden rounded-xl border-2 p-4 text-left transition hover:shadow-md ${
                   isSelected
                     ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]'
                     : 'border-gray-200 hover:border-gray-300'
@@ -187,11 +178,34 @@ export default function AppearancePage() {
 
                 {isSelected && (
                   <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-accent)]">
-                    <svg className="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                 )}
+              </button>
+            )
+          })}
+        </div>
+      </Card>
+
+      {/* Typography */}
+      <Card>
+        <h2 className="text-lg font-semibold text-gray-900 mb-1">Tipografía</h2>
+        <p className="text-sm text-gray-500 mb-4">Elegí un estilo tipográfico para tu plantilla (catálogo curado, carga segura).</p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {Object.values(FONT_PRESETS).map((fp) => {
+            const active = fontPreset === fp.id
+            return (
+              <button
+                key={fp.id}
+                type="button"
+                onClick={() => { setFontPreset(fp.id); if (success) setSuccess(false) }}
+                className={`rounded-xl border-2 p-4 text-left transition hover:shadow-sm ${active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]' : 'border-gray-200 hover:border-gray-300'}`}
+              >
+                <div className="text-base font-semibold text-gray-900" style={{ fontFamily: fp.heading }}>{fp.name}</div>
+                <div className="mt-1 text-xs text-gray-500" style={{ fontFamily: fp.body }}>{fp.description}</div>
+                <div className="mt-2 text-xs text-gray-400" style={{ fontFamily: fp.body }}>Aa Bb 123 — Reserva tu turno</div>
               </button>
             )
           })}
@@ -232,7 +246,7 @@ export default function AppearancePage() {
         </div>
 
         {/* WCAG Contrast warnings */}
-        <ContrastWarnings colors={colors} />
+        <ContrastWarnings checks={contrastChecks} />
       </Card>
 
       {/* Preview */}
@@ -250,15 +264,15 @@ export default function AppearancePage() {
               <div className="flex items-center gap-3">
                 <div
                   className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
-                  style={{ backgroundColor: colors.accent, color: '#ffffff' }}
+                  style={{ backgroundColor: colors.accent, color: derivedColors.onAccent }}
                 >
                   B
                 </div>
-                <span className="text-lg font-bold" style={{ color: '#ffffff' }}>BarberShifts</span>
+                <span className="text-lg font-bold" style={{ color: derivedColors.onPrimary }}>BarberShifts</span>
               </div>
               <div className="flex gap-2">
                 <div className="h-8 w-20 rounded-lg" style={{ backgroundColor: `${colors.accent}cc` }} />
-                <div className="h-8 w-20 rounded-lg" style={{ backgroundColor: `${colors.background}22` }} />
+                <div className="h-8 w-20 rounded-lg border" style={{ backgroundColor: `${colors.background}33`, borderColor: `${derivedColors.onPrimary}22` }} />
               </div>
             </div>
           </div>
@@ -272,8 +286,8 @@ export default function AppearancePage() {
               Reserva tu cita con los mejores barberos
             </p>
             <div
-              className="mx-auto mt-4 flex h-10 w-40 items-center justify-center rounded-lg text-sm font-medium text-white"
-              style={{ backgroundColor: colors.accent }}
+              className="mx-auto mt-4 flex h-10 w-40 items-center justify-center rounded-lg text-sm font-medium"
+              style={{ backgroundColor: colors.accent, color: derivedColors.onAccent }}
             >
               Reservar ahora
             </div>
@@ -341,35 +355,36 @@ function ColorPicker({ label, value, onChange }) {
   )
 }
 
-function ContrastWarnings({ colors }) {
-  const pairs = [
-    { label: 'Texto sobre fondo', fg: colors.text, bg: colors.background },
-    { label: 'Acento sobre fondo', fg: colors.accent, bg: colors.background },
-    { label: 'Texto sobre primario', fg: '#ffffff', bg: colors.primary },
-    { label: 'Acento sobre primario', fg: colors.accent, bg: colors.primary },
-  ]
-
-  const warnings = pairs
-    .map(p => ({ ...p, ratio: contrastRatio(p.fg, p.bg) }))
-    .filter(p => p.ratio < 4.5)
-
-  if (warnings.length === 0) return null
-
+function ContrastWarnings({ checks = [] }) {
+  const issues = checks.filter(c => !c.pass)
+  if (issues.length === 0) {
+    return (
+      <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+        Contraste correcto: el sistema calculará colores de texto seguros sobre tus fondos (acento/primario).
+      </div>
+    )
+  }
+  const hasErrors = issues.some(c => c.severity === 'error')
   return (
-    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+    <div className={`mt-4 rounded-xl border p-4 ${hasErrors ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'}`}>
       <div className="flex items-start gap-2">
-        <svg className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg aria-hidden="true" focusable="false" className={`mt-0.5 h-4 w-4 shrink-0 ${hasErrors ? 'text-red-600' : 'text-amber-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div>
-          <p className="text-sm font-medium text-amber-800">Contraste insuficiente (WCAG AA)</p>
-          <ul className="mt-1 space-y-1 text-xs text-amber-700">
-            {warnings.map((w, i) => (
-              <li key={i}>
-                {w.label}: {w.ratio.toFixed(1)}:1 (mínimo 4.5:1)
+          <p className={`text-sm font-medium ${hasErrors ? 'text-red-800' : 'text-amber-800'}`}>
+            {hasErrors ? 'Contraste crítico: no se puede guardar hasta corregir' : 'Advertencias de contraste'}
+          </p>
+          <ul className={`mt-1 space-y-1 text-xs ${hasErrors ? 'text-red-700' : 'text-amber-700'}`}>
+            {issues.map((w) => (
+              <li key={w.key}>
+                {w.label}: {w.ratio.toFixed(1)}:1 (mínimo {w.min}:1){w.severity === 'error' ? ' — crítico' : ''}
               </li>
             ))}
           </ul>
+          <p className={`mt-2 text-xs ${hasErrors ? 'text-red-700' : 'text-amber-700'}`}>
+            El texto sobre acento/primario se ajusta automáticamente para legibilidad; aun así, evitá combinaciones extremas.
+          </p>
         </div>
       </div>
     </div>

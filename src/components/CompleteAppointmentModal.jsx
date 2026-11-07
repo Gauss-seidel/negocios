@@ -5,7 +5,7 @@ import InvoiceModal from './InvoiceModal'
 
 function MinusIcon() {
   return (
-    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg aria-hidden="true" focusable="false" className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
     </svg>
   )
@@ -13,7 +13,7 @@ function MinusIcon() {
 
 function PlusIcon() {
   return (
-    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg aria-hidden="true" focusable="false" className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
     </svg>
   )
@@ -125,7 +125,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         {/* Backdrop */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
         {/* Modal */}
         <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">

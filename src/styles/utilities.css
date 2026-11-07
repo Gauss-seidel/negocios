@@ -1,3 +1,4 @@
+/* Hallmark: tokens-first; aria-hidden icons; reduced-motion; overflow-x-clip; audited 2026-11-07 */
 /* ============================================================
    BarberShifts - Pure CSS Utility Framework (Tailwind-free)
    ============================================================ */
@@ -8,11 +9,17 @@
   --color-secondary: #1a1a2e;
   --color-accent: #e94560;
   --color-accent-secondary: #f59e0b;
-  --color-bg: #faf9f6;
-  --color-surface: #ffffff;
-  --color-text: #0a0a0f;
-  --color-text-secondary: #6b7280;
-  --color-border: rgba(0, 0, 0, 0.06);
+  --color-accent-ink: #fffaf8;
+  --color-bg: #f7f3ee;
+  --color-surface: #fffdfa;
+  --color-text: #1f1a17;
+  --color-text-secondary: #6b625b;
+  --color-border: rgba(31, 26, 23, 0.12);
+  --color-paper: #f7f3ee;
+  --color-paper-2: #efe8df;
+  --color-ink: #1f1a17;
+  --color-muted: #6b625b;
+  --color-accent-warm: #8b4a2b;
 
   /* Barbershop template colors (overridden per page) */
   --barber-primary: #1a1a2e;
@@ -44,6 +51,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 body {
@@ -51,6 +59,7 @@ body {
   color: var(--color-text);
   background-color: var(--color-bg);
   line-height: 1.6;
+  overflow-x: clip;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -59,7 +68,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
 input, select, textarea { font: inherit; }
 table { border-collapse: collapse; }
 
-::selection { background-color: var(--color-accent); color: white; }
+::selection { background-color: var(--color-accent); color: var(--color-accent-ink); }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
@@ -455,7 +464,7 @@ table { border-collapse: collapse; }
 .tabular-nums { font-variant-numeric: tabular-nums; }
 
 /* ─── 11. TRANSITIONS & ANIMATIONS ─── */
-.transition-all { transition-property: all; }
+.transition-all { transition-property: color, background-color, border-color, opacity, transform, box-shadow, filter; }
 .transition-colors { transition-property: color, background-color, border-color; }
 .transition-opacity { transition-property: opacity; }
 .transition-transform { transition-property: transform; }
@@ -467,9 +476,9 @@ table { border-collapse: collapse; }
 
 /* Animations */
 @keyframes spin { to { transform: rotate(360deg); } }
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-25%); }
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.35; transform: none; }
+  50% { opacity: 1; transform: none; }
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 @keyframes fade-up {
@@ -482,7 +491,7 @@ table { border-collapse: collapse; }
 }
 
 .animate-spin { animation: spin 1s linear infinite; }
-.animate-bounce { animation: bounce 1s infinite; }
+.animate-pulse-soft { animation: soft-pulse 1s ease-in-out infinite; }
 .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 .animate-fade-up { animation: fade-up 0.6s var(--ease-out-expo) forwards; }
 .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
@@ -522,7 +531,7 @@ table { border-collapse: collapse; }
 .group:hover .group-hover\:scale-105 { transform: scale(1.05); }
 .group:hover .group-hover\:translate-y-\[-2px\] { transform: translateY(-2px); }
 .group:hover .group-hover\:ring-2 { box-shadow: 0 0 0 2px var(--color-accent); opacity: 0.2; }
-.group:hover .group-hover\:shadow-\[0_0_40px_-12px_rgba\(233\2c 69\2c 96\2c 0\.3\)\] { box-shadow: 0 0 40px -12px rgba(233,69,96,0.3); }
+.group:hover .group-hover\:shadow-\[0_0_40px_-12px_rgba\(233\2c 69\2c 96\2c 0\.3\)\] { box-shadow: 0 12px 32px -12px rgba(10,10,15,0.25); }
 
 /* Focus states */
 .focus\:border-white\/20:focus { border-color: rgba(255,255,255,0.20); }
@@ -545,9 +554,9 @@ table { border-collapse: collapse; }
 
 /* Disabled states */
 .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
-.disabled\:opacity-50:disabled { opacity: 0.5; }
-.disabled\:opacity-60:disabled { opacity: 0.6; }
-.disabled\:opacity-30:disabled { opacity: 0.3; }
+.disabled\:opacity-30:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(0.2); }
+.disabled\:opacity-50:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.2); }
+.disabled\:opacity-60:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(0.15); }
 
 /* ─── 12. TEXT COLORS ─── */
 .text-white { color: #ffffff; }
@@ -731,8 +740,8 @@ table { border-collapse: collapse; }
 .blur-3xl { filter: blur(64px); }
 
 /* ─── 17. SEMANTIC DARK BACKGROUNDS ─── */
-.bg-surface-dark { background-color: #0a0a0f; }
-.bg-card-dark { background-color: #0f0f14; }
+.bg-surface-dark { background-color: #0a0a0f; color: var(--color-paper); }
+.bg-card-dark { background-color: #0f0f14; color: var(--color-paper); }
 
 /* ─── 18. CSS VARIABLE COLORS (bracket notation) ─── */
 .bg-\[var\(--color-accent\)\] { background-color: var(--color-accent); }
@@ -851,7 +860,7 @@ table { border-collapse: collapse; }
 .after\:left-\[2px\]::after { content: ''; left: 2px; }
 .after\:top-\[2px\]::after { content: ''; top: 2px; }
 .after\:rounded-full::after { content: ''; border-radius: 9999px; }
-.after\:transition-all::after { content: ''; transition-property: all; }
+.after\:transition-all::after { content: ''; transition-property: color, background-color, border-color, opacity, transform, box-shadow, filter; }
 
 /* Peer (toggle sibling) */
 .peer { }
@@ -865,14 +874,27 @@ table { border-collapse: collapse; }
 
 /* Disabled state */
 .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
-.disabled\:opacity-50:disabled { opacity: 0.5; }
-.disabled\:opacity-60:disabled { opacity: 0.6; }
+.disabled\:opacity-50:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.2); }
+.disabled\:opacity-60:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(0.15); }
 
 /* Responsive sm: */
 @media (min-width: 640px) {
   .sm\:block { display: block; }
   .sm\:w-40 { width: 10rem; }
   .sm\:gap-6 { gap: 1.5rem; }
+}
+
+/* Display heads: balanced wrapping (Hallmark F3) */
+h1, h2 { text-wrap: balance; }
+
+/* Reduced motion fallback (Hallmark gate 27 / floor) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ============================================================
@@ -954,9 +976,9 @@ table { border-collapse: collapse; }
   }
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+@keyframes soft-pulse-alt {
+  0%, 100% { opacity: 0.35; transform: none; }
+  50% { opacity: 1; transform: none; }
 }
 
 /* Animation classes por plantilla */

@@ -11,7 +11,7 @@ function AnimatedSection({ children, className = '', delay = 0 }) {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
+      className={`transition duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
       style={{ transitionDelay: `${delay}ms`, transitionTimingFunction: 'var(--ease-out-expo)' }}
     >
       {children}
@@ -64,30 +64,30 @@ function BarberiaHero({ business, templateConfig, branches }) {
               )}
             </div>
             <div
-              className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold text-white shadow-lg"
-              style={{ backgroundColor: colors.accent }}
+              className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold shadow-lg"
+              style={{ backgroundColor: colors.accent, color: colors.onAccent }}
             >
               {business.name.charAt(1) || business.name.charAt(0)}
             </div>
           </div>
 
-          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-white lg:text-5xl">
+          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight lg:text-5xl" style={{ color: colors.onPrimary }}>
             {business.name}
           </h1>
 
           {business.description && (
-            <p className="mt-3 max-w-xl text-lg leading-relaxed text-white/60">
+            <p className="mt-3 max-w-xl text-lg leading-relaxed" style={{ color: colors.onPrimary, opacity: 0.72 }}>
               {business.description}
             </p>
           )}
 
           <Link
             to={`/barberia/${business.slug}/reservar${branches.length === 1 ? `?branch=${branches[0].slug}` : ''}`}
-            className="group mt-8 inline-flex items-center gap-2.5 rounded-2xl px-8 py-4 text-base font-semibold text-white shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-            style={{ backgroundColor: colors.accent }}
+            className="group mt-8 inline-flex items-center gap-2.5 rounded-2xl px-8 py-4 text-base font-semibold shadow-xl transition-colors duration-300 active:scale-[0.98]"
+            style={{ backgroundColor: colors.accent, color: colors.onAccent }}
           >
             Reservar turno
-            <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
@@ -123,7 +123,7 @@ function BarberiaServices({ services, colors, templateId = 'classic' }) {
            {services.map((service, i) => (
             <div
               key={service.id}
-              className={`group relative rounded-2xl border bg-white/50 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${getCardAnimationClass(i)}`}
+              className={`group relative rounded-2xl border bg-white/50 p-6 transition duration-500 hover:-translate-y-1 hover:shadow-xl ${getCardAnimationClass(i)}`}
               style={{
                 borderColor: `${colors.primary}12`,
                 animationDelay: `${i * 60}ms`,
@@ -131,15 +131,15 @@ function BarberiaServices({ services, colors, templateId = 'classic' }) {
             >
               {/* Price badge */}
               <div
-                className="absolute right-4 top-4 rounded-xl px-3 py-1 text-sm font-bold text-white"
-                style={{ backgroundColor: colors.accent }}
+                className="absolute right-4 top-4 rounded-xl px-3 py-1 text-sm font-bold"
+                style={{ backgroundColor: colors.accent, color: colors.onAccent }}
               >
                 {fmtCurrency(service.price)}
               </div>
 
               <div
-                className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl text-lg font-bold text-white"
-                style={{ backgroundColor: colors.primary }}
+                className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl text-lg font-bold"
+                style={{ backgroundColor: colors.primary, color: colors.onPrimary }}
               >
                 {service.name.charAt(0)}
               </div>
@@ -154,7 +154,7 @@ function BarberiaServices({ services, colors, templateId = 'classic' }) {
               )}
               <div className="mt-4 flex items-center gap-3 text-sm" style={{ color: colors.textSecondary }}>
                 <span className="flex items-center gap-1">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {service.duration} min
@@ -197,7 +197,7 @@ function BarberiaHours({ hours, colors }) {
               return (
                 <div
                   key={day.value}
-                  className={`flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300 ${
+                  className={`flex items-center justify-between rounded-xl px-4 py-3 transition duration-300 ${
                     isToday ? 'font-semibold shadow-sm' : ''
                   }`}
                   style={{
@@ -246,7 +246,7 @@ function BarberiaBranches({ branches, colors, slug }) {
           {branches.map(branch => (
             <div key={branch.id} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
               <div className="mb-3 flex items-center gap-2">
-                <svg className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
@@ -260,10 +260,11 @@ function BarberiaBranches({ branches, colors, slug }) {
               )}
               <Link
                 to={`/barberia/${slug}/reservar?branch=${branch.slug}`}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-white transition-all hover:brightness-110"
+                className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:brightness-110"
+                style={{ backgroundColor: colors.accent, color: colors.onAccent }}
               >
                 Reservar en esta sucursal
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
@@ -301,7 +302,7 @@ function BarberiaProducts({ products, colors }) {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="group relative rounded-2xl border bg-white/50 p-0 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative rounded-2xl border bg-white/50 p-0 overflow-hidden transition duration-500 hover:-translate-y-1 hover:shadow-xl"
                 style={{ borderColor: `${colors.primary}12` }}
               >
                 {/* Image */}
@@ -313,7 +314,7 @@ function BarberiaProducts({ products, colors }) {
                     <img
                       src={product.image_url}
                       alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover"
                       onError={() => setImgErrors(prev => ({ ...prev, [product.id]: true }))}
                     />
                   ) : (
@@ -398,13 +399,24 @@ export default function BarberiaPage() {
     loadBarberia()
   }, [slug, loadBarberia])
 
+  useEffect(() => {
+    if (!business) return
+    const cfg = getTemplateConfig(business.template_id, business.template_colors)
+    const href = cfg.fonts?.google
+    const id = 'barber-font-preset'
+    let link = document.getElementById(id)
+    if (!href) { if (link) link.remove(); return }
+    if (!link) { link = document.createElement('link'); link.id = id; link.rel = 'stylesheet'; document.head.appendChild(link) }
+    if (link.href !== href) link.href = href
+  }, [business])
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
     )
@@ -415,7 +427,7 @@ export default function BarberiaPage() {
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div className="text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-            <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -433,7 +445,7 @@ export default function BarberiaPage() {
   const { colors } = templateConfig
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: colors.background, color: colors.text }}>
+    <div className="min-h-screen" style={{ backgroundColor: colors.background, color: colors.text, fontFamily: templateConfig.fonts?.body }}>
       <style>{`
         :root {
           --barber-primary: ${colors.primary};
@@ -442,17 +454,23 @@ export default function BarberiaPage() {
           --barber-bg: ${colors.background};
           --barber-text: ${colors.text};
           --barber-text-secondary: ${colors.textSecondary};
+          --barber-on-accent: ${colors.onAccent};
+          --barber-on-primary: ${colors.onPrimary};
+          --barber-on-secondary: ${colors.onSecondary};
+          --barber-on-background: ${colors.onBackground};
+          --barber-font-heading: ${templateConfig.fonts?.heading || 'inherit'};
+          --barber-font-body: ${templateConfig.fonts?.body || 'inherit'};
         }
       `}</style>
 
       {/* Navbar minimal */}
       <nav
-        className="sticky top-0 z-40 border-b backdrop-blur-xl"
-        style={{ borderColor: `${colors.primary}08`, backgroundColor: `${colors.background}D9` }}
+        className="sticky top-0 z-40 border-b"
+        style={{ borderColor: `${colors.primary}12`, backgroundColor: `${colors.background}F2` }}
       >
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link to="/" className="group flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: colors.textSecondary }}>
-            <svg className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Todas las barberías
@@ -481,11 +499,11 @@ export default function BarberiaPage() {
             </p>
             <Link
               to={`/barberia/${business.slug}/reservar${branches.length === 1 ? `?branch=${branches[0].slug}` : ''}`}
-              className="group mt-6 inline-flex items-center gap-2.5 rounded-2xl px-8 py-4 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-              style={{ backgroundColor: colors.accent }}
+              className="group mt-6 inline-flex items-center gap-2.5 rounded-2xl px-8 py-4 text-base font-semibold shadow-lg transition-colors duration-300 active:scale-[0.98]"
+              style={{ backgroundColor: colors.accent, color: colors.onAccent }}
             >
               Reservar ahora
-              <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>

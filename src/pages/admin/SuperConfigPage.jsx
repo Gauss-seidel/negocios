@@ -139,9 +139,9 @@ export default function SuperConfigPage() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -151,8 +151,8 @@ export default function SuperConfigPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Configuración del Sistema</h1>
-          <p className="mt-1 text-sm text-white/40">Estadísticas, administradores y configuración global</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Configuración del Sistema</h1>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">Estadísticas, administradores y configuración global</p>
         </div>
       </div>
 
@@ -167,12 +167,12 @@ export default function SuperConfigPage() {
           <Card key={s.label} dark hover>
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.06]">
-                <svg className={`h-5 w-5 ${s.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <svg aria-hidden="true" focusable="false" className={`h-5 w-5 ${s.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-medium text-white/40">{s.label}</p>
+                <p className="text-xs font-medium text-[var(--color-muted)]">{s.label}</p>
                 <p className={`text-lg font-bold ${s.color}`}>{s.value}</p>
               </div>
             </div>
@@ -184,8 +184,8 @@ export default function SuperConfigPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* System Info */}
         <Card dark padding={false}>
-          <div className="border-b border-white/[0.06] px-6 py-4">
-            <h2 className="text-lg font-semibold text-white">Información del Sistema</h2>
+          <div className="border-b border-[var(--color-border)] px-6 py-4">
+            <h2 className="text-lg font-semibold text-[var(--color-text)]">Información del Sistema</h2>
           </div>
           <div className="divide-y divide-white/[0.04] px-6 py-4">
             {[
@@ -198,8 +198,8 @@ export default function SuperConfigPage() {
               { label: 'Zona horaria', value: 'America/Asuncion' },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between py-2.5 text-sm">
-                <span className="text-white/40">{label}</span>
-                <span className="font-medium text-white/80">{value}</span>
+                <span className="text-[var(--color-muted)]">{label}</span>
+                <span className="font-medium text-[var(--color-text)]/80">{value}</span>
               </div>
             ))}
           </div>
@@ -207,22 +207,22 @@ export default function SuperConfigPage() {
 
         {/* Quick Actions */}
         <Card dark>
-          <h2 className="mb-4 text-lg font-semibold text-white">Acciones Rápidas</h2>
+          <h2 className="mb-4 text-lg font-semibold text-[var(--color-text)]">Acciones Rápidas</h2>
           <div className="space-y-3">
             <button
               onClick={openCreate}
-              className="flex w-full items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left text-sm text-white/70 transition-all hover:border-[var(--color-accent)]/30 hover:bg-[var(--color-accent)]/5 hover:text-white"
+              className="flex w-full items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-3 text-left text-sm text-[var(--color-text-secondary)] transition hover:border-[var(--color-accent)]/30 hover:bg-[var(--color-accent)]/5 hover:text-[var(--color-text)]"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-accent)]/10">
-                <svg className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                 </svg>
               </div>
               <div>
-                <p className="font-medium text-white">Crear Super Admin</p>
-                <p className="text-xs text-white/40">Dar acceso a otro administrador del sistema</p>
+                <p className="font-medium text-[var(--color-text)]">Crear Super Admin</p>
+                <p className="text-xs text-[var(--color-muted)]">Dar acceso a otro administrador del sistema</p>
               </div>
-              <svg className="ml-auto h-5 w-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="ml-auto h-5 w-5 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             </button>
@@ -231,18 +231,18 @@ export default function SuperConfigPage() {
               href={`https://supabase.com/dashboard/project/${import.meta.env.VITE_SUPABASE_URL?.split('://')[1]?.split('.')[0]}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left text-sm text-white/70 transition-all hover:border-white/[0.12] hover:bg-white/[0.06] hover:text-white"
+              className="flex w-full items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-3 text-left text-sm text-[var(--color-text-secondary)] transition hover:border-[var(--color-border)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10">
-                <svg className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
                 </svg>
               </div>
               <div>
-                <p className="font-medium text-white">Dashboard Supabase</p>
-                <p className="text-xs text-white/40">Base de datos, auth, usuarios y más</p>
+                <p className="font-medium text-[var(--color-text)]">Dashboard Supabase</p>
+                <p className="text-xs text-[var(--color-muted)]">Base de datos, auth, usuarios y más</p>
               </div>
-              <svg className="ml-auto h-5 w-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="ml-auto h-5 w-5 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             </a>
@@ -251,18 +251,18 @@ export default function SuperConfigPage() {
               href="https://render.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-left text-sm text-white/70 transition-all hover:border-white/[0.12] hover:bg-white/[0.06] hover:text-white"
+              className="flex w-full items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-3 text-left text-sm text-[var(--color-text-secondary)] transition hover:border-[var(--color-border)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
-                <svg className="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                 </svg>
               </div>
               <div>
-                <p className="font-medium text-white">Dashboard Render</p>
-                <p className="text-xs text-white/40">Hosting, deploy y logs de la app</p>
+                <p className="font-medium text-[var(--color-text)]">Dashboard Render</p>
+                <p className="text-xs text-[var(--color-muted)]">Hosting, deploy y logs de la app</p>
               </div>
-              <svg className="ml-auto h-5 w-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="ml-auto h-5 w-5 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
             </a>
@@ -272,13 +272,13 @@ export default function SuperConfigPage() {
 
       {/* Super Admins */}
       <Card dark padding={false}>
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">Super Administradores</h2>
-            <p className="mt-0.5 text-sm text-white/40">{superAdmins.length} {superAdmins.length === 1 ? 'registrado' : 'registrados'}</p>
+            <h2 className="text-lg font-semibold text-[var(--color-text)]">Super Administradores</h2>
+            <p className="mt-0.5 text-sm text-[var(--color-muted)]">{superAdmins.length} {superAdmins.length === 1 ? 'registrado' : 'registrados'}</p>
           </div>
           <Button variant="secondary" size="sm" onClick={openCreate}>
-            <svg className="-ml-0.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg aria-hidden="true" focusable="false" className="-ml-0.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
             Nuevo
@@ -286,13 +286,13 @@ export default function SuperConfigPage() {
         </div>
         {superAdmins.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-6 py-10">
-            <p className="text-sm text-white/40">No hay super-administradores registrados</p>
+            <p className="text-sm text-[var(--color-muted)]">No hay super-administradores registrados</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs font-semibold uppercase tracking-wider text-white/30">
+                <tr className="border-b border-[var(--color-border)] text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)]">
                   <th className="px-6 py-3.5">Nombre</th>
                   <th className="px-6 py-3.5">ID</th>
                   <th className="px-6 py-3.5">Registrado</th>
@@ -301,11 +301,11 @@ export default function SuperConfigPage() {
               <tbody className="divide-y divide-white/[0.04]">
                 {superAdmins.map(a => (
                   <tr key={a.id} className="transition-colors hover:bg-white/[0.02]">
-                    <td className="px-6 py-4 font-medium text-white">{a.name}</td>
+                    <td className="px-6 py-4 font-medium text-[var(--color-text)]">{a.name}</td>
                     <td className="px-6 py-4">
-                      <code className="rounded-md bg-white/[0.04] px-2 py-0.5 text-xs text-white/40 font-mono">{a.id}</code>
+                      <code className="rounded-md bg-white/[0.04] px-2 py-0.5 text-xs text-[var(--color-muted)] font-mono">{a.id}</code>
                     </td>
-                    <td className="px-6 py-4 text-white/40">
+                    <td className="px-6 py-4 text-[var(--color-muted)]">
                       {a.created_at
                         ? new Intl.DateTimeFormat('es-PY', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(a.created_at))
                         : '—'}
@@ -323,12 +323,12 @@ export default function SuperConfigPage() {
         {createSuccess ? (
           <div className="space-y-4 py-4 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10">
-              <svg className="h-8 w-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-white">Super Admin creado</h3>
-            <p className="text-sm text-white/40">{createdEmail} ya tiene acceso como super admin.</p>
+            <h3 className="text-lg font-semibold text-[var(--color-text)]">Super Admin creado</h3>
+            <p className="text-sm text-[var(--color-muted)]">{createdEmail} ya tiene acceso como super admin.</p>
             <Button variant="secondary" onClick={() => { setShowCreate(false); setCreateSuccess(false) }}>Cerrar</Button>
           </div>
         ) : (
@@ -365,7 +365,7 @@ export default function SuperConfigPage() {
               error={createErrors.password}
               dark
             />
-            <div className="flex items-center justify-end gap-3 border-t border-white/[0.06] pt-4">
+            <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
               <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancelar</Button>
               <Button type="submit" loading={createLoading}>Crear Super Admin</Button>
             </div>
