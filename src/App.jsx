@@ -15,6 +15,8 @@ const Marketplace = lazy(() => import('./pages/public/Marketplace'))
 const BarberiaPage = lazy(() => import('./pages/barberia/BarberiaPage'))
 const BookingPage = lazy(() => import('./pages/barberia/BookingPage'))
 const TVQueue = lazy(() => import('./pages/public/TVQueue'))
+const TermsPage = lazy(() => import('./pages/public/TermsPage'))
+const PrivacyPage = lazy(() => import('./pages/public/PrivacyPage'))
 
 const Login = lazy(() => import('./pages/admin/Login'))
 const SuperDashboard = lazy(() => import('./pages/admin/SuperDashboard'))
@@ -89,6 +91,8 @@ export default function App() {
             <Route path="/" element={<Marketplace />} />
             <Route path="/barberia/:slug" element={<BarberiaPage />} />
             <Route path="/barberia/:slug/reservar" element={<BookingPage />} />
+            <Route path="/terminos" element={<TermsPage />} />
+            <Route path="/privacidad" element={<PrivacyPage />} />
           </Route>
 
           {/* TV Mode - sin layout */}
