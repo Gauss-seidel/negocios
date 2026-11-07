@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
 import { usePlan } from '../../hooks/usePlan'
@@ -111,17 +111,6 @@ function StepProgress({ step, colors }) {
 
 /* ─── Step transitions ─── */
 
-function StepContainer({ children, isActive }) {
-  return (
-    <div
-      className={`transition-all duration-500 ${
-        isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 absolute pointer-events-none'
-      }`}
-    >
-      {children}
-    </div>
-  )
-}
 
 /* ─── Service card ─── */
 
@@ -201,10 +190,10 @@ export default function BookingPage() {
   const [clientPhone, setClientPhone] = useState('')
   const [clientEmail, setClientEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [step, setStep] = useState(1)
   const [products, setProducts] = useState([])
+  const [barberServices, setBarberServices] = useState({})
   const [selectedProducts, setSelectedProducts] = useState([])
   const [imgErrors, setImgErrors] = useState({})
   const [cooldown, setCooldown] = useState(0)
@@ -213,12 +202,19 @@ export default function BookingPage() {
   const days = getNext7Days()
   const contentRef = useRef(null)
 
-  useEffect(() => {
-    loadBarberia()
-  }, [slug])
+  // Solo barberos que realizan el servicio elegido (sin configuración = todos).
+  const eligibleBarbers = useMemo(() => {
+    if (!selectedService) return barbers
+    return barbers.filter((b) => {
+      const assigned = barberServices[b.id]
+      return !assigned || assigned.size === 0 || assigned.has(selectedService.id)
+    })
+  }, [barbers, barberServices, selectedService])
+
 
   useEffect(() => {
     contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (submitError) setSubmitError(null)
   }, [step])
 
@@ -263,11 +259,33 @@ export default function BookingPage() {
       }
       setSelectedBranch(initialBranch)
 
+      // Columnas explícitas: anon no tiene acceso a email/teléfono de empleados.
       let barQuery = supabase
-        .from('barbers').select('*').eq('business_id', biz.id).eq('is_active', true)
+        .from('barbers')
+        .select('id, name, photo_url, specialty, color_hex, branch_id, is_active')
+        .eq('business_id', biz.id)
+        .eq('is_active', true)
       if (initialBranch) barQuery = barQuery.eq('branch_id', initialBranch.id)
       const { data: bar } = await barQuery
-      setBarbers(bar || [])
+      const barberList = bar || []
+      setBarbers(barberList)
+
+      // Servicios habilitados por barbero: el backend rechaza combinaciones
+      // barbero/servicio no configuradas, así que la UI no debe ofrecerlas.
+      if (barberList.length > 0) {
+        const { data: links } = await supabase
+          .from('barber_services')
+          .select('barber_id, service_id')
+          .in('barber_id', barberList.map((b) => b.id))
+        const map = {}
+        for (const link of links || []) {
+          if (!map[link.barber_id]) map[link.barber_id] = new Set()
+          map[link.barber_id].add(link.service_id)
+        }
+        setBarberServices(map)
+      } else {
+        setBarberServices({})
+      }
 
       let hrsQuery = supabase
         .from('business_hours').select('*').eq('business_id', biz.id).order('day_of_week')
@@ -277,7 +295,7 @@ export default function BookingPage() {
 
       const { data: prods } = await supabase
         .from('inventory_products')
-        .select('*')
+        .select('id, name, description, price, current_stock, unit, image_url, branch_id, is_active')
         .eq('business_id', biz.id)
         .eq('is_product', true)
         .eq('is_active', true)
@@ -292,7 +310,13 @@ export default function BookingPage() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadBarberia()
+  }, [slug])
+
+  useEffect(() => {
     if (!selectedDate || !selectedService || !business) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSlotsLoading(true)
     setSelectedTime(null)
 
@@ -306,13 +330,15 @@ export default function BookingPage() {
         .eq('business_id', business.id).eq('date', selectedDate).eq('is_closed', true)
       if (holidays?.length > 0) { setAvailableSlots([]); setSlotsLoading(false); return }
 
-      let query = supabase
-        .from('appointments').select('start_time, end_time')
-        .eq('business_id', business.id).eq('date', selectedDate)
-        .not('status', 'in', '("cancelled","no_show")')
-      if (selectedBarber) query = query.eq('barber_id', selectedBarber)
-
-      const { data: existing } = await query
+      // Disponibilidad vía RPC: anon ya no puede leer la tabla appointments.
+      const { data: existing, error: slotsErr } = await supabase.rpc('get_busy_slots', {
+        p_business_id: business.id,
+        p_date: selectedDate,
+        p_barber_id: selectedBarber || null,
+      })
+      if (slotsErr) {
+        console.error('No se pudo cargar la disponibilidad:', slotsErr.message)
+      }
       const slots = generateTimeSlots(dayHours.open_time, dayHours.close_time, selectedService.duration, existing || [])
       setAvailableSlots(slots)
       setSlotsLoading(false)
@@ -320,34 +346,6 @@ export default function BookingPage() {
     loadSlots()
   }, [selectedDate, selectedService, selectedBarber, business?.id])
 
-  const checkSlotAvailable = async () => {
-    const [h, m] = selectedTime.split(':').map(Number)
-    const startMin = h * 60 + m
-    const endMin = startMin + selectedService.duration
-    const eH = String(Math.floor(endMin / 60)).padStart(2, '0')
-    const eM = String(endMin % 60).padStart(2, '0')
-    const endTimeStr = `${eH}:${eM}`
-
-    let query = supabase
-      .from('appointments')
-      .select('id')
-      .eq('business_id', business.id)
-      .eq('date', selectedDate)
-      .not('status', 'in', '("cancelled","no_show")')
-      .lt('start_time', endTimeStr)
-      .gt('end_time', selectedTime)
-
-    if (selectedBarber) {
-      query = query.eq('barber_id', selectedBarber)
-    }
-
-    const { data: conflicts, error } = await query
-    if (error) throw new Error('Error al verificar disponibilidad: ' + error.message)
-    if (conflicts && conflicts.length > 0) {
-      throw new Error('Este horario acaba de ser reservado por otra persona. Por favor elegí otro turno.')
-    }
-    return endTimeStr
-  }
 
   const canSubmit = useCallback(() => {
     if (cooldown > 0) return false
@@ -374,67 +372,28 @@ export default function BookingPage() {
     setSubmitting(true)
     setSubmitError(null)
     try {
-      // Verificar que el slot sigue disponible (evita doble reserva)
-      const endTime = await checkSlotAvailable()
+      const productIds = selectedProducts.map((sp) => sp.product_id)
+      const productQtys = selectedProducts.map((sp) => sp.quantity || 1)
 
-      let clientId = null
-
-      // Buscar cliente existente por teléfono
-      const { data: existingClient, error: findErr } = await supabase
-        .from('clients').select('id')
-        .eq('business_id', business.id).eq('phone', clientPhone).maybeSingle()
-      if (findErr) throw new Error('Error al buscar cliente: ' + findErr.message)
-
-      if (existingClient) {
-        clientId = existingClient.id
-      } else {
-        // Crear nuevo cliente
-        const { data: newClient, error: insertClientErr } = await supabase
-          .from('clients').insert({
-            business_id: business.id, name: clientName, phone: clientPhone, email: clientEmail || null
-          }).select().single()
-        if (insertClientErr) throw new Error('Error al crear cliente: ' + insertClientErr.message)
-        if (!newClient) throw new Error('No se pudo crear el cliente')
-        clientId = newClient.id
-      }
-
-      // Crear reserva
-      const { data: appointment, error: insertApptErr } = await supabase
-        .from('appointments').insert({
-          business_id: business.id, branch_id: selectedBranch?.id || null, client_id: clientId, barber_id: selectedBarber || null,
-          date: selectedDate, start_time: selectedTime, end_time: endTime, status: 'pending',
-          total: Number(selectedService?.price || 0) + selectedProducts.reduce((sum, sp) => sum + Number(sp.price || 0) * (sp.quantity || 1), 0),
-        }).select().single()
-      if (insertApptErr) {
-        // Si hay un error de unique constraint, el slot se acaba de ocupar
-        if (insertApptErr.code === '23505') {
-          throw new Error('Este horario acaba de ser reservado por otra persona. Por favor elegí otro turno.')
-        }
-        throw new Error('Error al crear reserva: ' + insertApptErr.message)
-      }
-      if (!appointment) throw new Error('No se pudo crear la reserva')
-
-      // Agregar servicio a la reserva
-      const { error: insertSvcErr } = await supabase.from('appointment_services').insert({
-        appointment_id: appointment.id, service_id: selectedService.id, price: selectedService.price,
+      const { data: rpcData, error: rpcErr } = await supabase.rpc('create_appointment_atomic', {
+        p_business_id: business.id,
+        p_branch_id: selectedBranch?.id || null,
+        p_service_id: selectedService.id,
+        p_client_name: clientName,
+        p_client_phone: clientPhone,
+        p_client_email: clientEmail || '',
+        p_date: selectedDate,
+        p_start_time: selectedTime,
+        p_barber_id: selectedBarber || null,
+        p_product_ids: productIds,
+        p_product_quantities: productQtys,
       })
-      if (insertSvcErr) throw new Error('Error al agregar servicio: ' + insertSvcErr.message)
 
-      // Agregar productos a la reserva
-      if (selectedProducts.length > 0) {
-        const productInserts = selectedProducts.map(sp => ({
-          appointment_id: appointment.id,
-          product_id: sp.product_id,
-          quantity: sp.quantity,
-          price: sp.price,
-        }))
-        const { error: insertProdErr } = await supabase
-          .from('appointment_products')
-          .insert(productInserts)
-        if (insertProdErr) throw new Error('Error al agregar productos: ' + insertProdErr.message)
+      if (rpcErr) throw new Error('Error al crear reserva: ' + rpcErr.message)
+      if (!rpcData || rpcData.success === false) {
+        throw new Error(rpcData?.error || 'No se pudo crear la reserva')
       }
 
-      setSuccess(true)
       setStep(7)
     } catch (err) {
       setSubmitError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
@@ -622,7 +581,7 @@ export default function BookingPage() {
                 </div>
               </button>
 
-              {barbers.map((barber) => {
+              {eligibleBarbers.map((barber) => {
                 const isSelected = selectedBarber === barber.id
                 return (
                   <button

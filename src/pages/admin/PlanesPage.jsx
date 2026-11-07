@@ -5,6 +5,7 @@ import Input from '../../components/ui/Input'
 import Modal from '../../components/ui/Modal'
 import Card from '../../components/ui/Card'
 import { fmtCurrency } from '../../utils/format'
+import { formatLimitShort, formatLimitCount } from '../../utils/limits'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 
 /* ─── Constants ─── */
@@ -229,15 +230,15 @@ export default function PlanesPage() {
                   </div>
                   <div>
                     <span className="text-white/40">Barberos</span>
-                    <p className="font-medium text-white">{p.max_barbers === 999 ? '∞' : p.max_barbers}</p>
+                    <p className="font-medium text-white">{formatLimitShort(p.max_barbers)}</p>
                   </div>
                   <div>
                     <span className="text-white/40">Sucursales</span>
-                    <p className="font-medium text-white">{p.max_branches === 999 ? '∞' : p.max_branches}</p>
+                    <p className="font-medium text-white">{formatLimitShort(p.max_branches)}</p>
                   </div>
                   <div>
                     <span className="text-white/40">Reservas/mes</span>
-                    <p className="font-medium text-white">{p.max_monthly_bookings >= 999999 ? '∞' : p.max_monthly_bookings.toLocaleString()}</p>
+                    <p className="font-medium text-white">{formatLimitCount(p.max_monthly_bookings)}</p>
                   </div>
                 </div>
 
@@ -290,9 +291,9 @@ export default function PlanesPage() {
                       <span className="font-semibold text-[var(--color-accent)]">{fmtCurrency(p.price)}</span>
                       <span className="text-xs text-white/30">/mes</span>
                     </td>
-                    <td className="px-6 py-4 text-white/60">{p.max_barbers === 999 ? '∞' : p.max_barbers}</td>
-                    <td className="px-6 py-4 text-white/60">{p.max_branches === 999 ? '∞' : p.max_branches}</td>
-                    <td className="px-6 py-4 text-white/60">{p.max_monthly_bookings >= 999999 ? '∞' : p.max_monthly_bookings.toLocaleString()}</td>
+                    <td className="px-6 py-4 text-white/60">{formatLimitShort(p.max_barbers)}</td>
+                    <td className="px-6 py-4 text-white/60">{formatLimitShort(p.max_branches)}</td>
+                    <td className="px-6 py-4 text-white/60">{formatLimitCount(p.max_monthly_bookings)}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                         p.is_active
@@ -384,15 +385,15 @@ export default function PlanesPage() {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-white/40">Barberos</span>
-                  <span className="font-medium text-white">{p.max_barbers === 999 ? '∞' : p.max_barbers}</span>
+                  <span className="font-medium text-white">{formatLimitShort(p.max_barbers)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-white/40">Sucursales</span>
-                  <span className="font-medium text-white">{p.max_branches === 999 ? '∞' : p.max_branches}</span>
+                  <span className="font-medium text-white">{formatLimitShort(p.max_branches)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-white/40">Reservas/mes</span>
-                  <span className="font-medium text-white">{p.max_monthly_bookings >= 999999 ? '∞' : p.max_monthly_bookings.toLocaleString()}</span>
+                  <span className="font-medium text-white">{formatLimitCount(p.max_monthly_bookings)}</span>
                 </div>
               </div>
               {Array.isArray(p.features) && p.features.length > 0 && (

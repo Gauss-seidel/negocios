@@ -9,6 +9,7 @@ import Button from '../../components/ui/Button'
 import CompleteAppointmentModal from '../../components/CompleteAppointmentModal'
 import { APPOINTMENT_STATUS } from '../../lib/constants'
 import { fmtCurrency as formatCurrency } from '../../utils/format'
+import { isUnlimited, formatLimitCount } from '../../utils/limits'
 
 const STATUS_ACTIONS = [
   { status: APPOINTMENT_STATUS.CONFIRMED, label: 'Confirmar', variant: 'primary' },
@@ -226,7 +227,9 @@ export default function AppointmentsPage() {
         <p className="mt-1 text-sm text-gray-500">Gestiona todas las reservas de tu negocio</p>
         {!planLoading && (
           <p className="mt-1 text-xs text-gray-400">
-            Plan {planName}: Limite de <strong>{limits.max_monthly_bookings.toLocaleString('es-MX')}</strong> reservas/mes
+            {isUnlimited(limits.max_monthly_bookings)
+              ? <>Plan {planName}: <strong>Reservas ilimitadas</strong></>
+              : <>Plan {planName}: Limite de <strong>{formatLimitCount(limits.max_monthly_bookings)}</strong> reservas/mes</>}
           </p>
         )}
       </div>

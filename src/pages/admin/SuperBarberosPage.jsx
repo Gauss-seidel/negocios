@@ -1,6 +1,5 @@
 import { supabase } from '../../lib/supabase'
 import { useState, useEffect } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
@@ -10,7 +9,6 @@ import Card from '../../components/ui/Card'
 /* ─── Main ─── */
 
 export default function SuperBarberosPage() {
-  const { session } = useAuth()
   const [barbers, setBarbers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)

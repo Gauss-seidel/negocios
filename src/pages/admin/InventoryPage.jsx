@@ -28,7 +28,7 @@ const UNITS = ['pieza', 'litro', 'kilogramo', 'botella', 'tubo', 'pack', 'par']
 export default function InventoryPage() {
   const { businessId } = useAuth()
   const { currentBranch } = useBranch()
-  const { isProfessional, hasFeature, planName, loading: planLoading } = usePlan()
+  const { isProfessional, loading: planLoading } = usePlan()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -183,17 +183,17 @@ export default function InventoryPage() {
     setStockError(null)
 
     const qty = Number(stockAdjustment)
-    const newStock =
-      stockAdjustmentType === 'in'
-        ? (stockTarget.current_stock || 0) + qty
-        : Math.max(0, (stockTarget.current_stock || 0) - qty)
+    const delta = stockAdjustmentType === 'in' ? qty : -qty
 
     try {
-      const { error: updateErr } = await supabase
-        .from('inventory_products')
-        .update({ current_stock: newStock })
-        .eq('id', stockTarget.id)
-      if (updateErr) throw updateErr
+      // RPC atómico: bloquea la fila, valida stock y registra el movimiento.
+      const { data: rpcData, error: rpcErr } = await supabase.rpc('adjust_inventory_stock', {
+        p_product_id: stockTarget.id,
+        p_delta: delta,
+        p_notes: stockAdjustmentType === 'in' ? 'Ajuste manual (entrada)' : 'Ajuste manual (salida)',
+      })
+      if (rpcErr) throw rpcErr
+      if (!rpcData?.success) throw new Error(rpcData?.error || 'Error al ajustar stock')
 
       setShowStockModal(false)
       setStockTarget(null)

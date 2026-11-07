@@ -11,6 +11,20 @@ export function AuthProvider({ children }) {
   const [userRole, setUserRole] = useState(null)
   const [businessId, setBusinessId] = useState(null)
 
+  const extractClaims = useCallback((user) => {
+    if (!user?.app_metadata) {
+      setUserRole(null)
+      setBusinessId(null)
+      return
+    }
+
+    const role = user.app_metadata.role || null
+    const bizId = user.app_metadata.business_id || null
+
+    setUserRole(role)
+    setBusinessId(bizId)
+  }, [])
+
   useEffect(() => {
     // Obtener sesión inicial
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -31,21 +45,7 @@ export function AuthProvider({ children }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
-
-  function extractClaims(user) {
-    if (!user?.app_metadata) {
-      setUserRole(null)
-      setBusinessId(null)
-      return
-    }
-
-    const role = user.app_metadata.role || null
-    const bizId = user.app_metadata.business_id || null
-
-    setUserRole(role)
-    setBusinessId(bizId)
-  }
+  }, [extractClaims])
 
   const login = useCallback(async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -90,6 +90,7 @@ export function AuthProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- useAuth hook is co-located with AuthProvider by design
 export function useAuth() {
   const context = useContext(AuthContext)
   if (!context) {

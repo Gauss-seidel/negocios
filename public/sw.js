@@ -1,4 +1,4 @@
-const CACHE = 'barbershifts-v1'
+const CACHE = 'barbershifts-v2'
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -26,8 +26,15 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
 
-  // Supabase API → NetworkFirst (red con fallback a cache)
-  if (url.hostname.includes('supabase.co')) {
+  // Supabase API y auth: NUNCA cachear (datos privados / multi-tenant)
+  const isSupabase = url.hostname.includes('supabase') || url.pathname.includes('/rest/v1/') || url.pathname.includes('/auth/v1/') || url.pathname.includes('/functions/v1/')
+  if (isSupabase || event.request.method !== 'GET') {
+    event.respondWith(fetch(event.request))
+    return
+  }
+
+  // Navegacion (HTML): network-first con fallback a cache
+  if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then((res) => {
@@ -35,13 +42,22 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE).then((cache) => cache.put(event.request, clone))
           return res
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match('/index.html'))
     )
     return
   }
 
-  // Assets estáticos → CacheFirst
+  // Assets estaticos: cache-first con actualizacion en background
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    caches.match(event.request).then((cached) => {
+      const networkFetch = fetch(event.request).then((res) => {
+        if (res && res.status === 200 && res.type === 'basic') {
+          const clone = res.clone()
+          caches.open(CACHE).then((cache) => cache.put(event.request, clone))
+        }
+        return res
+      }).catch(() => cached)
+      return cached || networkFetch
+    })
   )
 })

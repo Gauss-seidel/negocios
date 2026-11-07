@@ -35,6 +35,7 @@ export function usePlan() {
 
   useEffect(() => {
     if (!businessId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset loading when no business context
       setLoading(false)
       return
     }
