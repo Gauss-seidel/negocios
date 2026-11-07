@@ -397,20 +397,7 @@ export default function Marketplace() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-black/5 bg-white py-8">
-        <div className="mx-auto flex flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-          <p className="text-sm font-semibold text-[var(--color-text)]">BarberShifts</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-[var(--color-text-secondary)]">
-            <span>© 2026</span>
-            <Link to="/terminos" className="transition-colors hover:text-[var(--color-text)] hover:underline">Términos</Link>
-            <Link to="/privacidad" className="transition-colors hover:text-[var(--color-text)] hover:underline">Privacidad</Link>
-          </div>
-          <Link to="/admin" className="text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]">
-            Administración
-          </Link>
-        </div>
-      </footer>
+
     </div>
   )
 }
