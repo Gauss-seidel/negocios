@@ -101,16 +101,19 @@ export default function TVQueue() {
   const [lastRefresh, setLastRefresh] = useState(null)
   const intervalRef = useRef(null)
   const branchRef = useRef(null)
+  const branchInitRef = useRef(false)
+  const hasLoadedRef = useRef(false)
 
   function selectBranch(id) {
     branchRef.current = id
+    branchInitRef.current = true
     setSelectedBranchId(id)
     // Re-fetch inmediato con la nueva sucursal
-    setLoading(true)
-    setTimeout(loadData, 0)
+    loadData({ showLoader: true })
   }
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async ({ showLoader = false } = {}) => {
+    if (showLoader) setLoading(true)
     try {
       if (!slug) throw new Error('Slug no proporcionado')
 
@@ -134,7 +137,8 @@ export default function TVQueue() {
       setBranches(activeBranches)
 
       // Auto-seleccionar primera sucursal si no hay selección
-      if (activeBranches.length > 0 && !branchRef.current && !branches.length) {
+      if (activeBranches.length > 0 && !branchInitRef.current) {
+        branchInitRef.current = true
         branchRef.current = activeBranches[0].id
         setSelectedBranchId(activeBranches[0].id)
       }
@@ -162,6 +166,7 @@ export default function TVQueue() {
       setAppointments(enriched)
       setError(null)
       setLastRefresh(new Date())
+      hasLoadedRef.current = true
     } catch (err) {
       console.error('TVQueue error:', err)
       setError(err.message || 'Error al cargar datos')
@@ -171,8 +176,8 @@ export default function TVQueue() {
   }, [slug])
 
   useEffect(() => {
-    loadData()
-    intervalRef.current = setInterval(loadData, 30000)
+    loadData({ showLoader: true })
+    intervalRef.current = setInterval(() => loadData(), 30000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [slug, loadData])
 

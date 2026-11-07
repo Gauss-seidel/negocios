@@ -707,6 +707,16 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $fn$;
 
+-- Barberos del negocio pueden leer notificaciones de su negocio (cola operativa).
+-- Idempotente: política aditiva, no elimina las existentes de admin/super_admin.
+DROP POLICY IF EXISTS barber_read_notifications ON public.notifications;
+CREATE POLICY barber_read_notifications ON public.notifications
+  FOR SELECT
+  USING (
+    current_user_role() = 'barber'
+    AND business_id = current_user_business_id()
+  );
+
 -- ---------------------------------------------------------------------------
 -- 5. Recálculo de total sin producto cartesiano
 -- ---------------------------------------------------------------------------

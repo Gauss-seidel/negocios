@@ -18,6 +18,11 @@ describe('isUnlimited', () => {
     expect(isUnlimited(3)).toBe(false)
     expect(isUnlimited(10)).toBe(false)
   })
+
+  it('valores inválidos o negativos se tratan como finitos (no exponer ∞ por error)', () => {
+    expect(isUnlimited(-1)).toBe(false)
+    expect(isUnlimited(NaN)).toBe(false)
+  })
 })
 
 describe('formatLimitShort', () => {
@@ -29,6 +34,11 @@ describe('formatLimitShort', () => {
     expect(formatLimitShort(3)).toBe('3')
     expect(formatLimitShort(10)).toBe('10')
     expect(formatLimitShort(1)).toBe('1')
+  })
+
+  it('formatea 0 y negativos como valores finitos', () => {
+    expect(formatLimitShort(0)).toBe('0')
+    expect(formatLimitShort(-1)).toBe('-1')
   })
 })
 

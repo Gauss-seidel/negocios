@@ -12,9 +12,9 @@ Este directorio contiene el historial de migraciones del proyecto Supabase
 | 20260628   | `20260628_branches_public_select.sql`          | Aplicada y registrada                   |
 | 20260629   | `20260629_fix_hours_unique_constraint.sql`     | Aplicada y registrada                   |
 | 20260630   | `20260630_fix_null_branch_appointments.sql`    | Aplicada y registrada                   |
-| 20260703   | `20260703_fix_rls_branches_super_admin.sql`    | Aplicada en producción, **NO registrada** |
-| 20260703   | `20260703_fix_security_audit.sql`              | Aplicada en producción, **NO registrada** |
-| 20260703   | `20260703_fix_security_phase2.sql`             | Aplicada en producción, **NO registrada** |
+| 20260703   | `20260703_fix_security_phase2.sql` (canónica)  | Aplicada en producción, **NO registrada** — ver §2 |
+| 20260703   | `archive/20260703_fix_rls_branches_super_admin.sql` | Archivada (efecto ya aplicado) |
+| 20260703   | `archive/20260703_fix_security_audit.sql`      | Archivada (efecto ya aplicado) |
 | 20260704   | `20260704_security_hardening.sql`              | Aplicada y registrada                   |
 | 20260705   | `20260705_update_plan_prices.sql`              | Aplicada y registrada                   |
 | 20260706   | `20260706_atomic_booking_rpc.sql`              | Aplicada y registrada                   |
@@ -29,30 +29,28 @@ Consulta del historial remoto:
 select version, name from supabase_migrations.schema_migrations order by version;
 ```
 
-## 2. Anomalía 20260703 (tres archivos, una sola versión)
+## 2. Anomalía 20260703 (consolidada en disco)
 
-Los tres archivos `20260703_*` existen en el repositorio y **sus efectos ya están
-en producción** (política `super_admin_all` en todas las tablas, `complete_appointment`
-con `search_path`), pero la versión `20260703` **no aparece** en
-`supabase_migrations.schema_migrations`.
+Existían tres archivos con prefijo `20260703` y **sus efectos ya están en producción**
+(`super_admin_all` en todas las tablas, `complete_appointment` con `search_path`),
+pero la versión `20260703` **no aparece** en `supabase_migrations.schema_migrations`.
 
-Consecuencias:
+**Acción realizada en el repositorio (no destructiva):**
 
-- `supabase db push` intentaría ejecutar los tres archivos (y fallaría: la versión
-  está duplicada en disco y los `CREATE POLICY` ya existen).
-- `supabase db pull --remote` falla con `DbPullMigrationConflictError` por el
-  conflicto de historial alrededor de esta versión.
+- Conservada como canónica: `20260703_fix_security_phase2.sql`.
+- Movidas a `supabase/migrations/archive/` (contenido preservado en git):
+  - `20260703_fix_rls_branches_super_admin.sql`
+  - `20260703_fix_security_audit.sql`
 
-Solución recomendada (no destructiva, sin tocar producción):
+**Acción requerida en el proyecto Supabase (operativa):**
 
-1. No aplicar esos archivos nunca más. Sus efectos ya están verificados en la DB.
-2. Registrar la versión como aplicada:
-   ```bash
-   supabase migration repair --status applied 20260703
-   ```
-3. Mover dos de los tres archivos a `supabase/migrations/archive/` (o consolidarlos
-   en uno) para eliminar la ambigüedad de versión. El contenido queda preservado en
-   el historial de git independientemente de lo que se haga en disco.
+```bash
+supabase migration repair --status applied 20260703
+```
+
+No volver a ejecutar los archivos archivados. Sus efectos están verificados y muchas
+de sus definiciones son reemplazadas por `20260710`. Si `supabase db pull/push` sigue
+en conflicto, revisar el historial remoto completo antes de forzar nada.
 
 ## 3. Cómo aplicar `20260710_security_and_booking_fixes.sql`
 
