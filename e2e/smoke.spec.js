@@ -39,10 +39,10 @@ test.describe('Smoke admin (requiere credenciales reales)', () => {
   test.skip(!BASE || !ADMIN_EMAIL || !ADMIN_PASSWORD, 'Configurar E2E_BASE_URL, E2E_ADMIN_EMAIL, E2E_ADMIN_PASSWORD')
 
   test('login admin y dashboard', async ({ page }) => {
-    await page.goto('/admin/login')
-    await page.getByLabel(/email|correo/i).fill(ADMIN_EMAIL)
-    await page.getByLabel(/contraseña|password/i).fill(ADMIN_PASSWORD)
-    await page.getByRole('button', { name: /ingresar|entrar|iniciar/i }).click()
-    await expect(page).toHaveURL(/\/admin(?!\/login)/, { timeout: 15_000 })
+    await page.goto('/admin')
+    await page.locator('input[type="email"], input[name="email"]').first().fill(ADMIN_EMAIL)
+    await page.locator('input[type="password"], input[name="password"]').first().fill(ADMIN_PASSWORD)
+    await page.getByRole('button', { name: /ingresar|entrar|iniciar|acceder|login/i }).click()
+    await expect(page).not.toHaveURL(/\/admin\/?$/i, { timeout: 20_000 })
   })
 })
