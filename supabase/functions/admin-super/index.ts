@@ -1,17 +1,35 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400',
+// Restringir en producción vía secrets de la función:
+//   supabase secrets set ALLOWED_ORIGINS=https://tu-dominio.com,https://www.tu-dominio.com
+// Si no se configura, permite '*' para no romper entornos existentes.
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGINS') || Deno.env.get('SITE_URL') || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
+function corsHeadersFor(req: Request): Record<string, string> {
+  const origin = req.headers.get('Origin') || ''
+  const allowOrigin =
+    ALLOWED_ORIGINS.length === 0
+      ? '*'
+      : ALLOWED_ORIGINS.includes(origin)
+        ? origin
+        : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400',
+    Vary: 'Origin',
+  }
 }
 
-function respond(data: unknown, status = 200): Response {
+function respond(req: Request, data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    headers: { 'Content-Type': 'application/json', ...corsHeadersFor(req) },
   })
 }
 
@@ -47,35 +65,35 @@ function isValidEmail(email: string): boolean {
 
 serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders })
+    return new Response(null, { status: 204, headers: corsHeadersFor(req) })
   }
 
   try {
     if (req.method !== 'POST') {
-      return respond({ success: false, error: 'Method not allowed' }, 405)
+      return respond(req, { success: false, error: 'Method not allowed' }, 405)
     }
 
     const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return respond({ success: false, error: 'Missing or invalid Authorization header' }, 401)
+      return respond(req, { success: false, error: 'Missing or invalid Authorization header' }, 401)
     }
 
     const token = authHeader.replace('Bearer ', '')
 
     const contentType = req.headers.get('Content-Type')
     if (!contentType || !contentType.includes('application/json')) {
-      return respond({ success: false, error: 'Content-Type must be application/json' }, 400)
+      return respond(req, { success: false, error: 'Content-Type must be application/json' }, 400)
     }
 
     let body: Payload
     try {
       body = await req.json()
     } catch {
-      return respond({ success: false, error: 'Invalid JSON body' }, 400)
+      return respond(req, { success: false, error: 'Invalid JSON body' }, 400)
     }
 
     if (!body.action) {
-      return respond({ success: false, error: 'Missing action field' }, 400)
+      return respond(req, { success: false, error: 'Missing action field' }, 400)
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
@@ -86,7 +104,7 @@ serve(async (req: Request): Promise<Response> => {
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(token)
     if (authError || !user) {
-      return respond({ success: false, error: 'Invalid or expired session token' }, 401)
+      return respond(req, { success: false, error: 'Invalid or expired session token' }, 401)
     }
 
     // Rol confiable desde app_metadata (solo service_role puede modificarlo)
@@ -94,12 +112,12 @@ serve(async (req: Request): Promise<Response> => {
     const callerBusinessId = (user.app_metadata?.business_id as string) ?? null
 
     if (callerRole !== 'super_admin' && callerRole !== 'business_admin') {
-      return respond({ success: false, error: 'Forbidden: requires super_admin or business_admin role' }, 403)
+      return respond(req, { success: false, error: 'Forbidden: requires super_admin or business_admin role' }, 403)
     }
 
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     if (!serviceRoleKey) {
-      return respond({ success: false, error: 'Server misconfiguration' }, 500)
+      return respond(req, { success: false, error: 'Server misconfiguration' }, 500)
     }
     const adminClient = createClient(supabaseUrl, serviceRoleKey, {
       auth: { autoRefreshToken: false, persistSession: false },
@@ -110,37 +128,37 @@ serve(async (req: Request): Promise<Response> => {
         const { email, password, role, business_id, name } = body as CreateUserPayload
 
         if (!email || !password || !role) {
-          return respond({ success: false, error: 'Missing required fields: email, password, role' }, 400)
+          return respond(req, { success: false, error: 'Missing required fields: email, password, role' }, 400)
         }
         if (!isValidEmail(email)) {
-          return respond({ success: false, error: 'Invalid email format' }, 400)
+          return respond(req, { success: false, error: 'Invalid email format' }, 400)
         }
         if (typeof password !== 'string' || password.length < 6) {
-          return respond({ success: false, error: 'Password must be at least 6 characters' }, 400)
+          return respond(req, { success: false, error: 'Password must be at least 6 characters' }, 400)
         }
         if (!ALLOWED_ADMIN_ROLES.includes(role as AdminRole)) {
-          return respond({ success: false, error: 'Invalid role' }, 400)
+          return respond(req, { success: false, error: 'Invalid role' }, 400)
         }
 
         // Escalation prevention
         if (role === 'super_admin' && callerRole !== 'super_admin') {
-          return respond({ success: false, error: 'Forbidden: cannot create super_admin' }, 403)
+          return respond(req, { success: false, error: 'Forbidden: cannot create super_admin' }, 403)
         }
         if (role === 'business_admin' && callerRole !== 'super_admin') {
-          return respond({ success: false, error: 'Forbidden: only super_admin can create business_admin' }, 403)
+          return respond(req, { success: false, error: 'Forbidden: only super_admin can create business_admin' }, 403)
         }
 
         // business_admin caller can only create barbers within their own business
         let resolvedBusinessId: string | undefined = business_id
         if (callerRole === 'business_admin') {
           if (!callerBusinessId) {
-            return respond({ success: false, error: 'Caller has no business_id in metadata' }, 403)
+            return respond(req, { success: false, error: 'Caller has no business_id in metadata' }, 403)
           }
           if (role !== 'barber') {
-            return respond({ success: false, error: 'business_admin can only create barber users' }, 403)
+            return respond(req, { success: false, error: 'business_admin can only create barber users' }, 403)
           }
           if (business_id && business_id !== callerBusinessId) {
-            return respond({ success: false, error: 'Cannot create users for another business' }, 403)
+            return respond(req, { success: false, error: 'Cannot create users for another business' }, 403)
           }
           resolvedBusinessId = callerBusinessId
         }
@@ -150,12 +168,12 @@ serve(async (req: Request): Promise<Response> => {
           const { data: biz, error: bizErr } = await adminClient
             .from('businesses').select('id').eq('id', resolvedBusinessId).maybeSingle()
           if (bizErr || !biz) {
-            return respond({ success: false, error: 'Business not found' }, 400)
+            return respond(req, { success: false, error: 'Business not found' }, 400)
           }
         } else if (role === 'business_admin' || role === 'barber') {
           // business_admin/barber require a business; super_admin creating business_admin may omit initially
           if (role === 'barber') {
-            return respond({ success: false, error: 'business_id is required for barber' }, 400)
+            return respond(req, { success: false, error: 'business_id is required for barber' }, 400)
           }
         }
 
@@ -172,7 +190,7 @@ serve(async (req: Request): Promise<Response> => {
         })
 
         if (error) {
-          return respond({ success: false, error: error.message }, 400)
+          return respond(req, { success: false, error: error.message }, 400)
         }
 
         const newUserId = data.user.id
@@ -185,28 +203,28 @@ serve(async (req: Request): Promise<Response> => {
           if (saErr) {
             // Roll back auth user to avoid orphan
             await adminClient.auth.admin.deleteUser(newUserId)
-            return respond({ success: false, error: `Failed to register super_admin: ${saErr.message}` }, 400)
+            return respond(req, { success: false, error: `Failed to register super_admin: ${saErr.message}` }, 400)
           }
         }
 
-        return respond({ success: true, data: { user: data.user } })
+        return respond(req, { success: true, data: { user: data.user } })
       }
 
       case 'update_user': {
         const { user_id, app_metadata } = body as UpdateUserPayload
 
         if (!user_id || !app_metadata || typeof app_metadata !== 'object') {
-          return respond({ success: false, error: 'Missing required fields: user_id, app_metadata' }, 400)
+          return respond(req, { success: false, error: 'Missing required fields: user_id, app_metadata' }, 400)
         }
 
         // Only super_admin may update users via this endpoint
         if (callerRole !== 'super_admin') {
-          return respond({ success: false, error: 'Forbidden: only super_admin can update users' }, 403)
+          return respond(req, { success: false, error: 'Forbidden: only super_admin can update users' }, 403)
         }
 
         const { data: targetUser, error: lookupError } = await adminClient.auth.admin.getUserById(user_id)
         if (lookupError || !targetUser?.user) {
-          return respond({ success: false, error: lookupError?.message ?? 'User not found' }, 404)
+          return respond(req, { success: false, error: lookupError?.message ?? 'User not found' }, 404)
         }
 
         const targetRole = (targetUser.user.app_metadata?.role as string) ?? null
@@ -218,13 +236,13 @@ serve(async (req: Request): Promise<Response> => {
           if (key in app_metadata) sanitizedMeta[key] = app_metadata[key]
         }
         if (Object.keys(sanitizedMeta).length === 0) {
-          return respond({ success: false, error: 'No valid app_metadata fields provided' }, 400)
+          return respond(req, { success: false, error: 'No valid app_metadata fields provided' }, 400)
         }
 
         // Validate role if provided
         const newRole = sanitizedMeta.role as string | undefined
         if (newRole && !ALLOWED_ADMIN_ROLES.includes(newRole as AdminRole) && newRole !== 'customer') {
-          return respond({ success: false, error: 'Invalid role in app_metadata' }, 400)
+          return respond(req, { success: false, error: 'Invalid role in app_metadata' }, 400)
         }
 
         // Validate business_id if provided
@@ -233,7 +251,7 @@ serve(async (req: Request): Promise<Response> => {
           const { data: biz, error: bizErr } = await adminClient
             .from('businesses').select('id').eq('id', newBusinessId).maybeSingle()
           if (bizErr || !biz) {
-            return respond({ success: false, error: 'Business not found' }, 400)
+            return respond(req, { success: false, error: 'Business not found' }, 400)
           }
         }
 
@@ -255,7 +273,7 @@ serve(async (req: Request): Promise<Response> => {
         )
 
         if (error) {
-          return respond({ success: false, error: error.message }, 400)
+          return respond(req, { success: false, error: error.message }, 400)
         }
 
         // Keep super_admins table in sync
@@ -268,31 +286,31 @@ serve(async (req: Request): Promise<Response> => {
           await adminClient.from('super_admins').delete().eq('id', user_id)
         }
 
-        return respond({ success: true, data: { user: data.user } })
+        return respond(req, { success: true, data: { user: data.user } })
       }
 
       case 'delete_user': {
         const { user_id, business_id } = body as DeleteUserPayload
 
         if (!user_id) {
-          return respond({ success: false, error: 'Missing required field: user_id' }, 400)
+          return respond(req, { success: false, error: 'Missing required field: user_id' }, 400)
         }
 
         // Look up target
         const { data: targetUser, error: lookupError } = await adminClient.auth.admin.getUserById(user_id)
         if (lookupError || !targetUser?.user) {
-          return respond({ success: false, error: lookupError?.message ?? 'User not found' }, 404)
+          return respond(req, { success: false, error: lookupError?.message ?? 'User not found' }, 404)
         }
         const targetRole = (targetUser.user.app_metadata?.role as string) ?? null
 
         // Only super_admin can delete super_admins or business_admins
         if ((targetRole === 'super_admin' || targetRole === 'business_admin') && callerRole !== 'super_admin') {
-          return respond({ success: false, error: 'Forbidden' }, 403)
+          return respond(req, { success: false, error: 'Forbidden' }, 403)
         }
 
         if (callerRole === 'business_admin') {
           if (!callerBusinessId) {
-            return respond({ success: false, error: 'Caller has no business_id in metadata' }, 403)
+            return respond(req, { success: false, error: 'Caller has no business_id in metadata' }, 403)
           }
           const { data: staffEntry, error: staffErr } = await adminClient
             .from('business_staff')
@@ -302,11 +320,11 @@ serve(async (req: Request): Promise<Response> => {
             .maybeSingle()
 
           if (staffErr || !staffEntry) {
-            return respond({ success: false, error: 'User not found in your business staff' }, 403)
+            return respond(req, { success: false, error: 'User not found in your business staff' }, 403)
           }
           // Also ensure business_id matches if provided
           if (business_id && business_id !== callerBusinessId) {
-            return respond({ success: false, error: 'Cannot delete users from another business' }, 403)
+            return respond(req, { success: false, error: 'Cannot delete users from another business' }, 403)
           }
         }
 
@@ -315,7 +333,7 @@ serve(async (req: Request): Promise<Response> => {
 
         const { error } = await adminClient.auth.admin.deleteUser(user_id)
         if (error) {
-          return respond({ success: false, error: error.message }, 400)
+          return respond(req, { success: false, error: error.message }, 400)
         }
 
         // Clean up super_admins row if applicable
@@ -323,15 +341,15 @@ serve(async (req: Request): Promise<Response> => {
           await adminClient.from('super_admins').delete().eq('id', user_id)
         }
 
-        return respond({ success: true })
+        return respond(req, { success: true })
       }
 
       default: {
-        return respond({ success: false, error: `Unknown action: ${body.action}` }, 400)
+        return respond(req, { success: false, error: `Unknown action: ${body.action}` }, 400)
       }
     }
   } catch (err) {
     console.error('admin-super edge function error:', err)
-    return respond({ success: false, error: 'Internal server error' }, 500)
+    return respond(req, { success: false, error: 'Internal server error' }, 500)
   }
 })
