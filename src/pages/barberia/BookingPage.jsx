@@ -378,15 +378,14 @@ export default function BookingPage() {
     setSelectedTime(null)
 
     async function loadSlots() {
-      try {
-        const dayOfWeek = new Date(selectedDate + 'T12:00:00').getDay() || 7
-        const dayHours = hours.find((h) => h.day_of_week === dayOfWeek)
-        if (!dayHours || dayHours.is_closed) { setAvailableSlots([]); setSlotsLoading(false); return }
+      const dayOfWeek = new Date(selectedDate + 'T12:00:00').getDay() || 7
+      const dayHours = hours.find((h) => h.day_of_week === dayOfWeek)
+      if (!dayHours || dayHours.is_closed) { setAvailableSlots([]); setSlotsLoading(false); return }
 
-        const { data: holidaysOnDate } = await supabase
-          .from('business_holidays').select('*')
-          .eq('business_id', business.id).eq('date', selectedDate).eq('is_closed', true)
-        if (holidaysOnDate?.length > 0) { setAvailableSlots([]); setSlotsLoading(false); return }
+      const { data: holidaysOnDate } = await supabase
+        .from('business_holidays').select('*')
+        .eq('business_id', business.id).eq('date', selectedDate).eq('is_closed', true)
+      if (holidaysOnDate?.length > 0) { setAvailableSlots([]); setSlotsLoading(false); return }
 
         // Disponibilidad vía RPC: anon ya no puede leer appointments directamente.
         try {
