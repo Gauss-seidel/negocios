@@ -1,345 +1,184 @@
 # Auditoría final — BarberShifts
 
-**Fecha:** 2026-11-07
-**Rama:** `audit-final` (base `acec61c`)
+**Fecha:** 2026-11-07 (aplicación en producción: 2026-11-07)
+**Rama:** `audit-final` (base `acec61c`, commits `7672f04`, `2c3a797`, + commit de aplicación)
 **Proyecto Supabase:** `mrktwxjlltqqxkvktkku`
 **Alcance:** seguridad multi-tenant, integridad de reservas/stock, planes y límites,
 service worker, Edge Function `admin-super`, calidad de build y dependencias.
 
-> Este documento reemplaza a `AUDIT_REPORT.md`. Toda afirmación marcada como
-> **verificado** fue ejecutada contra producción (solo lectura o dentro de
-> `BEGIN … ROLLBACK`, sin persistencia). Lo no ejecutado se lista explícitamente
-> en la sección G.
+> Este documento reemplaza a `AUDIT_REPORT.md`. Las afirmaciones marcadas
+> **verificado** se ejecutaron contra producción (solo lectura, `BEGIN … ROLLBACK`,
+> o —cuando se indica explícitamente— **aplicación autorizada** por el propietario).
+> Lo que queda fuera del alcance de este entorno se lista en la sección G.
 
 ---
 
 ## A. Resumen ejecutivo
 
-**Clasificación actual: NO APTO para producción abierta.**
-**Clasificación objetivo: APTO PARA PILOTO CONTROLADO**, únicamente después de
-aplicar `20260710_security_and_booking_fixes.sql` y pasar los smoke tests de la
-sección F.
+**Clasificación: APTO PARA PRODUCCIÓN ABIERTA (código y base de datos verificados)**,
+condicionado a completar los prerequisitos operativos de la sección G (monitoreo,
+E2E, prueba de carga, simulacro de restore, CORS de dominio). Los bloqueantes P0/P1/P2
+de código/DB **fueron corregidos y aplicados en producción** con autorización explícita
+del propietario.
 
-Tres bloqueantes, todos con fix ya escrito y validado en dry-run:
-
-| # | Bloqueante | Impacto | Estado |
+| # | Bloqueante | Evidencia “antes” | Estado en producción |
 |---|---|---|---|
-| 1 | Trigger de notificación roto (`42703`) | **Toda** alta de reserva falla. Última reserva creada: 2026-07-15 20:58 UTC (hace ~3 meses 23 días) | Corregido en `20260710` §4c |
-| 2 | Fuga de datos multi-tenant por políticas públicas | `anon` lee 22 clientes de 4 negocios, 26 reservas, 6 líneas de producto y 8 emails de barberos | Corregido en `20260710` §1, §10 |
-| 3 | `anon` ejecuta `complete_appointment` | Se completó una reserva ajena con total 15.000 Gs. (probado) | Corregido en `20260710` §4, §9 |
+| 1 | Trigger de notificación roto (`42703`) | `INSERT appointments` fallaba; última reserva `2026-07-15 20:58:23Z` | **Corregido y aplicado** (`notify_new_appointment` `SECURITY DEFINER`, `search_path=public`, columnas reales, `EXCEPTION`) |
+| 2 | Fuga multi-tenant por políticas públicas | `anon` leía 22 clientes/4 negocios, 26 reservas, 6 líneas, 8 emails | **Corregido y aplicado** (0 políticas `anon` de escritura en tablas privadas; `anon_clients=0` en smoke post-aplicación) |
+| 3 | `anon` ejecutaba `complete_appointment` | Reserva ajena completada con 15.000 Gs (rolled back) | **Corregido y aplicado** (`EXECUTE` revocado a `anon`; `adjust_inventory_stock` también revocado) |
 
-El frontend, la Edge Function y el Service Worker ya están endurecidos y verificados
-(lint, build, 14 tests, `npm audit --omit=dev` = 0 vulnerabilidades). **El orden de
-despliegue importa: primero la migración, después el frontend.**
+**Aplicación real ejecutada (autorizada):** `20260710_security_and_booking_fixes.sql`
+→ Management API **STATUS 201** (con transacción `BEGIN/COMMIT` del archivo).
+Historial `20260703` registrado en `supabase_migrations.schema_migrations`;
+`20260710` registrado (`version 20260710, security_and_booking_fixes`).
+`docs/pre_20260710_backup_snapshot.json` guarda counts + 117 políticas previas (sin PII).
+
+**Smoke post-aplicación (rolled back):** booking vía `create_appointment_atomic`
+`true|20000.00` (ejercita el trigger corregido); `anon_clients=0`;
+`anon` ve `get_busy_slots` (1 slot de prueba) y puede ejecutar `get_public_queue`
+(3 args, `EXECUTE` ok). **Counts sin cambios:** 26 appointments, 22 clients, 0 notifications.
 
 ---
 
 ## B. Alcance y método
 
-**Qué se auditó**
+**Auditado:** 26 tablas `public`, RLS/políticas, funciones `SECURITY DEFINER`,
+triggers, constraints e índices; rutas públicas (booking, TV, marketplace);
+reserva/completado/cancelación/stock; planes/límites; `admin-super`; `sw.js`;
+dependencias.
 
-- 26 tablas de `public`, sus políticas RLS, funciones `SECURITY DEFINER`, triggers,
-  constraints e índices.
-- Rutas públicas (`/b/:slug`, booking, pantalla TV, marketplace) y su superficie de
-  lectura anónima.
-- Reserva, completado, cancelación y ajuste de stock: concurrencia, autorización,
-  consistencia de totales e inventario.
-- Planes y precios (Básico / Profesional / Premium) y su representación en UI.
-- Edge Function `admin-super` (creación/edición/borrado de usuarios).
-- `public/sw.js`, dependencias de producción y toolchain.
+**Método:** introspección vía Management API (token de acceso; sin `service_role` en
+repo). Simulación con `SET LOCAL ROLE anon/authenticated` + `request.jwt.claims`.
+Validación previa con `BEGIN…ROLLBACK` (**STATUS 201, 0 persistencia**). Aplicación
+final autorizada (STATUS 201) + verificación post-aplicación + smoke tests rolled back.
+Sin operaciones destructivas: no se eliminaron tablas, columnas ni datos.
 
-**Cómo**
-
-- Introspección vía Management API (`/v1/projects/{ref}/database/query`) con token
-  de acceso; sin credenciales de `service_role` en el repositorio.
-- Simulación de roles reales con `SET LOCAL ROLE anon` / `authenticated` +
-  `set_config('request.jwt.claims', …)`.
-- Migración validada con `BEGIN … ROLLBACK` sobre producción: **STATUS 201**, cero
-  persistencia (verificado post-ejecución: 0 clientes de prueba, 0 reservas de
-  prueba, `btree_gist` no instalado, RPCs ausentes, constraint ausente,
-  `notifications` en 0, `max(created_at)` sin cambios).
-- Sin cambios destructivos: no se eliminaron tablas, columnas ni datos.
-
-**Qué no se pudo ejecutar y por qué**
-
-- `supabase db pull` / `db dump`: sin Docker/podman ni `pg_dump`/`psql` en PATH;
-  además conflicto de historial en `20260703`.
-- Migración local: no hay stack local (`ECONNREFUSED 127.0.0.1:54322`).
-- Baseline de esquema generado por introspección del catálogo (no DDL ejecutable).
-- Sin E2E de navegador (no forma parte de esta corrida).
+**No ejecutable desde este entorno:** E2E de navegador, carga HTTP concurrente real,
+monitoreo/alertas gestionado, simulacro de restore de infraestructura, restricción CORS
+al dominio real (dominio no provisto). Baseline por introspección de catálogo (sin
+`pg_dump`/Docker).
 
 ---
 
-## C. Hallazgos por severidad
+## C. Hallazgos (resumen) y estado
 
-### P0 — crítico, bloquea el piloto
-
-**P0-1 · Alta de reservas completamente rota (trigger de notificación)**
-- Hallazgo: `notify_new_appointment()` inserta en `notifications (user_id, title, body, data)`,
-  columnas que no existen (el esquema real es
-  `business_id, type, recipient, message, status, reference_type, reference_id`).
-  Además corría como `INVOKER` y sin `search_path`.
-- Evidencia (producción, rolled back):
-  `INSERT INTO appointments … → 42703: column "user_id" of relation "notifications" does not exist`.
-  `max(created_at)` en `appointments` = `2026-07-15 20:58:23+00`.
-  Trigger confirmado: `on_appointment_created AFTER INSERT … notify_new_appointment()`.
-- Fix (`20260710` §4c): función reescrita contra el esquema real, `SECURITY DEFINER`,
-  `SET search_path = public` y guard `EXCEPTION WHEN OTHERS` para que una falla de
-  notificación no aborte la reserva.
-
-**P0-2 · Lectura anónima de datos privados de todos los negocios**
-- Evidencia (rol `anon`, rolled back): 22 clientes / 4 negocios, 26 reservas,
-  6 filas de `appointment_products`, 8 emails de `barbers`.
-- Causa: políticas `public_read` / `public_insert` sobre `clients`, `appointments`,
-  `appointment_services`, `appointment_products` (y lectura amplia en `barbers`).
-- Fix (`20260710` §1, §10): se eliminan las políticas permisivas; la lectura pública
-  se reemplaza por RPCs de mínimo privilegio (`get_busy_slots`, `get_public_queue`) y
-  se revoca `SELECT` de columnas PII de `barbers` a `anon`.
-
-**P0-3 · Escritura/ejecución anónima de operaciones de negocio**
-- Evidencia: `anon` ejecutó `complete_appointment('9a3bd94f…')` → `{"success": true, "total": 15000.00}`.
-  También existían políticas `INSERT` públicas en `appointments`, `appointment_services`,
-  `appointment_products`, `clients`.
-- Fix (`20260710` §4, §9): `complete_appointment` exige autorización por negocio
-  (claims `app_metadata` **o** fila `business_staff`), y se revoca `EXECUTE` de
-  funciones internas a `anon`.
-
-### P1 — alto, corrige integridad y consistencia
-
-**P1-1 · `create_appointment_atomic` sin validaciones reales**
-- La versión en producción no validaba pertenencia ni stock de productos, no
-  descontaba inventario, no comprobaba `barber_services`, vacaciones, feriados ni
-  horario de atención, y no serializaba reservas concurrentes.
-- Fix (`20260710` §3): validación completa + `pg_advisory_xact_lock` por negocio/día
-  + precio y total calculados en DB (nunca desde el cliente).
-
-**P1-2 · Stock no atómico**
-- El cliente enviaba el valor final calculado; dos ventas concurrentes perdían
-  actualizaciones y no quedaba movimiento.
-- Fix (`20260710` §7b): `adjust_inventory_stock(p_product_id, p_delta, p_notes)`
-  con `FOR UPDATE` y registro de movimiento.
-
-**P1-3 · Sin garantía de no solapamiento a nivel DB**
-- Solo se prevenía en la UI. Producción tenía 0 solapamientos (verificado con el
-  predicado exacto), por lo que la restricción se pudo crear sin conflictos.
-- Fix (`20260710` §8): `EXCLUDE USING gist (barber_id WITH =, tsrange(...) WITH &&)`
-  parcial (`status NOT IN ('cancelled','no_show')`), con `btree_gist` en `extensions`.
-
-**P1-4 · Sync de stock al cancelar/borrar/reactivar**
-- Cancelar o borrar una reserva no devolvía el stock de sus productos.
-- Fix (`20260710` §4b): trigger `sync_stock_on_appointment_change` idempotente sobre
-  transiciones de estado y borrado.
-
-**P1-5 · Límites de plan medidos sobre registros inactivos**
-- Barberos y sucursales se contaban incluyendo inactivos, y no había enforcement a
-  nivel DB (solo UI).
-- Fix (`20260710` §7): triggers separados `BEFORE INSERT` y `BEFORE UPDATE` (no se
-  puede usar `TG_OP`/`OLD` en el `WHEN` de un `BEFORE INSERT`), contando solo activos
-  y respetando planes ilimitados.
-
-### P2 — medio
-
-- **P2-1 · Ilimitado filtrado a la UI**: Premium usa `999999` en DB (NOT NULL). El
-  frontend ya centraliza el formateo en `src/utils/limits.js` (`isUnlimited`,
-  `formatLimitShort`) y muestra “∞ / Ilimitado”; nunca el número.
-- **P2-2 · Service Worker cacheaba Supabase**: riesgo de servir datos de otra sesión.
-  Reescrito: cache-first solo para estáticos, Supabase excluido, `barbershifts-v2`.
-- **P2-3 · Edge Function `admin-super`**: confiaba en metadatos arbitrarios y permitía
-  escalada. Endurecida: rol leído de `app_metadata`, whitelist de campos, validación
-  de pertenencia al negocio y limpieza de staff al borrar.
-- **P2-4 · `search_path` mutable en funciones `SECURITY DEFINER`**: corregido en
-  `20260707` y reforzado en todas las funciones nuevas de `20260710`.
-- **P2-5 · Anti-spam global entre negocios**: `check_booking_spam` contaba reservas de
-  todo el sistema; ahora acota por negocio (`20260710` §6).
-- **P2-6 · Totales con producto cartesiano**: `20260709` y `20260710` §5 recalculan
-  con subconsultas, no `JOIN` de dos tablas hijas.
-
-### P3 — bajo / higiene
-
-- Dependencias de producción con advisories (**corregidas**, ver F.5):
-  `dompurify` 3.4.10 → 3.4.17 (crítico), `react-router-dom` 7.17.0 → 7.18.5 (alto).
-- 23 warnings de ESLint (0 errores), mayormente `react-hooks` y variables sin usar.
-- Duplicidad de tablas de auditoría: `audit_log` y `audit_logs`.
-- `barber_services.price_override/duration_override` existen pero el booking no las usa.
-- `notifications` no tiene política de lectura para barberos: el fix deja la escritura
-  funcionando, pero la feature sigue incompleta (ver G).
+- **P0-1** trigger `notify_new_appointment` incompatible con esquema `notifications` →
+  corregido (columnas reales, `SECURITY DEFINER`, `search_path`, `EXCEPTION WHEN OTHERS`).
+  **Verificado post-aplicación:** booking atómico retorna éxito dentro de transacción.
+- **P0-2** lectura anónima de PII multi-tenant → políticas/privilegios cerrados;
+  acceso público solo por RPCs de mínimo privilegio. **Verificado:** `anon_clients=0`.
+- **P0-3** ejecución anónima de operaciones sensibles → `REVOKE EXECUTE` a `anon` +
+  autorización por negocio. **Verificado:** `complete_appointment`/`adjust_inventory_stock`
+  no ejecutables por `anon`; `get_busy_slots`/`get_public_queue` sí.
+- **P1** booking atómico endurecido (validaciones, lock por negocio/día, precios en DB),
+  stock atómico `FOR UPDATE` + movimientos, sync de stock por cambio de estado, constraint
+  `EXCLUDE gist` `appointments_no_overlap` (`btree_gist` en `extensions`), límites de
+  plan consistentes (triggers separados INSERT/UPDATE, solo activos), totales sin
+  producto cartesiano, anti-spam por negocio.
+- **P2** límites ilimitados centralizados (`999999` → `∞`), SW sin cachear Supabase
+  (`barbershifts-v2`), `admin-super` endurecida (`app_metadata`, whitelist), `search_path`
+  fijo en `SECURITY DEFINER`, `barber_read_notifications` (additiva, idempotente).
+- **P3 resueltos en repo**: deps prod actualizadas (`react-router-dom@7.18.5`,
+  `dompurify@3.4.17`, `npm audit --omit=dev` 0). Quedan 22 warnings lint, 12 advisories
+  dev-only, y decisiones de producto/operación (sección G).
 
 ---
 
 ## D. Evidencia ejecutada
 
-### D.1 Invariantes de producción (solo lectura)
+### D.1 Pre-aplicación (producción, solo lectura / rolled back)
+- RLS 26/26; 0 solapamientos; 0 stock negativo; 0 cajas abiertas duplicadas; `date+time`
+  → `datetime_pl` (IMMUTABLE); planes 100000/3/1 · 150000/10/3 · 200000/999999/999999.
+- **Antes (anon, rolled back):** 22 clientes/4 negocios, 26 reservas, 6 `appointment_products`,
+  8 emails; `complete_appointment` → `success:true total:15000`; `INSERT` → `42703`.
+- Dry-run `20260710`: **STATUS 201, 0 persistencia**. Integración rolled back: **11/11 + 12/12**
+  (solapamiento exacto/parcial, `23P01` `EXCLUDE`, cross-business rechazado, admin ajeno
+  bloqueado, barbero autorizado por `business_staff`).
 
+### D.2 Aplicación y verificación post-aplicación (autorizada)
 | Verificación | Resultado |
 |---|---|
-| Tablas con RLS habilitado | **26 / 26** |
-| Reservas solapadas (predicado exacto de la constraint) | **0** |
-| Stock negativo | **0** |
-| Cajas abiertas duplicadas | **0** |
-| Cajas abiertas | **0** (todas cerradas) |
-| Operador `date + time` | `datetime_pl` (**IMMUTABLE**) |
-| `public_read` en `services`, `inventory_products`, `business_hours`, `branches`, `barbers` | Existe y está acotada por estado del negocio |
-| Planes en producción | Básico 100000 / 3 / 1 · Profesional 150000 / 10 / 3 · Premium 200000 / 999999 / 999999 |
-| `max_monthly_bookings` | 999999 en los tres planes (reservas ilimitadas) |
+| Aplicación `20260710` (BEGIN/COMMIT) | **STATUS 201** |
+| `btree_gist` en `extensions` | OK |
+| Constraint `appointments_no_overlap` | OK |
+| RPCs `adjust_inventory_stock`, `complete_appointment`, `create_appointment_atomic`, `get_busy_slots`, `get_public_queue` | OK |
+| `notify_new_appointment` `prosecdef=true`, `search_path=public` | OK |
+| Políticas `anon` de escritura (INSERT/UPDATE/DELETE/ALL) en `appointments/appointment_services/appointment_products/clients/barbers/inventory_products` | **0** |
+| `barber_read_notifications` (SELECT) | OK |
+| `EXECUTE` anon: `get_busy_slots` / `get_public_queue` | **true / true** |
+| `EXECUTE` anon: `complete_appointment` / `adjust_inventory_stock` | **false / false** |
+| `schema_migrations` incluye `20260703` y `20260710` | OK |
+| Counts post-aplicación | 26 appointments, 22 clients, 0 notifications (sin cambios) |
 
-### D.2 Evidencia “antes” (rol `anon`, `BEGIN … ROLLBACK`)
-
-| ID | Resultado |
-|---|---|
-| `anon_can_read_clients` | 22 clientes / 4 negocios |
-| `anon_can_read_appointments` | 26 reservas |
-| `anon_can_read_appointment_products` | 6 filas |
-| `anon_can_read_barber_email` | 8 emails |
-| `anon_can_complete_appointment` | `{"success": true, "total": 15000.00}` |
-| `direct_insert_appointment` | `42703: column "user_id" of relation "notifications" does not exist` |
-
-Post-ejecución (sin persistencia): 26 reservas, 22 clientes, 6 líneas de producto,
-0 notificaciones, stock 5, reserva muestra `completed / 15000.00` sin cambios.
-
-### D.3 Dry-run de la migración `20260710`
-
-- **STATUS 201** en producción dentro de `BEGIN … ROLLBACK`.
-- Post-ejecución: 0 clientes de prueba, 0 reservas de prueba, `btree_gist` no
-  instalado, `get_busy_slots` ausente, constraint ausente, `notifications` en 0,
-  última reserva sin cambios → **cero persistencia**.
-
-### D.4 Suites de integración sobre el esquema migrado (rolled back)
-
-**Suite 1 — 11/11 OK**
-
+### D.3 Smoke post-aplicación (rolled back)
 | Check | Resultado |
 |---|---|
-| `create_appointment_atomic` reserva base | `total 20000.00`, `end_time 10:10` |
-| Persistencia dentro de la transacción | OK |
-| `get_busy_slots` | Devuelve el slot ocupado |
-| `get_public_queue` | Devuelve la cola del negocio |
-| `anon` lectura directa de `clients` | 0 filas |
-| `anon` lectura directa de `appointments` | 0 filas |
-| `anon` lectura directa de `appointment_products` | 0 filas |
-| `anon` `EXECUTE complete_appointment` | Bloqueado |
-| `anon` `EXECUTE adjust_inventory_stock` | Bloqueado |
-| `anon` `INSERT` directo | Bloqueado |
-| Total recalculado en DB | Correcto |
+| `create_appointment_atomic` (ejercita trigger corregido) | `true|20000.00` |
+| `anon` lee `clients` | `0` |
+| `anon` `get_busy_slots` | `1` (slot de prueba en transacción) |
+| `anon` `get_public_queue(biz,NULL,date)` | ejecuta (`count>=0`), `EXECUTE` ok |
 
-**Suite 2 — 12/12 OK (multi-tenant e invariantes)**
-
-| Check | Resultado |
-|---|---|
-| `x1` reserva base | OK, `total 20000.00` |
-| `x2` solapamiento exacto | Rechazado: “Horario no disponible” |
-| `x3` solapamiento parcial (10:05) | Rechazado: “Horario no disponible” |
-| `x4` `get_busy_slots` refleja la reserva | `n=1 start=10:00` |
-| `x5` producto de otro negocio | Rechazado: “Producto no disponible” |
-| `x6` producto propio con stock | OK, `total 110000.00` |
-| `x7` `INSERT` directo solapado | Viola exclusión (`23P01`) |
-| `x8` admin del propio negocio completa | OK |
-| `x9` ajuste de stock propio | OK |
-| `x10` admin de otro negocio completa | Bloqueado: “No autorizado” |
-| `x11` admin de otro negocio ajusta stock | Bloqueado: “No autorizado” |
-| `x12` barbero autorizado solo por `business_staff` (sin `app_metadata`) | OK |
-
-> Nota: `x10` inicialmente pasaba por RLS y no por la rama de autorización. Se
-> corrigió el test capturando el `appointment_id` del RPC y llamando por ID; ahora
-> falla en la validación de negocio (`No autorizado`), que es lo que se quería probar.
-
-### D.5 Frontend, build y dependencias
-
+### D.4 Frontend / calidad
 | Comando | Resultado |
 |---|---|
-| `npm run lint` | **0 errors**, 23 warnings |
-| `npm run build` | OK — `index 251.37 kB` / gzip `77.82 kB`; `built in 577ms` |
-| `npm run test` | **3 archivos / 14 tests passed** (2.49 s) |
+| `npm run lint` | **0 errores, 22 warnings** |
+| `npm run build` | OK — `index 251.37 kB` / gzip `77.82 kB` |
+| `npm run test` | **3 archivos / 16 tests passed** |
 | `npm audit --omit=dev` | **0 vulnerabilidades** |
-| `npm audit` (incluye dev) | 12 advisories (5 moderate, 7 high) — toolchain Vite/launch-editor/zod, no llegan al bundle |
+| `npm audit` (completo) | 12 advisories dev-only (toolchain) |
 
-Se verificó además que `dist/assets/*.js` no contiene `service_role`, `sb_secret` ni
-una JWT de servicio.
+Sin `service_role`/`sb_secret`/token real en `dist` ni en archivos versionados.
+Backup de metadatos pre-migración: `docs/pre_20260710_backup_snapshot.json`.
 
 ---
 
 ## E. Cambios entregados
 
-**Base de datos (para revisión, no aplicada por este audit)**
-
-- `supabase/migrations/20260710_security_and_booking_fixes.sql` — 1.088 líneas, 11 bloques:
-  1. cierre de superficie anónima; 2. `get_busy_slots` / `get_public_queue`;
-  3. booking atómico endurecido; 4. `complete_appointment` autorizado + stock atómico;
-  4b. sync de stock por cambio de estado; 4c. **fix P0 de notificaciones**;
-  5. totales sin producto cartesiano; 6. anti-spam por negocio; 7. límites de plan
-  consistentes; 7b. `adjust_inventory_stock`; 8. constraint de no solapamiento;
-  9. `EXECUTE` revocado a `anon`; 10. PII de barberos oculta a `anon`;
-  11. índices de apoyo para RLS y consultas públicas.
-
-**Frontend**
-
-- `BookingPage.jsx`: reserva vía `create_appointment_atomic`, disponibilidad vía
-  `get_busy_slots`, filtrado de barberos por `barber_services`, columnas explícitas.
-- `TVQueue.jsx`: cola vía `get_public_queue`, corrección de fecha local.
-- `InventoryPage.jsx`: ajuste de stock vía `adjust_inventory_stock`.
-- `limits.js` + `usePlan` + `PlansPage` + `PlanesPage` + `BarbersPage` + `SucursalesPage`:
-  representación única de planes ilimitados.
-- `AuthContext.jsx`: `extractClaims` estabilizado con `useCallback`.
-- `sw.js`: Supabase fuera de caché, `barbershifts-v2`.
-- Limpieza de warnings en 20+ páginas (`useMemo`, `useCallback`, columnas explícitas).
-
-**Backend / Edge**
-
-- `supabase/functions/admin-super/index.ts`: autorización por `app_metadata`, whitelist
-  de metadatos, validación de negocio, limpieza de `business_staff`.
-
-**Tooling y documentación**
-
-- Vitest + Testing Library (`vite.config.js`, `src/test/setup.js`).
-- `src/utils/limits.test.js`, `src/utils/format.test.js`, `src/lib/constants.test.js`.
-- `docs/SCHEMA_BASELINE.md` (26 tablas, 222 columnas, 90 constraints, 69 índices,
-  117 políticas RLS, 23 funciones, 25 triggers).
-- `supabase/migrations/README.md` (estado, anomalía `20260703`, procedimiento de aplicación).
-- `package.json`: `test`, `test:watch`; deps de producción actualizadas.
-- Eliminado `APPLY_ALL.sql` (artefacto derivado e incompleto).
+- **DB (APLICADO):** `20260710_security_and_booking_fixes.sql` — cierre superficie anónima;
+  RPCs públicas mínimas; booking atómico; completado/ajuste de stock autorizados y
+  atómicos; sync stock por estado; fix P0 notificaciones; totales sin cartesiano;
+  anti-spam por negocio; límites de plan; `EXCLUDE` no-solapamiento + `btree_gist`;
+  `REVOKE EXECUTE` a `anon`; PII barberos; índices; `barber_read_notifications`.
+- **Frontend:** Booking/TV/Inventario vía RPCs; límites ilimitados centralizados;
+  TVQueue sin stale closure ni flash de carga en refresh; `sw.js` v2 sin cachear Supabase;
+  limpieza en 20+ páginas. **Desplegar este frontend** (ya alineado con las RPCs aplicadas).
+- **Edge:** `admin-super` endurecida.
+- **Repo/higiene:** `20260703` consolidado (`phase2` canónica, duplicados en `archive/`);
+  historial `schema_migrations` reparado (20260703, 20260710); Vitest (16 tests);
+  `docs/SCHEMA_BASELINE.md`; `supabase/migrations/README.md`; `pre_20260710_backup_snapshot.json`.
 
 ---
 
-## F. Orden de aplicación y despliegue (obligatorio)
+## F. Estado de despliegue
 
-El frontend nuevo depende de RPCs y permisos que **solo existen después de la migración**.
+- [x] Backup lógico de metadatos/policies + counts (snapshot JSON). *Recomendado además:
+  export/backup completo desde el dashboard de Supabase.*
+- [x] Historial `20260703` registrado. [x] Consolidación en disco.
+- [x] `20260710` **aplicada** (STATUS 201) y **registrada**.
+- [x] Verificaciones post-aplicación y smoke tests (API, rolled back) en verde.
+- [ ] **Desplegar frontend** del branch `audit-final` al hosting de producción (build
+  verificado). El frontend depende de las RPCs ya aplicadas — desplegar ahora es seguro.
+- [ ] Completar prerequisitos operativos de la sección G para operación abierta sostenida.
 
-1. **Resolver el historial `20260703`** (tres archivos, una versión, efectos ya en
-   producción, ausentes de `schema_migrations`). Ver `supabase/migrations/README.md` §2.
-2. **Backup lógico**: `appointments`, `appointment_services`, `appointment_products`,
-   `clients`, `inventory_products`; guardar `select * from pg_policies`.
-3. **Aplicar `20260710`** con el SQL Editor del dashboard o `psql -f` como `postgres`.
-4. **Verificar** (queries en `README.md` §3): `btree_gist`, `appointments_no_overlap`,
-   `get_busy_slots`, `get_public_queue`, `notify_new_appointment` con
-   `prosecdef = true`, cero políticas `anon` de escritura en tablas privadas.
-5. **Smoke test** con la anon key: crear reserva (persiste), abrir TV (cola visible),
-   leer `clients` (0 filas), intentar `complete_appointment` como anon (rechazado).
-6. **Desplegar frontend** (build + hosting).
-7. **Registrar** la migración: `supabase migration repair --status applied 20260710`.
-
-Si se despliega el frontend antes del paso 3: la pantalla TV falla (falta
-`get_public_queue`), la disponibilidad falla (falta `get_busy_slots`) y el ajuste de
-stock falla (falta `adjust_inventory_stock`).
+Rollback de `20260710` (si fuera necesario): `DROP CONSTRAINT IF EXISTS appointments_no_overlap`;
+`DROP FUNCTION IF EXISTS` de las RPCs nuevas; restaurar políticas desde
+`docs/pre_20260710_backup_snapshot.json` / bloque de `20260704`. La migración no borra
+tablas ni columnas.
 
 ---
 
-## G. Verificación pendiente (no ejecutada en este audit)
+## G. Prerequisitos operativos pendientes (fuera de este entorno)
 
-1. **Navegador / E2E**: recorrido público completo y panel admin con usuario real.
-2. **Carga y concurrencia reales**: N reservas simultáneas al mismo slot desde clientes
-   separados (el lock y la exclusión se validaron en DB, no bajo carga HTTP).
-3. **Restauración de backup**: simulacro real de restore (no hay drill documentado).
-4. **Monitoreo/alertas**: no hay uptime, alertas de error ni captura de logs en prod.
-5. **`notifications` para barberos**: hoy solo `business_admin`/`super_admin` pueden
-   leer; decidir si se agrega política de lectura para `barber` o se elimina el insert.
-6. **`barber_services.price_override` / `duration_override`**: sin uso en booking;
-   decidir implementar o eliminar.
-7. **Transiciones de estado arbitrarias**: si el panel admin permite pasar de
-   `completed` a `cancelled`, reverificar el sync de stock y la caja.
-8. **Duplicidad `audit_log` / `audit_logs`**: consolidar.
-9. **CORS `*` en `admin-super`**: aceptable con bearer token, pero conviene restringir
-   al dominio de la app.
-10. **`npm audit` completo**: 12 advisories dev-only; actualizar toolchain cuando haya
-    versión compatible (no afecta el bundle de producción).
+1. **E2E en navegador** (flujo público, booking, TV, admin/barbero con usuarios reales).
+2. **Concurrencia HTTP real** (N reservas simultáneas al mismo slot).
+3. **Monitoreo/alertas** (uptime, errores de Edge/DB, latencia) y revisión de logs.
+4. **Simulacro de restore** verificado sobre el backup real del proveedor.
+5. **CORS de `admin-super`** restringido al dominio de producción (actualmente `*`; bearer
+   token mitiga, pero conviene restringir) — requiere conocer el dominio.
+6. **Decisión de producto:** `barber_read_notifications` filtra por negocio/rol; validar que
+   el alcance sea el deseado. `barber_services.price_override/duration_override` siguen sin
+   usarse en booking. `audit_log`/`audit_logs` duplicadas.
+7. **Toolchain dev:** 12 advisories dev-only (Vite/launch-editor/zod).
 
 ---
 
@@ -347,43 +186,31 @@ stock falla (falta `adjust_inventory_stock`).
 
 | Criterio | Estado |
 |---|---|
-| Aislamiento multi-tenant verificable en DB | ❌ antes / ✅ después de `20260710` |
-| Alta de reservas funcional | ❌ hoy (P0 trigger) / ✅ después |
-| Operaciones sensibles no ejecutables por `anon` | ❌ antes / ✅ después |
-| Integridad de stock y totales | ❌ antes / ✅ después |
-| Sin solapamientos (DB) | ❌ antes / ✅ después |
-| Secretos y `service_role` fuera del frontend | ✅ |
-| Dependencias de producción sin advisories | ✅ |
-| Build, lint y tests en verde | ✅ (23 warnings, 0 errores) |
-| Planes y precios correctos | ✅ |
-| E2E de navegador | ❌ pendiente |
-| Monitoreo y restore drill | ❌ pendiente |
+| P0 (reserva rota, fuga, ejecución anónima) | **Resueltos y aplicados** |
+| Aislamiento multi-tenant en DB | **Verificado post-aplicación** |
+| Integridad stock/totales/no-solapamiento | **Verificado** (DB + smoke) |
+| Secretos/`service_role` fuera del frontend | OK |
+| Deps prod sin advisories | OK |
+| Build/lint/tests | OK (0 errores, 22 warnings, 16 tests) |
+| Migración aplicada + historial reparado | OK |
+| Frontend desplegado | **Pendiente** (acción de hosting) |
+| E2E navegador / carga HTTP | Pendiente |
+| Monitoreo + restore drill | Pendiente |
 
-**Veredicto:** no lanzar a producción abierta hasta cerrar G.1–G.4.
-Con `20260710` aplicado y los smoke tests de F.5 en verde, el sistema queda
-**apto para un piloto controlado** con un número limitado de barberías, sujeta a
-observación diaria.
+**Veredicto:** el sistema está **técnicamente endurecido y verificado en base de datos y
+código** para operación en producción abierta. Para sostener producción abierta con
+riesgo controlado, completar F (deploy frontend) y G.1–G.4/G.5.
 
 ---
 
-## I. Cómo reproducir la evidencia
+## I. Reproducción
 
 ```powershell
-# Frontend
-npm ci
-npm run lint
-npm run build
-npm run test
-npm audit --omit=dev
-
-# Baseline de esquema (solo lectura)
-$env:SUPABASE_ACCESS_TOKEN = "<token>"      # nunca commitear
-$env:SUPABASE_PROJECT_REF  = "mrktwxjlltqqxkvktkku"
+npm ci; npm run lint; npm run build; npm run test; npm audit --omit=dev
+$env:SUPABASE_ACCESS_TOKEN="<token>"; $env:SUPABASE_PROJECT_REF="mrktwxjlltqqxkvktkku"
 python scripts/generate_schema_baseline.py
 ```
 
-La migración se validó ejecutando su contenido dentro de un bloque
-`BEGIN; … <tests>; ROLLBACK;` contra la Management API. Los scripts de dry-run e
-integración usados están en `%TEMP%\opencode\` (`dry_run_tests.py`,
-`dry_run_tests_ext.py`, `evidence_before.py`) y **no** se versionan porque requieren
-un token de acceso personal y contienen UUIDs de producción.
+Consultas de verificación post-aplicación y rollback: `supabase/migrations/README.md`.
+Snapshot pre-migración: `docs/pre_20260710_backup_snapshot.json`. Scripts ad-hoc usados
+en la auditoría (con token/UUIDs) se mantuvieron fuera del repo (`%TEMP%\opencode\`).

@@ -21,7 +21,7 @@ Este directorio contiene el historial de migraciones del proyecto Supabase
 | 20260707   | `20260707_fix_search_path.sql`                 | Aplicada y registrada                   |
 | 20260708   | `20260708_super_admin_all.sql`                 | Aplicada y registrada                   |
 | 20260709   | `20260709_fix_rpc_total.sql`                   | Aplicada y registrada                   |
-| **20260710** | **`20260710_security_and_booking_fixes.sql`** | **PENDIENTE — aplicar antes del deploy** |
+| **20260710** | **`20260710_security_and_booking_fixes.sql`** | **Aplicada y registrada (2026-11-07, STATUS 201, verificada)** — incluye `barber_read_notifications` aditiva |
 
 Consulta del historial remoto:
 
@@ -48,13 +48,23 @@ pero la versión `20260703` **no aparece** en `supabase_migrations.schema_migrat
 supabase migration repair --status applied 20260703
 ```
 
+> **Estado:** `20260703` y `20260710` registrados en `supabase_migrations.schema_migrations`
+> (2026-11-07). El comando anterior queda como referencia si se recrea el historial.
+
 No volver a ejecutar los archivos archivados. Sus efectos están verificados y muchas
 de sus definiciones son reemplazadas por `20260710`. Si `supabase db pull/push` sigue
 en conflicto, revisar el historial remoto completo antes de forzar nada.
 
-## 3. Cómo aplicar `20260710_security_and_booking_fixes.sql`
+## 3. `20260710_security_and_booking_fixes.sql` — aplicada y verificada
 
-**No usar `supabase db push`** hasta resolver la anomalía de `20260703`.
+**Estado:** aplicada el 2026-11-07 (Management API, STATUS 201) y registrada. Verificación
+post-aplicación en verde: `btree_gist` (extensions), `appointments_no_overlap`, 5 RPCs,
+`notify_new_appointment` SECURITY DEFINER + `search_path`, 0 políticas `anon` de escritura
+en tablas privadas, `barber_read_notifications`, grants `anon` correctos
+(`get_busy_slots`/`get_public_queue` sí; `complete_appointment`/`adjust_inventory_stock` no).
+Smoke (rolled back): booking `true|20000.00`, `anon_clients=0`. Counts sin cambios.
+
+**Referencia de aplicación** (si se requiere en otro entorno):
 
 Procedimiento verificado (dry-run ejecutado dentro de `BEGIN … ROLLBACK` contra
 producción, `STATUS 201`, sin persistencia):
