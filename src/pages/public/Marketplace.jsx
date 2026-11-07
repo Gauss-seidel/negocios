@@ -9,7 +9,7 @@ function AnimatedSection({ children, className = '', delay = 0 }) {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
+      className={`transition duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
       style={{ transitionDelay: `${delay}ms`, transitionTimingFunction: 'var(--ease-out-expo)' }}
     >
       {children}
@@ -24,20 +24,20 @@ function BusinessCard({ business, index }) {
     <Link
       to={`/barberia/${business.slug}`}
       ref={ref}
-      className={`group relative transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+      className={`group relative transition duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
       style={{
         transitionDelay: `${index * 100}ms`,
         transitionTimingFunction: 'var(--ease-out-expo)',
       }}
     >
       {/* Double-bezel card */}
-      <div className="relative rounded-2xl bg-white/5 p-[1px] transition-all duration-500 group-hover:shadow-[0_0_40px_-12px_rgba(233,69,96,0.3)]">
-        <div className="relative rounded-[calc(1rem-1px)] bg-white p-6 transition-all duration-500 group-hover:translate-y-[-2px]">
+      <div className="relative rounded-2xl bg-white/5 p-[1px] transition duration-500 group-hover:shadow-[0_0_40px_-12px_rgba(233,69,96,0.3)]">
+        <div className="relative rounded-[calc(1rem-1px)] bg-white p-6 transition duration-500 group-hover:translate-y-[-2px]">
           {/* Logo with ring */}
           <div className="relative mb-5 flex items-start justify-between">
-            <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 ring-1 ring-black/5 transition-all duration-500 group-hover:ring-2 group-hover:ring-[var(--color-accent)]/20">
+            <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 ring-1 ring-black/5 transition duration-500 group-hover:ring-2 group-hover:ring-[var(--color-accent)]/20">
               {business.logo_url ? (
-                <img src={business.logo_url} alt={business.name} className="h-full w-full object-cover" loading="lazy" />
+                <img src={business.logo_url} alt={business.name} className="h-full w-full object-cover" loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : undefined} decoding="async" />
               ) : (
                 <span className="text-xl font-bold text-gray-400">{business.name.charAt(0)}</span>
               )}
@@ -66,7 +66,7 @@ function BusinessCard({ business, index }) {
               className="mt-1.5 flex items-start gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
-              <svg className="mt-0.5 h-4 w-4 flex-shrink-0 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" focusable="false" className="mt-0.5 h-4 w-4 flex-shrink-0 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -83,7 +83,7 @@ function BusinessCard({ business, index }) {
               className="mt-1.5 flex items-start gap-2 text-sm text-[var(--color-text-secondary)] hover:text-green-500 transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
-              <svg className="mt-0.5 h-4 w-4 flex-shrink-0 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" focusable="false" className="mt-0.5 h-4 w-4 flex-shrink-0 opacity-60" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
               {business.phone}
@@ -99,11 +99,11 @@ function BusinessCard({ business, index }) {
 
           {/* CTA */}
           <div className="mt-5 flex items-center justify-between border-t border-black/5 pt-4">
-            <span className="text-sm font-semibold text-[var(--color-accent)] transition-all duration-300 group-hover:translate-x-1">
+            <span className="text-sm font-semibold text-[var(--color-accent)] transition duration-300 group-hover:translate-x-1">
               Reservar turno
             </span>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-sm transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white group-hover:translate-x-1">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-sm transition duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white group-hover:translate-x-1">
+              <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </span>
@@ -182,7 +182,7 @@ export default function Marketplace() {
 
         {/* Floating Nav */}
         <div className="fixed left-1/2 top-4 z-50 -translate-x-1/2">
-          <nav className={`transition-all duration-700 ${heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+          <nav className={`transition duration-700 ${heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
             <div className="glass-dark flex items-center gap-6 rounded-2xl px-5 py-2.5">
               <span className="text-sm font-bold text-white tracking-tight">BarberShifts</span>
               <div className="hidden items-center gap-4 text-sm text-white/60 sm:flex">
@@ -191,7 +191,7 @@ export default function Marketplace() {
               </div>
               <Link
                 to="/admin"
-                className="ml-2 rounded-xl bg-white/10 px-4 py-1.5 text-sm text-white transition-all hover:bg-white/20 active:scale-[0.97]"
+                className="ml-2 rounded-xl bg-white/10 px-4 py-1.5 text-sm text-white transition hover:bg-white/20 active:scale-[0.97]"
               >
                 Admin
               </Link>
@@ -201,7 +201,7 @@ export default function Marketplace() {
 
         {/* Hero content */}
         <div className="relative mx-auto flex min-h-[90dvh] max-w-6xl flex-col items-center justify-center px-6 text-center">
-          <div className={`max-w-3xl transition-all duration-1000 ${heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className={`max-w-3xl transition duration-1000 ${heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
             {/* Eyebrow */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.15em] text-white/60">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -224,8 +224,8 @@ export default function Marketplace() {
             <div className="mx-auto mt-10 max-w-md">
               <div className="group relative">
                 <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-[var(--color-accent)]/20 to-[var(--color-accent-secondary)]/20 opacity-0 blur-xl transition-opacity duration-500 group-focus-within:opacity-100" />
-                <div className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-300 focus-within:border-white/20 focus-within:bg-white/10">
-                  <svg className="pointer-events-none absolute left-4 h-5 w-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition duration-300 focus-within:border-white/20 focus-within:bg-white/10">
+                  <svg aria-hidden="true" focusable="false" className="pointer-events-none absolute left-4 h-5 w-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                   <input
@@ -240,7 +240,7 @@ export default function Marketplace() {
                       onClick={() => setSearch('')}
                       className="mr-2 rounded-lg p-2 text-white/30 transition-colors hover:text-white/60"
                     >
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -254,7 +254,7 @@ export default function Marketplace() {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                 <button
                   onClick={() => setCityFilter('')}
-                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
                     !cityFilter
                       ? 'bg-white/20 text-white'
                       : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/70'
@@ -266,7 +266,7 @@ export default function Marketplace() {
                   <button
                     key={city}
                     onClick={() => setCityFilter(city === cityFilter ? '' : city)}
-                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
                       cityFilter === city
                         ? 'bg-white/20 text-white'
                         : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/70'
@@ -324,16 +324,16 @@ export default function Marketplace() {
           <div className="flex justify-center py-20">
             <div className="flex items-center gap-3 text-[var(--color-text-secondary)]">
               <div className="flex gap-1">
-                <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+                <span className="h-2 w-2 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+                <span className="h-2 w-2 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+                <span className="h-2 w-2 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-              <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -379,9 +379,9 @@ export default function Marketplace() {
               { step: '03', title: 'Recibí tu servicio', desc: 'Llegá a la barbería a la hora reservada. Tu turno te espera.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
             ].map((item, i) => (
               <AnimatedSection key={i} delay={i * 150}>
-                <div className="group rounded-2xl border border-black/5 bg-[var(--color-bg)] p-8 transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-primary)] text-white transition-all duration-500 group-hover:scale-105">
-                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="group rounded-2xl border border-black/5 bg-[var(--color-bg)] p-8 transition duration-500 hover:shadow-xl hover:-translate-y-1">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-primary)] text-white transition duration-500 group-hover:scale-105">
+                    <svg aria-hidden="true" focusable="false" className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
                     </svg>
                   </div>
@@ -401,7 +401,11 @@ export default function Marketplace() {
       <footer className="border-t border-black/5 bg-white py-8">
         <div className="mx-auto flex flex-col items-center justify-between gap-4 px-6 sm:flex-row">
           <p className="text-sm font-semibold text-[var(--color-text)]">BarberShifts</p>
-          <p className="text-sm text-[var(--color-text-secondary)]">© 2026 Todos los derechos reservados.</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-[var(--color-text-secondary)]">
+            <span>© 2026</span>
+            <Link to="/terminos" className="transition-colors hover:text-[var(--color-text)] hover:underline">Términos</Link>
+            <Link to="/privacidad" className="transition-colors hover:text-[var(--color-text)] hover:underline">Privacidad</Link>
+          </div>
           <Link to="/admin" className="text-sm text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text)]">
             Administración
           </Link>

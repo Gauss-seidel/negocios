@@ -97,7 +97,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@barberia.com"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
               />
             </div>
 
@@ -111,7 +111,7 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
               />
             </div>
 
@@ -124,15 +124,15 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="relative w-full overflow-hidden rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+              className="relative w-full overflow-hidden rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Iniciando sesión...
+                  Iniciando sesión…
                 </span>
               ) : (
                 'Iniciar sesión'
@@ -143,7 +143,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => { setShowReset(true); setResetEmail(email); setResetSent(false); setResetError('') }}
-                className="text-sm text-white/40 transition-colors hover:text-white/70"
+                className="whitespace-nowrap text-sm text-white/40 transition-colors hover:text-white/70"
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -153,8 +153,13 @@ export default function Login() {
 
         <p className="mt-6 text-center text-sm text-white/30">
           <Link to="/" className="font-medium text-white/50 transition-colors hover:text-white/80">
-            Ver barberías disponibles
+            ← Ver barberías disponibles
           </Link>
+        </p>
+        <p className="mt-3 text-center text-xs text-white/30">
+          <Link to="/terminos" className="transition-colors hover:text-white/60">Términos</Link>
+          <span className="mx-2">·</span>
+          <Link to="/privacidad" className="transition-colors hover:text-white/60">Privacidad</Link>
         </p>
 
         {/* Forgot password modal */}
@@ -170,7 +175,7 @@ export default function Login() {
                   </div>
                   <button
                     onClick={() => setShowReset(false)}
-                    className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white transition-all hover:bg-white/20"
+                    className="w-full rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/20"
                   >
                     Volver al login
                   </button>
@@ -186,7 +191,7 @@ export default function Login() {
                     onChange={(e) => setResetEmail(e.target.value)}
                     placeholder="admin@barberia.com"
                     required
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/25 backdrop-blur-sm transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
                   />
                   {resetError && (
                     <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400">
@@ -197,16 +202,16 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => setShowReset(false)}
-                      className="flex-1 rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-white/60 transition-all hover:bg-white/10"
+                      className="flex-1 rounded-xl bg-white/5 px-4 py-3 text-sm font-medium text-white/60 transition hover:bg-white/10"
                     >
                       Cancelar
                     </button>
                     <button
                       type="submit"
                       disabled={resetLoading}
-                      className="flex-1 rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:opacity-60"
+                      className="flex-1 rounded-xl bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
                     >
-                      {resetLoading ? 'Enviando...' : 'Enviar enlace'}
+                      {resetLoading ? 'Enviando…' : 'Enviar enlace'}
                     </button>
                   </div>
                 </form>
