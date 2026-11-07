@@ -324,7 +324,7 @@ export default function InventoryPage() {
                         <span className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                           product.is_active ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'
                         }`}>
-                          🛍️ {product.is_active ? 'Producto' : 'Inactivo'}
+                          {product.is_active ? 'Producto' : 'Inactivo'}
                         </span>
                       )}
                     </div>
@@ -416,7 +416,7 @@ export default function InventoryPage() {
                             )}
                             {product.is_product && (
                               <span className="inline-flex items-center gap-1 text-xs font-medium text-purple-600">
-                                <span>🛍️</span> Producto
+                                Producto
                               </span>
                             )}
                           </div>

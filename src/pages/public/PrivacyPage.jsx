@@ -3,7 +3,7 @@ import LegalLayout from './LegalLayout'
 export default function PrivacyPage() {
   return (
     <LegalLayout title="Política de Privacidad" updated="2026-11-07">
-      <p><strong>Plantilla informativa — no constituye asesoría legal.</strong> Debe ser revisada y adaptada por un profesional legal conforme a la normativa aplicable (p. ej. Ley N.º 6534/2020 de Protección de Datos Personales de Paraguay y normas complementarias) y a tus prácticas reales antes de vender el servicio.</p>
+      <p><strong>Plantilla informativa (no constituye asesoría legal).</strong> Debe ser revisada y adaptada por un profesional legal conforme a la normativa aplicable (p. ej. Ley N.º 6534/2020 de Protección de Datos Personales de Paraguay y normas complementarias) y a tus prácticas reales antes de vender el servicio.</p>
 
       <h2>1. Responsable y contacto</h2>
       <p>Responsable del tratamiento en la operación de la plataforma: <strong>Willian Vera, RUC 3817388-3</strong>. Contacto de privacidad/soporte: <strong>willianvera2012@gmail.com</strong> · Cel/WhatsApp: <strong>0972 128 782</strong>.</p>

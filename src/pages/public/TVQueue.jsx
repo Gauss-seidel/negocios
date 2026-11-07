@@ -391,7 +391,7 @@ export default function TVQueue() {
 
       {/* ── Footer ── */}
       <footer className="flex items-center justify-between px-6 py-3 sm:px-8 border-t border-white/[0.04] text-xs flex-shrink-0" style={{ color: tvColors.textSecondary }}>
-        <span>TV Mode — {business.name}</span>
+        <span>TV Mode · {business.name}</span>
         <span className="tabular-nums">
           {lastRefresh
             ? `Última actualización: ${lastRefresh.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`

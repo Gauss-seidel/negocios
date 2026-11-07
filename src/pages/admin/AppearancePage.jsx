@@ -205,7 +205,7 @@ export default function AppearancePage() {
               >
                 <div className="text-base font-semibold text-gray-900" style={{ fontFamily: fp.heading }}>{fp.name}</div>
                 <div className="mt-1 text-xs text-gray-500" style={{ fontFamily: fp.body }}>{fp.description}</div>
-                <div className="mt-2 text-xs text-gray-400" style={{ fontFamily: fp.body }}>Aa Bb 123 — Reserva tu turno</div>
+                <div className="mt-2 text-xs text-gray-400" style={{ fontFamily: fp.body }}>Aa Bb 123, Reserva tu turno</div>
               </button>
             )
           })}

@@ -307,10 +307,10 @@ export default function SuperBarberosPage() {
                         <div className="space-y-0.5">
                           {b.email && <p className="text-[var(--color-text-secondary)]">{b.email}</p>}
                           {b.phone && <p className="text-xs text-[var(--color-muted)]">{b.phone}</p>}
-                          {!b.email && !b.phone && <span className="text-[var(--color-muted)]">—</span>}
+                          {!b.email && !b.phone && <span className="text-[var(--color-muted)]">·</span>}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-[var(--color-text)]/50">{b.specialty || '—'}</td>
+                      <td className="px-6 py-4 text-[var(--color-text)]/50">{b.specialty || '·'}</td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                           b.has_user

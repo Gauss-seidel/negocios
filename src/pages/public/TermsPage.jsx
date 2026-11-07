@@ -3,7 +3,7 @@ import LegalLayout from './LegalLayout'
 export default function TermsPage() {
   return (
     <LegalLayout title="Términos y Condiciones de Uso" updated="2026-11-07">
-      <p><strong>Plantilla informativa — no constituye asesoría legal.</strong> Debe ser revisada y adaptada por un profesional legal para tu operación, jurisdicción (Paraguay) y modelo comercial antes de vender el servicio.</p>
+      <p><strong>Plantilla informativa (no constituye asesoría legal).</strong> Debe ser revisada y adaptada por un profesional legal para tu operación, jurisdicción (Paraguay) y modelo comercial antes de vender el servicio.</p>
 
       <h2>1. Servicio</h2>
       <p>BarberShifts es una plataforma de gestión y reserva de turnos para barberías/peluquerías. Permite a negocios administrar agenda, servicios, personal, clientes, caja e inventario, y a clientes finales solicitar reservas en línea.</p>
