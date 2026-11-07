@@ -140,11 +140,11 @@ export default function HoursPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando horarios...</p>
+          <p className="mt-4 text-sm text-gray-500">Cargando horarios…</p>
         </div>
       </div>
     )
@@ -155,7 +155,7 @@ export default function HoursPage() {
       <div className="flex items-center justify-center py-32">
         <div className="max-w-md text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-            <svg className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -204,7 +204,7 @@ export default function HoursPage() {
                       onChange={() => handleToggle(day.day_of_week)}
                       className="peer sr-only"
                     />
-                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-[var(--color-accent)] peer-checked:after:translate-x-full" />
+                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition peer-checked:bg-[var(--color-accent)] peer-checked:after:translate-x-full" />
                   </label>
                   <span className="min-w-20 text-sm font-medium text-gray-900">
                     {getDayName(day.day_of_week)}

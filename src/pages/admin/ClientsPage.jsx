@@ -162,11 +162,11 @@ export default function ClientsPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando clientes...</p>
+          <p className="mt-4 text-sm text-gray-500">Cargando clientes…</p>
         </div>
       </div>
     )
@@ -177,7 +177,7 @@ export default function ClientsPage() {
       <div className="flex items-center justify-center py-32">
         <div className="max-w-md text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-            <svg className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -210,7 +210,7 @@ export default function ClientsPage() {
             name="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Nombre, teléfono o email..."
+            placeholder="Nombre, teléfono o email…"
           />
         </div>
       </Card>
@@ -219,7 +219,7 @@ export default function ClientsPage() {
       {filteredClients.length === 0 ? (
         <Card>
           <div className="flex flex-col items-center justify-center py-12">
-            <svg className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             <h3 className="mt-4 text-base font-medium text-gray-900">
@@ -269,7 +269,7 @@ export default function ClientsPage() {
                 >
                   Historial
                 </button>
-                <svg
+                <svg aria-hidden="true" focusable="false"
                   className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
                     expandedClient === client.id ? 'rotate-180' : ''
                   }`}
@@ -287,7 +287,7 @@ export default function ClientsPage() {
                   <h4 className="mb-3 text-sm font-semibold text-gray-700">Historial de reservas</h4>
                   {historyLoading ? (
                     <div className="flex items-center justify-center py-8">
-                      <svg className="h-6 w-6 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+                      <svg aria-hidden="true" focusable="false" className="h-6 w-6 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>

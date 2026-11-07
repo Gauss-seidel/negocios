@@ -1,0 +1,4471 @@
+﻿{
+  "summary": {
+    "fails": 410,
+    "reflex": 15,
+    "warns": 70,
+    "waived": 0,
+    "rejected": 0,
+    "answered": 0,
+    "dismissed": 0,
+    "notes": 0,
+    "files": 60,
+    "render": "off"
+  },
+  "findings": [
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 25,
+      "evidence": "pure #fff: background: #fff (.brochure)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 147,
+      "evidence": "pure #fff: color: #fff (.feature-card.navy)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 164,
+      "evidence": "pure #fff: color: #fff (.plans-table th)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 182,
+      "evidence": "pure #fff: color: #fff (.plans-table tr.highlight td)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 186,
+      "evidence": "pure #fff: color: #fff (.plans-table tr.highlight td:first-child)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 193,
+      "evidence": "pure #fff: background: #fff (.cta)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 207,
+      "evidence": "pure #fff: background: #fff (body)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 109,
+      "evidence": "pure #fff: color: white ([data-composition-id=\"scene2-4-canvas\"])",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 135,
+      "evidence": "pure #fff: background: white (.web-frame)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 145,
+      "evidence": "pure #fff: background: white (.ui-content)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 219,
+      "evidence": "pure #fff: color: white (.cta-button)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 231,
+      "evidence": "pure #fff: color: white (.dimension-label)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 262,
+      "evidence": "pure #fff: background: white (.handle)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 330,
+      "evidence": "pure #fff: background: white (.dragged-card)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 362,
+      "evidence": "pure #fff: background: white (.stamped-card)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 397,
+      "evidence": "pure #fff: color: white (.checkmark)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 406,
+      "evidence": "pure #fff: background: white (.comment-bubble)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 430,
+      "evidence": "pure #fff: color: white (.cursor-label)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 103,
+      "evidence": "pure #fff: color: white ([data-composition-id=\"scene5-logo-outro\"] .tagline)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 38,
+      "evidence": "pure #fff: background: #ffffff (.card)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 46,
+      "evidence": "pure #fff: color: #fff (.tag)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 50,
+      "evidence": "pure #fff: color: #fff (.cta)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 59,
+      "evidence": "pure #fff: color: #fff (.number-badge)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 358,
+      "evidence": "pure #fff: background-color: #ffffff (.bg-white)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 504,
+      "evidence": "pure #fff: color: #ffffff (.hover\\:text-white:hover)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 527,
+      "evidence": "pure #fff: color: #ffffff (.group:hover .group-hover\\:text-white)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 559,
+      "evidence": "pure #fff: color: #ffffff (.text-white)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 567,
+      "evidence": "pure #000: color: #000000 (.text-black)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 666,
+      "evidence": "pure #fff: background-color: #ffffff (.toggle::after)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 762,
+      "evidence": "pure #fff: color: #ffffff (.group:hover .group-hover\\:text-white)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "7a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 854,
+      "evidence": "pure #fff: background-color: #ffffff (.after\\:bg-white::after)",
+      "fix": "Tint the base toward the anchor hue"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 7,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 6,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\InventoryPage.jsx",
+      "line": 445,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\SuperBarberosPage.jsx",
+      "line": 310,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 604,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\PrivacyPage.jsx",
+      "line": 6,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 368,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "19",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TermsPage.jsx",
+      "line": 6,
+      "evidence": "dash \"ÔÇö\" in copy",
+      "fix": "A comma, a colon, a full stop or parentheses; never a dash"
+    },
+    {
+      "gate": "20",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 1,
+      "evidence": "no Hallmark stamp on the first non-empty line of any CSS",
+      "fix": "The stamp comment is line 1 of the CSS; only @charset may precede it"
+    },
+    {
+      "gate": "20",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene1-logo-intro.html",
+      "line": 1,
+      "evidence": "no Hallmark stamp on the first non-empty line of any CSS",
+      "fix": "The stamp comment is line 1 of the CSS; only @charset may precede it"
+    },
+    {
+      "gate": "20",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 1,
+      "evidence": "no Hallmark stamp on the first non-empty line of any CSS",
+      "fix": "The stamp comment is line 1 of the CSS; only @charset may precede it"
+    },
+    {
+      "gate": "20",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 1,
+      "evidence": "no Hallmark stamp on the first non-empty line of any CSS",
+      "fix": "The stamp comment is line 1 of the CSS; only @charset may precede it"
+    },
+    {
+      "gate": "20",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 1,
+      "evidence": "no Hallmark stamp on the first non-empty line of any CSS",
+      "fix": "The stamp comment is line 1 of the CSS; only @charset may precede it"
+    },
+    {
+      "gate": "26a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 1,
+      "evidence": "no :focus-visible styling anywhere",
+      "fix": "A focus ring at 3:1 or better, instant"
+    },
+    {
+      "gate": "26a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 1,
+      "evidence": "no :focus-visible styling anywhere",
+      "fix": "A focus ring at 3:1 or better, instant"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 238,
+      "evidence": "emoji icon \"Ô£é\" in <div class=\"cover-logo\">",
+      "fix": "One icon library or custom SVG"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 255,
+      "evidence": "text opens with an emoji: \"ÔØî ┬┐Perd├®s clientes por no tenerÔÇª\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 267,
+      "evidence": "text opens with an emoji: \"Ô£à Todo lo que necesit├ís en un sÔÇª\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 269,
+      "evidence": "text opens with an emoji: \"­ƒôà Reservas online\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 270,
+      "evidence": "text opens with an emoji: \"­ƒôï Agenda digital\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 271,
+      "evidence": "text opens with an emoji: \"­ƒÆ░ Caja diaria\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 272,
+      "evidence": "text opens with an emoji: \"­ƒôª Inventario\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 273,
+      "evidence": "text opens with an emoji: \"­ƒôè Reportes\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 274,
+      "evidence": "text opens with an emoji: \"­ƒæÑ Clientes\"",
+      "fix": "One icon library, a custom SVG, or the word alone"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\InventoryPage.jsx",
+      "line": 324,
+      "evidence": "emoji icon \"­ƒøì´©Å\" in <span class=\"mt-1 inline-flex items-centÔÇª\">",
+      "fix": "One icon library or custom SVG"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\InventoryPage.jsx",
+      "line": 419,
+      "evidence": "emoji icon \"­ƒøì´©Å\" in <span class=\"\">",
+      "fix": "One icon library or custom SVG"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 1147,
+      "evidence": "emoji icon \"­ƒôì\" in <span class=\"\">",
+      "fix": "One icon library or custom SVG"
+    },
+    {
+      "gate": "30a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 1150,
+      "evidence": "emoji icon \"­ƒô×\" in <span class=\"\">",
+      "fix": "One icon library or custom SVG"
+    },
+    {
+      "gate": "33",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene1-logo-intro.html",
+      "line": 11,
+      "evidence": "<svg> without aria-hidden or aria-label",
+      "fix": "Add aria-hidden or an aria-label"
+    },
+    {
+      "gate": "33",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene1-logo-intro.html",
+      "line": 44,
+      "evidence": "<svg> without aria-hidden or aria-label",
+      "fix": "Add aria-hidden or an aria-label"
+    },
+    {
+      "gate": "33",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 86,
+      "evidence": "<svg> without aria-hidden or aria-label",
+      "fix": "Add aria-hidden or an aria-label"
+    },
+    {
+      "gate": "33",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 92,
+      "evidence": "<svg> without aria-hidden or aria-label",
+      "fix": "Add aria-hidden or an aria-label"
+    },
+    {
+      "gate": "33",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 98,
+      "evidence": "<svg> without aria-hidden or aria-label",
+      "fix": "Add aria-hidden or an aria-label"
+    },
+    {
+      "gate": "33",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 14,
+      "evidence": "<svg> without aria-hidden or aria-label",
+      "fix": "Add aria-hidden or an aria-label"
+    },
+    {
+      "gate": "34",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene1-logo-intro.html",
+      "line": 1,
+      "evidence": "no overflow-x: clip on html and body",
+      "fix": "overflow-x: clip on both html and body"
+    },
+    {
+      "gate": "34",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 1,
+      "evidence": "no overflow-x: clip on html and body",
+      "fix": "overflow-x: clip on both html and body"
+    },
+    {
+      "gate": "34",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 1,
+      "evidence": "no overflow-x: clip on html and body",
+      "fix": "overflow-x: clip on both html and body"
+    },
+    {
+      "gate": "34",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 12,
+      "evidence": "overflow-x: hidden on html, body (breaks sticky)",
+      "fix": "Use overflow-x: clip on both html and body, never hidden"
+    },
+    {
+      "gate": "47a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 47,
+      "evidence": "re-drawn chrome class \"url-pill\" (class=\"url-pill\")",
+      "fix": "Use a real screenshot in a figure"
+    },
+    {
+      "gate": "47a",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 109,
+      "evidence": "re-drawn chrome selector [data-composition-id=\"scene5-logo-outro\"] .url-pill",
+      "fix": "Use a real screenshot in a figure"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 14,
+      "evidence": "colour literal #e5e5e5 outside tokens (background on body)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 15,
+      "evidence": "colour literal #111827 outside tokens (color on body)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 25,
+      "evidence": "colour literal #fff outside tokens (background on .brochure)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 28,
+      "evidence": "colour literal rgba(0,0,0,0.15) outside tokens (box-shadow on .brochure)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 33,
+      "evidence": "colour literal #f5f5f0 outside tokens (background on .cover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 42,
+      "evidence": "colour literal #1B2A4A outside tokens (background on .cover-bar)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 46,
+      "evidence": "colour literal #D4A843 outside tokens (background on .cover-logo)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 54,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .cover h1)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 59,
+      "evidence": "colour literal #6B7280 outside tokens (color on .cover-sub)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 64,
+      "evidence": "colour literal #D4A843 outside tokens (background on .cover-line)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 69,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .cover h2)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 80,
+      "evidence": "colour literal #D4A843 outside tokens (background on .cover-btn)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 81,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .cover-btn)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 91,
+      "evidence": "colour literal #9CA3AF outside tokens (color on .cover-footer)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 96,
+      "evidence": "colour literal #f5f5f0 outside tokens (background on .interior)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 105,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .section-title)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 118,
+      "evidence": "colour literal #1f2937 outside tokens (color on .problem-list li)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 123,
+      "evidence": "colour literal #D4A843 outside tokens (color on .problem-list li::before)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 128,
+      "evidence": "colour literal #D4A843 outside tokens (color on .problem-close)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 147,
+      "evidence": "colour literal #1B2A4A outside tokens (background on .feature-card.navy)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 147,
+      "evidence": "colour literal #fff outside tokens (color on .feature-card.navy)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 148,
+      "evidence": "colour literal #D4A843 outside tokens (background on .feature-card.gold)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 148,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .feature-card.gold)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 151,
+      "evidence": "colour literal #9CA3AF outside tokens (color on .features-note)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 163,
+      "evidence": "colour literal #1B2A4A outside tokens (background on .plans-table th)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 164,
+      "evidence": "colour literal #fff outside tokens (color on .plans-table th)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 173,
+      "evidence": "colour literal rgba(0,0,0,0.06) outside tokens (border-bottom on .plans-table td)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 176,
+      "evidence": "colour literal #f5f5f0 outside tokens (background on .plans-table td:first-child)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 181,
+      "evidence": "colour literal #1B2A4A outside tokens (background on .plans-table tr.highlight td)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 182,
+      "evidence": "colour literal #fff outside tokens (color on .plans-table tr.highlight td)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 185,
+      "evidence": "colour literal #1B2A4A outside tokens (background on .plans-table tr.highlight td:ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 186,
+      "evidence": "colour literal #fff outside tokens (color on .plans-table tr.highlight td:ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 193,
+      "evidence": "colour literal #fff outside tokens (background on .cta)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 199,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .cta h3)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 202,
+      "evidence": "colour literal #6B7280 outside tokens (color on .cta p)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 203,
+      "evidence": "colour literal #D4A843 outside tokens (color on .cta .brand)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 207,
+      "evidence": "colour literal #fff outside tokens (background on body)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 211,
+      "evidence": "colour literal #D4A843 outside tokens (background on .cover-btn)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 211,
+      "evidence": "colour literal #1B2A4A outside tokens (color on .cover-btn)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 294,
+      "evidence": "inline-style colour literal #6B7280",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 295,
+      "evidence": "inline-style colour literal #6B7280",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 296,
+      "evidence": "inline-style colour literal #6B7280",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene1-logo-intro.html",
+      "line": 62,
+      "evidence": "colour literal #0a0a0f outside tokens (background-color on [data-composition-id=\"scene1-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 107,
+      "evidence": "colour literal #1e1e1e outside tokens (background-color on [data-composition-id=\"scene2-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 108,
+      "evidence": "font-family literal \"\"Inter\", sans-serif\" on [data-composition-id=\"scene2-4-canvas\"]",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 125,
+      "evidence": "colour literal #2c2c2c outside tokens (background-image on .dot-grid)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 136,
+      "evidence": "colour literal rgba(255, 255, 255, 0.2) outside tokens (border on .web-frame)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 137,
+      "evidence": "colour literal rgba(0, 0, 0, 0.3) outside tokens (box-shadow on .web-frame)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 157,
+      "evidence": "colour literal #e6e6e6 outside tokens (border-bottom on .nav-bar)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 163,
+      "evidence": "colour literal #a259ff outside tokens (background on .nav-logo)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 176,
+      "evidence": "colour literal #cccccc outside tokens (background on .nav-link)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 192,
+      "evidence": "colour literal #1e1e1e outside tokens (color on .hero-heading)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 211,
+      "evidence": "colour literal #e6e6e6 outside tokens (background on .subtitle-line)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 218,
+      "evidence": "colour literal #0acf83 outside tokens (background on .cta-button)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 230,
+      "evidence": "colour literal #1abcfe outside tokens (background on .dimension-label)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 263,
+      "evidence": "colour literal #1abcfe outside tokens (border on .handle)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 290,
+      "evidence": "colour literal rgba(44, 44, 44, 0.9) outside tokens (background on .assets-panel)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 293,
+      "evidence": "colour literal rgba(255, 255, 255, 0.1) outside tokens (border-right on .assets-panel)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 296,
+      "evidence": "colour literal rgba(0, 0, 0, 0.2) outside tokens (box-shadow on .assets-panel)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 303,
+      "evidence": "colour literal #aaa outside tokens (color on .panel-header)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 313,
+      "evidence": "colour literal rgba(255, 255, 255, 0.05) outside tokens (background on .asset-item)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 317,
+      "evidence": "colour literal #a259ff outside tokens (color on .asset-icon)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 323,
+      "evidence": "colour literal #eee outside tokens (color on .asset-text)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 332,
+      "evidence": "colour literal rgba(0, 0, 0, 0.2) outside tokens (box-shadow on .dragged-card)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 341,
+      "evidence": "colour literal #f0f0f0 outside tokens (background on .card-content)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 341,
+      "evidence": "colour literal #fff outside tokens (background on .card-content)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 364,
+      "evidence": "colour literal rgba(0, 0, 0, 0.1) outside tokens (box-shadow on .stamped-card)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 387,
+      "evidence": "colour literal #f24e1e outside tokens (background on .comment-pin)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 392,
+      "evidence": "colour literal rgba(0, 0, 0, 0.3) outside tokens (box-shadow on .comment-pin)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 409,
+      "evidence": "colour literal #1e1e1e outside tokens (color on .comment-bubble)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 413,
+      "evidence": "colour literal rgba(0, 0, 0, 0.2) outside tokens (box-shadow on .comment-bubble)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 434,
+      "evidence": "colour literal rgba(0, 0, 0, 0.2) outside tokens (box-shadow on .cursor-label)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 438,
+      "evidence": "colour literal #a259ff outside tokens (background on .designer-cursor .cursor-label)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 441,
+      "evidence": "colour literal #1abcfe outside tokens (background on .engineer-cursor .cursor-label)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 444,
+      "evidence": "colour literal #f24e1e outside tokens (background on .pm-cursor .cursor-label)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 57,
+      "evidence": "colour literal #0a0a0f outside tokens (background on [data-composition-id=\"scene5-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 60,
+      "evidence": "font-family literal \"\"Inter\", sans-serif\" on [data-composition-id=\"scene5-logo-outro\"] .canvas",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 83,
+      "evidence": "colour literal rgba(162, 89, 255, 0.25) outside tokens (background on [data-composition-id=\"scene5-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 110,
+      "evidence": "colour literal #1a1a1f outside tokens (background on [data-composition-id=\"scene5-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 111,
+      "evidence": "colour literal #2c2c2c outside tokens (border on [data-composition-id=\"scene5-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene5-logo-outro.html",
+      "line": 122,
+      "evidence": "colour literal #666 outside tokens (color on [data-composition-id=\"scene5-ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 13,
+      "evidence": "colour literal #faf9f6 outside tokens (background on html, body)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 14,
+      "evidence": "font-family literal \"\"Plus Jakarta Sans\", system-ui, sanÔÇª\" on html, body",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 15,
+      "evidence": "colour literal #0a0a0f outside tokens (color on html, body)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 23,
+      "evidence": "colour literal #C23350 outside tokens (background on .diagonal-bg)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 23,
+      "evidence": "colour literal #B45309 outside tokens (background on .diagonal-bg)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 23,
+      "evidence": "colour literal #faf9f6 outside tokens (background on .diagonal-bg)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 30,
+      "evidence": "colour literal #C23350 outside tokens (color on .accent)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 31,
+      "evidence": "colour literal #B45309 outside tokens (color on .amber)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 32,
+      "evidence": "colour literal #0a0a0f outside tokens (color on .title)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 33,
+      "evidence": "colour literal #faf9f6 outside tokens (color on .title.light)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 34,
+      "evidence": "colour literal #6b7280 outside tokens (color on .subtitle)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 35,
+      "evidence": "colour literal #faf9f6 outside tokens (color on .subtitle.light)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 38,
+      "evidence": "colour literal #ffffff outside tokens (background on .card)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 39,
+      "evidence": "colour literal rgba(0,0,0,0.08) outside tokens (box-shadow on .card)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 40,
+      "evidence": "colour literal #C23350 outside tokens (border-top on .card)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 42,
+      "evidence": "colour literal #1a1a2e outside tokens (color on .card h2)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 43,
+      "evidence": "colour literal #6b7280 outside tokens (color on .card p)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 46,
+      "evidence": "colour literal #C23350 outside tokens (background on .tag)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 46,
+      "evidence": "colour literal #fff outside tokens (color on .tag)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 48,
+      "evidence": "colour literal #B45309 outside tokens (background on .tag.amber)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 50,
+      "evidence": "colour literal #C23350 outside tokens (background on .cta)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 50,
+      "evidence": "colour literal #fff outside tokens (color on .cta)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 54,
+      "evidence": "colour literal #C23350 outside tokens (color on .big-text)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 59,
+      "evidence": "colour literal #C23350 outside tokens (background on .number-badge)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 59,
+      "evidence": "colour literal #fff outside tokens (color on .number-badge)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 82,
+      "evidence": "inline-style colour literal #faf9f6",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 97,
+      "evidence": "inline-style colour literal #1a1a2e",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 98,
+      "evidence": "inline-style colour literal #faf9f6",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 100,
+      "evidence": "inline-style colour literal #B45309",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 113,
+      "evidence": "inline-style colour literal #faf9f6",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 132,
+      "evidence": "inline-style colour literal #C23350",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 134,
+      "evidence": "inline-style colour literal #ffffff",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 139,
+      "evidence": "inline-style colour literal #faf9f6",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\AppearancePage.jsx",
+      "line": 253,
+      "evidence": "inline-style colour literal #ffffff",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\AppearancePage.jsx",
+      "line": 257,
+      "evidence": "inline-style colour literal #ffffff",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barber\\BarberDashboard.jsx",
+      "line": 409,
+      "evidence": "colour literal bg-[#1a1a2e] in a class on <div class=\"absolute right-0 top-full z-50 ÔÇª\">",
+      "fix": "Lift the value into the token block (@theme or :root) and use its utility name"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 770,
+      "evidence": "inline-style colour literal #ef4444",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 34,
+      "evidence": "colour literal group-hover:shadow-[0_0_40px_-12px_rgba(233,69,96,0.3)] in a class on <div class=\"relative rounded-2xl bÔÇª",
+      "fix": "Lift the value into the token block (@theme or :root) and use its utility name"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 51,
+      "evidence": "inline-style colour literal #34d399",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 59,
+      "evidence": "inline-style colour literal #f1f5f9",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 67,
+      "evidence": "inline-style colour literal #94a3b8",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 220,
+      "evidence": "inline-style colour literal #0a0a0f",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 318,
+      "evidence": "inline-style colour literal #34d399",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 73,
+      "evidence": "colour literal rgba(0,0,0,0.15) outside tokens (background on ::-webkit-scrollbar-thumb)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 358,
+      "evidence": "colour literal #ffffff outside tokens (background-color on .bg-white)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 360,
+      "evidence": "colour literal #f9fafb outside tokens (background-color on .bg-gray-50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 361,
+      "evidence": "colour literal #f3f4f6 outside tokens (background-color on .bg-gray-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 362,
+      "evidence": "colour literal #e5e7eb outside tokens (background-color on .bg-gray-200)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 363,
+      "evidence": "colour literal #9ca3af outside tokens (background-color on .bg-gray-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 364,
+      "evidence": "colour literal #6b7280 outside tokens (background-color on .bg-gray-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 365,
+      "evidence": "colour literal rgba(107,114,128,0.10) outside tokens (background-color on .bg-gray-500\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 366,
+      "evidence": "colour literal #facc15 outside tokens (background-color on .bg-yellow-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 367,
+      "evidence": "colour literal rgba(234,179,8,0.10) outside tokens (background-color on .bg-yellow-500\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 368,
+      "evidence": "colour literal #fef2f2 outside tokens (background-color on .bg-red-50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 369,
+      "evidence": "colour literal #fee2e2 outside tokens (background-color on .bg-red-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 370,
+      "evidence": "colour literal #fffbeb outside tokens (background-color on .bg-amber-50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 371,
+      "evidence": "colour literal #fef3c7 outside tokens (background-color on .bg-amber-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 372,
+      "evidence": "colour literal #fde68a outside tokens (background-color on .bg-amber-200)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 373,
+      "evidence": "colour literal #ecfdf5 outside tokens (background-color on .bg-emerald-50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 374,
+      "evidence": "colour literal #d1fae5 outside tokens (background-color on .bg-emerald-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 375,
+      "evidence": "colour literal #34d399 outside tokens (background-color on .bg-emerald-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 376,
+      "evidence": "colour literal #10b981 outside tokens (background-color on .bg-emerald-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 377,
+      "evidence": "colour literal #dbeafe outside tokens (background-color on .bg-blue-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 378,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (background-color on .bg-black\\/5)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 379,
+      "evidence": "colour literal rgba(0,0,0,0.3) outside tokens (background-color on .bg-black\\/30)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 380,
+      "evidence": "colour literal rgba(0,0,0,0.6) outside tokens (background-color on .bg-black\\/60)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 381,
+      "evidence": "colour literal rgba(0,0,0,0.7) outside tokens (background-color on .bg-black\\/70)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 382,
+      "evidence": "colour literal rgba(255,255,255,0.05) outside tokens (background-color on .bg-white\\/5)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 383,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (background-color on .bg-white\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 384,
+      "evidence": "colour literal rgba(255,255,255,0.50) outside tokens (background-color on .bg-white\\/50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 385,
+      "evidence": "colour literal rgba(255,255,255,0.03) outside tokens (background-color on .bg-white\\/\\[0\\.03\\])",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 386,
+      "evidence": "colour literal rgba(255,255,255,0.06) outside tokens (background-color on .bg-white\\/\\[0\\.06\\])",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 392,
+      "evidence": "colour literal #f9fafb outside tokens (--tw-grad-from on .from-gray-50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 393,
+      "evidence": "colour literal #ffffff outside tokens (--tw-grad-from on .from-white)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 394,
+      "evidence": "colour literal rgba(255,255,255,0.03) outside tokens (--tw-grad-from on .from-white\\/\\[0\\.03\\])",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 402,
+      "evidence": "colour literal #ffffff outside tokens (--tw-grad-via on .via-white)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 404,
+      "evidence": "colour literal rgba(255,255,255,0.6) outside tokens (--tw-grad-to on .to-white\\/60)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 405,
+      "evidence": "colour literal #f3f4f6 outside tokens (--tw-grad-to on .to-gray-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 421,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (border-color on .border-black\\/5)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 422,
+      "evidence": "colour literal #f3f4f6 outside tokens (border-color on .border-gray-100)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 423,
+      "evidence": "colour literal #e5e7eb outside tokens (border-color on .border-gray-200)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 424,
+      "evidence": "colour literal #d1d5db outside tokens (border-color on .border-gray-300)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 425,
+      "evidence": "colour literal rgba(255,255,255,0.05) outside tokens (border-color on .border-white\\/5)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 426,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (border-color on .border-white\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 427,
+      "evidence": "colour literal rgba(255,255,255,0.20) outside tokens (border-color on .border-white\\/20)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 428,
+      "evidence": "colour literal rgba(255,255,255,0.06) outside tokens (border-color on .border-white\\/\\[0\\.06\\])",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 429,
+      "evidence": "colour literal #fecaca outside tokens (border-color on .border-red-200)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 430,
+      "evidence": "colour literal #f87171 outside tokens (border-color on .border-red-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 431,
+      "evidence": "colour literal rgba(239,68,68,0.2) outside tokens (border-color on .border-red-500\\/20)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 432,
+      "evidence": "colour literal #fde68a outside tokens (border-color on .border-amber-200)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 433,
+      "evidence": "colour literal #a7f3d0 outside tokens (border-color on .border-emerald-200)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 443,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (box-shadow on .ring-1)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 444,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (box-shadow on .ring-2)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 445,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (--tw-ring-color on .ring-black\\/5)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 446,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (--tw-ring-color on .ring-white\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 450,
+      "evidence": "colour literal #f3f4f6 outside tokens (border-color on .divide-gray-100 > * + *)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 451,
+      "evidence": "colour literal rgba(255,255,255,0.04) outside tokens (border-color on .divide-white\\/\\[0\\.04\\] > * ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 454,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (box-shadow on .shadow-sm)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 455,
+      "evidence": "colour literal rgba(0,0,0,0.1) outside tokens (box-shadow on .shadow-md)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 456,
+      "evidence": "colour literal rgba(0,0,0,0.1) outside tokens (box-shadow on .shadow-lg)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 457,
+      "evidence": "colour literal rgba(0,0,0,0.1) outside tokens (box-shadow on .shadow-xl)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 458,
+      "evidence": "colour literal rgba(0,0,0,0.25) outside tokens (box-shadow on .shadow-2xl)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 497,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (background-color on .hover\\:bg-black\\/5:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 498,
+      "evidence": "colour literal rgba(255,255,255,0.05) outside tokens (background-color on .hover\\:bg-white\\/5:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 499,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (background-color on .hover\\:bg-white\\/10:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 500,
+      "evidence": "colour literal rgba(255,255,255,0.20) outside tokens (background-color on .hover\\:bg-white\\/20:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 501,
+      "evidence": "colour literal #f9fafb outside tokens (background-color on .hover\\:bg-gray-50:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 502,
+      "evidence": "colour literal #f3f4f6 outside tokens (background-color on .hover\\:bg-gray-100:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 503,
+      "evidence": "colour literal #e5e7eb outside tokens (background-color on .hover\\:bg-gray-200:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 504,
+      "evidence": "colour literal #ffffff outside tokens (color on .hover\\:text-white:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 505,
+      "evidence": "colour literal rgba(255,255,255,0.6) outside tokens (color on .hover\\:text-white\\/60:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 506,
+      "evidence": "colour literal #fcd34d outside tokens (color on .hover\\:text-amber-300:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 507,
+      "evidence": "colour literal #6ee7b7 outside tokens (color on .hover\\:text-emerald-300:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 508,
+      "evidence": "colour literal rgba(255,255,255,0.7) outside tokens (color on .hover\\:text-white\\/70:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 509,
+      "evidence": "colour literal rgba(255,255,255,0.8) outside tokens (color on .hover\\:text-white\\/80:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 510,
+      "evidence": "colour literal #e5e7eb outside tokens (color on .hover\\:text-gray-200:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 511,
+      "evidence": "colour literal #4b5563 outside tokens (color on .hover\\:text-gray-600:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 512,
+      "evidence": "colour literal #374151 outside tokens (color on .hover\\:text-gray-700:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 513,
+      "evidence": "colour literal #111827 outside tokens (color on .hover\\:text-gray-900:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 514,
+      "evidence": "colour literal rgba(0,0,0,0.1) outside tokens (box-shadow on .hover\\:shadow-md:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 515,
+      "evidence": "colour literal rgba(0,0,0,0.1) outside tokens (box-shadow on .hover\\:shadow-xl:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 527,
+      "evidence": "colour literal #ffffff outside tokens (color on .group:hover .group-hover\\:teÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 531,
+      "evidence": "colour literal rgba(10,10,15,0.25) outside tokens (box-shadow on .group:hover .group-hover\\:shÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 534,
+      "evidence": "colour literal rgba(255,255,255,0.20) outside tokens (border-color on .focus\\:border-white\\/20:focus)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 536,
+      "evidence": "colour literal #ef4444 outside tokens (border-color on .focus\\:border-red-500:focus)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 537,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (background-color on .focus\\:bg-white\\/10:focus)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 541,
+      "evidence": "colour literal #ef4444 outside tokens (--tw-ring-color on .focus\\:ring-red-500:focus)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 544,
+      "evidence": "colour literal rgba(255,255,255,0.20) outside tokens (border-color on .focus-within\\:border-white\\/ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 545,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (background-color on .focus-within\\:bg-white\\/10:fÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 559,
+      "evidence": "colour literal #ffffff outside tokens (color on .text-white)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 560,
+      "evidence": "colour literal rgba(255,255,255,0.20) outside tokens (color on .text-white\\/20)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 561,
+      "evidence": "colour literal rgba(255,255,255,0.25) outside tokens (color on .text-white\\/25)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 562,
+      "evidence": "colour literal rgba(255,255,255,0.30) outside tokens (color on .text-white\\/30)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 563,
+      "evidence": "colour literal rgba(255,255,255,0.40) outside tokens (color on .text-white\\/40)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 564,
+      "evidence": "colour literal rgba(255,255,255,0.50) outside tokens (color on .text-white\\/50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 565,
+      "evidence": "colour literal rgba(255,255,255,0.60) outside tokens (color on .text-white\\/60)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 566,
+      "evidence": "colour literal rgba(255,255,255,0.70) outside tokens (color on .text-white\\/70)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 567,
+      "evidence": "colour literal #000000 outside tokens (color on .text-black)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 568,
+      "evidence": "colour literal #d1d5db outside tokens (color on .text-gray-300)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 569,
+      "evidence": "colour literal #9ca3af outside tokens (color on .text-gray-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 570,
+      "evidence": "colour literal #6b7280 outside tokens (color on .text-gray-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 571,
+      "evidence": "colour literal #4b5563 outside tokens (color on .text-gray-600)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 572,
+      "evidence": "colour literal #374151 outside tokens (color on .text-gray-700)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 573,
+      "evidence": "colour literal #111827 outside tokens (color on .text-gray-900)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 574,
+      "evidence": "colour literal #f87171 outside tokens (color on .text-red-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 575,
+      "evidence": "colour literal #ef4444 outside tokens (color on .text-red-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 576,
+      "evidence": "colour literal #dc2626 outside tokens (color on .text-red-600)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 577,
+      "evidence": "colour literal #b91c1c outside tokens (color on .text-red-700)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 578,
+      "evidence": "colour literal #34d399 outside tokens (color on .text-emerald-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 579,
+      "evidence": "colour literal #10b981 outside tokens (color on .text-emerald-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 580,
+      "evidence": "colour literal #059669 outside tokens (color on .text-emerald-600)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 581,
+      "evidence": "colour literal #047857 outside tokens (color on .text-emerald-700)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 582,
+      "evidence": "colour literal #fbbf24 outside tokens (color on .text-amber-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 583,
+      "evidence": "colour literal #d97706 outside tokens (color on .text-amber-600)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 584,
+      "evidence": "colour literal #b45309 outside tokens (color on .text-amber-700)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 585,
+      "evidence": "colour literal #92400e outside tokens (color on .text-amber-800)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 586,
+      "evidence": "colour literal #60a5fa outside tokens (color on .text-blue-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 587,
+      "evidence": "colour literal #3b82f6 outside tokens (color on .text-blue-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 588,
+      "evidence": "colour literal #1d4ed8 outside tokens (color on .text-blue-700)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 589,
+      "evidence": "colour literal #22d3ee outside tokens (color on .text-cyan-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 590,
+      "evidence": "colour literal #a78bfa outside tokens (color on .text-violet-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 591,
+      "evidence": "colour literal #8b5cf6 outside tokens (color on .text-violet-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 592,
+      "evidence": "colour literal #22d3ee outside tokens (color on .text-cyan-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 593,
+      "evidence": "colour literal #f43f5e outside tokens (color on .text-rose-500)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 594,
+      "evidence": "colour literal #facc15 outside tokens (color on .text-yellow-400)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 624,
+      "evidence": "colour literal rgba(255,255,255,0.25) outside tokens (color on .placeholder\\:text-white\\/25:ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 625,
+      "evidence": "colour literal #9ca3af outside tokens (color on .placeholder\\:text-gray-400::ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 634,
+      "evidence": "colour literal rgba(255,255,255,0.08) outside tokens (background on .glass)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 637,
+      "evidence": "colour literal rgba(255,255,255,0.1) outside tokens (border on .glass)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 640,
+      "evidence": "colour literal rgba(0,0,0,0.6) outside tokens (background on .glass-dark)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 643,
+      "evidence": "colour literal rgba(255,255,255,0.08) outside tokens (border on .glass-dark)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 654,
+      "evidence": "colour literal #d1d5db outside tokens (background-color on .toggle)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 666,
+      "evidence": "colour literal #ffffff outside tokens (background-color on .toggle::after)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 740,
+      "evidence": "colour literal #0a0a0f outside tokens (background-color on .bg-surface-dark)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 741,
+      "evidence": "colour literal #0f0f14 outside tokens (background-color on .bg-card-dark)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 759,
+      "evidence": "colour literal rgba(0,0,0,0.05) outside tokens (box-shadow on .group:hover .group-hover\\:riÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 762,
+      "evidence": "colour literal #ffffff outside tokens (color on .group:hover .group-hover\\:teÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 774,
+      "evidence": "colour literal rgba(255,255,255,0.05) outside tokens (background-color on .bg-white\\/5)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 775,
+      "evidence": "colour literal rgba(255,255,255,0.10) outside tokens (background-color on .bg-white\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 776,
+      "evidence": "colour literal rgba(255,255,255,0.50) outside tokens (background-color on .bg-white\\/50)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 779,
+      "evidence": "colour literal #d1d5db outside tokens (color on .text-gray-300)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 782,
+      "evidence": "colour literal rgba(239,68,68,0.10) outside tokens (background-color on .bg-red-500\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 783,
+      "evidence": "colour literal rgba(16,185,129,0.10) outside tokens (background-color on .bg-emerald-500\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 784,
+      "evidence": "colour literal rgba(245,158,11,0.10) outside tokens (background-color on .bg-amber-500\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 785,
+      "evidence": "colour literal rgba(59,130,246,0.10) outside tokens (background-color on .bg-blue-500\\/10)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 826,
+      "evidence": "colour literal #2563eb outside tokens (border-top-color on .border-t-blue-600)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 833,
+      "evidence": "colour literal rgba(0,0,0,0.02) outside tokens (background-color on .hover\\:bg-black\\/\\[0\\.02\\]:hÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 834,
+      "evidence": "colour literal rgba(255,255,255,0.02) outside tokens (background-color on .hover\\:bg-white\\/\\[0\\.02\\]:hÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 835,
+      "evidence": "colour literal rgba(255,255,255,0.06) outside tokens (background-color on .hover\\:bg-white\\/\\[0\\.06\\]:hÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 836,
+      "evidence": "colour literal rgba(239,68,68,0.10) outside tokens (background-color on .hover\\:bg-red-500\\/10:hover)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 839,
+      "evidence": "colour literal rgba(255,255,255,0.12) outside tokens (border-color on .hover\\:border-white\\/\\[0\\.12ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 850,
+      "evidence": "colour literal rgba(255,255,255,0.05) outside tokens (background-color on .dark .dark\\:hover\\:bg-white\\ÔÇª)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "48",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 854,
+      "evidence": "colour literal #ffffff outside tokens (background-color on .after\\:bg-white::after)",
+      "fix": "Lift the value into the token block"
+    },
+    {
+      "gate": "50",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TermsPage.jsx",
+      "line": 11,
+      "evidence": "display header word \"responsabilidades\" with no overflow-wrap",
+      "fix": "Add overflow-wrap: break-word and min-width: 0"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 171,
+      "evidence": "eyebrow \"BarberShifts\" before <h2> (uppercase, tracked 0.2em at 10px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\AppearancePage.jsx",
+      "line": 146,
+      "evidence": "eyebrow before <h2> (text-red-700 at 14px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 111,
+      "evidence": "eyebrow \"Nuestros servicios\" before <h2> (uppercase, tracked 0.15em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 182,
+      "evidence": "eyebrow \"Horarios\" before <h2> (uppercase, tracked 0.15em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 234,
+      "evidence": "eyebrow \"Sucursales\" before <h2> (uppercase, tracked 0.15em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 286,
+      "evidence": "eyebrow \"Productos\" before <h2> (uppercase, tracked 0.15em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 206,
+      "evidence": "eyebrow \"Plataforma de reservas\" before <h1> (uppercase, tracked 0.15em at 12px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 300,
+      "evidence": "eyebrow \"Barber├¡as disponibles\" before <h2> (uppercase, tracked 0.15em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 366,
+      "evidence": "eyebrow \"C├│mo funciona\" before <h2> (uppercase, tracked 0.15em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "54",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 388,
+      "evidence": "eyebrow before <h3> (tracked 0.1em at 11px)",
+      "fix": "Cut it; open the section another way (craft.md, Opening a section)"
+    },
+    {
+      "gate": "62",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 365,
+      "evidence": ".stamped-card is hidden at rest (opacity: 0) and depends on a script to appear",
+      "fix": "Visible by default: scope the hidden state under a .js class the script adds, or animate from visible with @starting-style"
+    },
+    {
+      "gate": "63",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 245,
+      "evidence": "arrow glued to the label \"Ver Planes ÔåÆ\"",
+      "fix": "A verb as the label; the link already says it goes somewhere"
+    },
+    {
+      "gate": "63",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "BarberShifts-Brochure.html",
+      "line": 247,
+      "evidence": "middle-dot meta string \"WhatsApp ┬À Web ┬À @barbershifts\"",
+      "fix": "Line breaks, columns or hairlines; one dot in a byline at most"
+    },
+    {
+      "gate": "63",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 103,
+      "evidence": "middle-dot meta string \"Servicios ┬À Horarios ┬À Barberos ┬À Caja ┬À InventarÔÇª\"",
+      "fix": "Line breaks, columns or hairlines; one dot in a byline at most"
+    },
+    {
+      "gate": "63",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 126,
+      "evidence": "middle-dot meta string \"RLS ┬À Auth ┬À Storage ┬À Reportes en PDF\"",
+      "fix": "Line breaks, columns or hairlines; one dot in a byline at most"
+    },
+    {
+      "gate": "63",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 144,
+      "evidence": "middle-dot meta string \"Gesti├│n y reservas ┬À Multi-rol ┬À Web app\"",
+      "fix": "Line breaks, columns or hairlines; one dot in a byline at most"
+    },
+    {
+      "gate": "63",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 859,
+      "evidence": "arrow glued to the label \"Continuar sin productos ÔåÆ\"",
+      "fix": "A verb as the label; the link already says it goes somewhere"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\ClientHistoryModal.jsx",
+      "line": 201,
+      "evidence": "uppercase at 12px tracked 0.05em on <p class=\"text-xs font-medium uppercase tÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\ClientHistoryModal.jsx",
+      "line": 309,
+      "evidence": "\"Servicios\" uppercase at 12px tracked 0.05em on <h4 class=\"mb-2 text-xs font-semibold uppeÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\ClientHistoryModal.jsx",
+      "line": 330,
+      "evidence": "\"Productos\" uppercase at 12px tracked 0.05em on <h4 class=\"mb-2 text-xs font-semibold uppeÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\CompleteAppointmentModal.jsx",
+      "line": 143,
+      "evidence": "\"Servicios\" uppercase at 14px tracked 0.05em on <h3 class=\"mb-3 text-sm font-semibold uppeÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\CompleteAppointmentModal.jsx",
+      "line": 166,
+      "evidence": "\"Productos\" uppercase at 14px tracked 0.05em on <h3 class=\"mb-3 text-sm font-semibold uppeÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 25,
+      "evidence": "\"Ô£ª\" letter-spaced at 9px tracked 0.2em on <span class=\"text-[9px] font-medium trackingÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 171,
+      "evidence": "\"BarberShifts\" uppercase at 10px tracked 0.2em on <span class=\"text-[10px] font-semibold trackÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 218,
+      "evidence": "\"Servicios\" uppercase at 10px tracked 0.15em on <p class=\"text-[10px] font-semibold trackÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 242,
+      "evidence": "\"Productos\" uppercase at 10px tracked 0.15em on <p class=\"text-[10px] font-semibold trackÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 277,
+      "evidence": "\"Total\" uppercase at 14px tracked 0.05em on <span class=\"text-sm font-semibold text-grayÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 296,
+      "evidence": "\"Emitido:\" uppercase at 10px tracked 0.05em on <p class=\"mt-1 text-[10px] text-gray-400 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\layouts\\AdminLayout.jsx",
+      "line": 101,
+      "evidence": "uppercase at 10px tracked 0.05em on <button class=\"flex w-full items-center justifÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\AppointmentsPage.jsx",
+      "line": 368,
+      "evidence": "\"Cliente Barbero ServiciÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-gray-200 text-xÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\AppointmentsPage.jsx",
+      "line": 432,
+      "evidence": "uppercase at 12px tracked 0.05em on <p class=\"text-xs font-medium uppercase tÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\BusinessDashboard.jsx",
+      "line": 239,
+      "evidence": "uppercase at 12px tracked 0.05em on <p class=\"text-xs font-semibold uppercaseÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\BusinessDashboard.jsx",
+      "line": 300,
+      "evidence": "\"Cliente Barbero Fecha HÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b text-xs font-semibold ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\ClientsPage.jsx",
+      "line": 324,
+      "evidence": "\"Fecha Hora Barbero ServÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-gray-200 text-xÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\InventoryPage.jsx",
+      "line": 387,
+      "evidence": "\"Producto Stock M├¡nimo UÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-gray-200 bg-graÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\PlanesPage.jsx",
+      "line": 269,
+      "evidence": "\"Plan Precio Barberos SuÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-white/[0.06] teÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\PlansPage.jsx",
+      "line": 54,
+      "evidence": "\"Plan actual\" uppercase at 11px tracked 0.05em on <span class=\"rounded-full bg-emerald-500 px-ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\PlansPage.jsx",
+      "line": 211,
+      "evidence": "\"Caracter├¡stica (actual)\" uppercase at 12px tracked 0.05em on <tr class=\"border-b text-xs font-semibold ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\ReportsPage.jsx",
+      "line": 575,
+      "evidence": "\"Ingresos\" uppercase at 12px tracked 0.05em on <p class=\"text-xs font-medium uppercase tÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\ReportsPage.jsx",
+      "line": 580,
+      "evidence": "\"Reservas\" uppercase at 12px tracked 0.05em on <p class=\"text-xs font-medium uppercase tÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\ReportsPage.jsx",
+      "line": 585,
+      "evidence": "\"Ticket promedio\" uppercase at 12px tracked 0.05em on <p class=\"text-xs font-medium uppercase tÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\SucursalesPage.jsx",
+      "line": 256,
+      "evidence": "\"Nombre Direcci├│n Tel├®foÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b text-xs font-semibold ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\SuperBarberosPage.jsx",
+      "line": 280,
+      "evidence": "\"Barbero Barber├¡a ContacÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-white/[0.06] teÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\SuperConfigPage.jsx",
+      "line": 295,
+      "evidence": "\"Nombre ID Registrado\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-white/[0.06] teÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\SuperDashboard.jsx",
+      "line": 487,
+      "evidence": "\"Nombre Estado Plan SucuÔÇª\" uppercase at 12px tracked 0.05em on <tr class=\"border-b border-white/[0.06] teÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 111,
+      "evidence": "\"Nuestros servicios\" uppercase at 11px tracked 0.15em on <span class=\"inline-flex items-center gap-2 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 182,
+      "evidence": "\"Horarios\" uppercase at 11px tracked 0.15em on <span class=\"inline-flex items-center gap-2 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 234,
+      "evidence": "\"Sucursales\" uppercase at 11px tracked 0.15em on <span class=\"inline-flex items-center gap-2 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 286,
+      "evidence": "\"Productos\" uppercase at 11px tracked 0.15em on <span class=\"inline-flex items-center gap-2 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 96,
+      "evidence": "uppercase at 10px tracked 0.05em on <span class=\"hidden text-[10px] font-semibolÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 763,
+      "evidence": "uppercase at 10px tracked 0.05em on <div class=\"text-[10px] font-semibold upperÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 770,
+      "evidence": "\"Cerrado\" uppercase at 9px tracked 0.05em on <div class=\"mt-1 text-[9px] font-medium uppÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 1074,
+      "evidence": "\"Productos adicionales\" uppercase at 12px tracked 0.05em on <p class=\"mb-2 text-xs font-semibold uppeÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 45,
+      "evidence": "uppercase at 11px tracked 0.05em on <span class=\"inline-flex items-center gap-1.ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 206,
+      "evidence": "\"Plataforma de reservas\" uppercase at 12px tracked 0.15em on <div class=\"mb-6 inline-flex items-center gÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 285,
+      "evidence": "\"Barber├¡as\" uppercase at 12px tracked 0.05em on <div class=\"mt-1 text-xs font-medium uppercÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 289,
+      "evidence": "\"Sin filas\" uppercase at 12px tracked 0.05em on <div class=\"mt-1 text-xs font-medium uppercÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 300,
+      "evidence": "\"Barber├¡as disponibles\" uppercase at 11px tracked 0.15em on <span class=\"inline-flex items-center gap-2 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 366,
+      "evidence": "\"C├│mo funciona\" uppercase at 11px tracked 0.15em on <span class=\"inline-flex items-center gap-2 ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 388,
+      "evidence": "letter-spaced at 11px tracked 0.1em on <div class=\"mt-6 font-mono text-[11px] fontÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 16,
+      "evidence": "uppercase at 12px tracked 0.05em on <span class=\"inline-flex items-center gap-1.ÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 318,
+      "evidence": "\"En curso\" uppercase at 14px tracked 0.1em on <h2 class=\"text-sm font-semibold uppercaseÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 333,
+      "evidence": "\"Pr├│ximos turnos ( )\" uppercase at 14px tracked 0.1em on <h2 class=\"text-sm font-semibold uppercaseÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "67",
+      "grade": "FAIL",
+      "tier": "floor",
+      "file": "src\\pages\\public\\TVQueue.jsx",
+      "line": 348,
+      "evidence": "\"Completados ( )\" uppercase at 12px tracked 0.1em on <summary class=\"text-xs font-semibold uppercaseÔÇª\">",
+      "fix": "Sentence case in the body face, a step smaller, untracked: drop uppercase and the tracking-* class"
+    },
+    {
+      "gate": "2b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 214,
+      "evidence": "gradient text (from-white via-white to-white/60) on <span class=\"bg-gradient-to-r from-white viaÔÇª\">",
+      "fix": "Solid ink; weight or a display face. Guard: a single-hue ramp from two tokens with 40 and 41 passing"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 89,
+      "evidence": "margin-top: 70px (off the 4px scale) on .cover-footer",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 116,
+      "evidence": "padding: 5px 0 (off the 4px scale) on .problem-list li",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 165,
+      "evidence": "padding: 12px 14px (off the 4px scale) on .plans-table th",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 171,
+      "evidence": "padding: 12px 14px (off the 4px scale) on .plans-table td",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 200,
+      "evidence": "margin-bottom: 6px (off the 4px scale) on .cta h3",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 209,
+      "evidence": "padding: 40px 30px (off the 4px scale) on .cover",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 210,
+      "evidence": "padding: 30px (off the 4px scale) on .interior",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 217,
+      "evidence": "padding: 40px 20px 30px (off the 4px scale) on .cover",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "BarberShifts-Brochure.html",
+      "line": 225,
+      "evidence": "padding: 8px 6px (off the 4px scale) on .plans-table th, .plans-table td",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 42,
+      "evidence": "margin-bottom: 6px (off the 4px scale) on .card h2",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 45,
+      "evidence": "padding: 8px 18px (off the 4px scale) on .tag",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "24b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 50,
+      "evidence": "padding: 18px 48px (off the 4px scale) on .cta",
+      "fix": "Use the 4px spacing scale"
+    },
+    {
+      "gate": "26b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 1,
+      "evidence": "no :active styling anywhere",
+      "fix": "All eight states; guard: not a form control, no aria-disabled anywhere"
+    },
+    {
+      "gate": "26b",
+      "grade": "REFLEX",
+      "tier": "reflex",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 1,
+      "evidence": "no :active styling anywhere",
+      "fix": "All eight states; guard: not a form control, no aria-disabled anywhere"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\CompleteAppointmentModal.jsx",
+      "line": 128,
+      "evidence": "glass: backdrop-blur-sm over bg-black/60 on <div class=\"absolute inset-0 bg-black/60 baÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 155,
+      "evidence": "glass: backdrop-blur-sm over bg-black/60 on <div class=\"invoice-root fixed inset-0 z-50ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\ui\\ConfirmDialog.jsx",
+      "line": 29,
+      "evidence": "glass: backdrop-blur-sm over bg-black/50 on <div class=\"absolute inset-0 bg-black/50 baÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\ui\\Modal.jsx",
+      "line": 68,
+      "evidence": "glass: backdrop-blur-sm over bg-black/60 on <div class=\"fixed inset-0 bg-black/60 backdÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\layouts\\AdminLayout.jsx",
+      "line": 70,
+      "evidence": "glass: backdrop-blur-sm over bg-black/30 on <div class=\"fixed inset-0 z-40 bg-black/30 ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\layouts\\BarberLayout.jsx",
+      "line": 33,
+      "evidence": "glass: backdrop-blur-sm over bg-black/70 on <div class=\"fixed inset-0 z-40 bg-black/70 ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\layouts\\SuperAdminLayout.jsx",
+      "line": 37,
+      "evidence": "glass: backdrop-blur-sm over bg-black/70 on <div class=\"fixed inset-0 z-40 bg-black/70 ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 68,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -left-40 -top-40 h-[50ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 69,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -bottom-40 -right-40 hÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 94,
+      "evidence": "glass: backdrop-blur-sm over bg-white/5 on <input class=\"w-full rounded-xl border borderÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 108,
+      "evidence": "glass: backdrop-blur-sm over bg-white/5 on <input class=\"w-full rounded-xl border borderÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 163,
+      "evidence": "glass: backdrop-blur-sm over bg-black/60 on <div class=\"absolute inset-0 bg-black/60 baÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 183,
+      "evidence": "glass: backdrop-blur-sm over bg-white/5 on <input class=\"w-full rounded-xl border borderÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 77,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -left-40 -top-40 h-[50ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 107,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -left-40 -top-40 h-[50ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 130,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -left-40 -top-40 h-[50ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 131,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -bottom-40 -right-40 hÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 157,
+      "evidence": "glass: backdrop-blur-sm over bg-white/5 on <input class=\"w-full rounded-xl border borderÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 172,
+      "evidence": "glass: backdrop-blur-sm over bg-white/5 on <input class=\"w-full rounded-xl border borderÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 34,
+      "evidence": "glow: group-hover:shadow-[0_0_40px_-12px_rgba(233,69,96,0.3)] on <div class=\"relative rounded-2xl bg-white/5ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 178,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -left-40 -top-40 h-[50ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 179,
+      "evidence": "blurred orb: blur-3xl on a filled absolute element on <div class=\"absolute -right-40 -top-20 h-[4ÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 227,
+      "evidence": "glass: backdrop-blur-xl over bg-white/5 on <div class=\"relative flex items-center overÔÇª\">",
+      "fix": "Solid or grained surface; elevation by lightness, shadows with offset and blur"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\styles\\utilities.css",
+      "line": 635,
+      "evidence": "glass panel: backdrop-filter blur over a translucent white on .glass",
+      "fix": "Solid or grained surface; elevation by lightness"
+    },
+    {
+      "gate": "29",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\styles\\utilities.css",
+      "line": 641,
+      "evidence": "glass panel: backdrop-filter blur over a translucent black on .glass-dark",
+      "fix": "Solid or grained surface; elevation by lightness"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 219,
+      "evidence": "2.05:1 < 3:1 on .cta-button",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "40",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 231,
+      "evidence": "2.17:1 < 4.5:1 on .dimension-label",
+      "fix": "Raise the contrast to threshold"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\index.css",
+      "line": 1,
+      "evidence": "accent-ink vs accent only 3.70:1",
+      "fix": "Accent-ink needs 4.5:1 against accent"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 1,
+      "evidence": "accent-ink vs accent only 3.70:1",
+      "fix": "Accent-ink needs 4.5:1 against accent"
+    },
+    {
+      "gate": "41",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\styles\\utilities.css",
+      "line": 7,
+      "evidence": "--color-accent-ink ~ --color-bg on :root",
+      "fix": "Use accent-ink or paper for the label"
+    },
+    {
+      "gate": "49",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 143,
+      "evidence": "long clickable label \"┬┐Olvidaste tu contrase├▒a?\" without nowrap",
+      "fix": "Shorten the label or set nowrap"
+    },
+    {
+      "gate": "49",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\pages\\admin\\SuperConfigPage.jsx",
+      "line": 212,
+      "evidence": "long clickable label \"Crear Super Admin Dar acceso a otroÔÇª\" without nowrap",
+      "fix": "Shorten the label or set nowrap"
+    },
+    {
+      "gate": "49",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 680,
+      "evidence": "long clickable label \"Cualquier barbero Sin preferencia\" without nowrap",
+      "fix": "Shorten the label or set nowrap"
+    },
+    {
+      "gate": "49",
+      "grade": "WARN",
+      "tier": "floor",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 859,
+      "evidence": "long clickable label \"Continuar sin productos ÔåÆ\" without nowrap",
+      "fix": "Shorten the label or set nowrap"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\ClientHistoryModal.jsx",
+      "line": 136,
+      "evidence": "default palette instead of theme tokens: 12 distinct palette classes (bg-gray-100 text-gray-600 text-gray-400 text-grayÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\CompleteAppointmentModal.jsx",
+      "line": 146,
+      "evidence": "default palette instead of theme tokens: 18 distinct palette classes (border-gray-100 text-gray-900 text-gray-500 text-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\InvoiceModal.jsx",
+      "line": 184,
+      "evidence": "default palette instead of theme tokens: 14 distinct palette classes (border-gray-200 text-gray-300 text-gray-400 text-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\OnboardingChecklist.jsx",
+      "line": 85,
+      "evidence": "default palette instead of theme tokens: 10 distinct palette classes (text-gray-900 text-gray-500 bg-gray-200 text-emerÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\ui\\Input.jsx",
+      "line": 34,
+      "evidence": "default palette instead of theme tokens: 5 distinct palette classes (text-gray-700 border-red-400 border-red-500 ring-rÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\components\\ui\\UpgradePrompt.jsx",
+      "line": 22,
+      "evidence": "default palette instead of theme tokens: 5 distinct palette classes (bg-amber-100 text-amber-600 text-gray-900 text-graÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\layouts\\AdminLayout.jsx",
+      "line": 86,
+      "evidence": "default palette instead of theme tokens: 9 distinct palette classes (bg-gray-50 border-gray-100 text-gray-400 bg-gray-1ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\AppearancePage.jsx",
+      "line": 141,
+      "evidence": "default palette instead of theme tokens: 17 distinct palette classes (text-gray-400 text-gray-500 text-gray-900 border-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\AppointmentsPage.jsx",
+      "line": 246,
+      "evidence": "default palette instead of theme tokens: 16 distinct palette classes (text-gray-400 text-gray-500 text-gray-900 border-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\BarbersPage.jsx",
+      "line": 380,
+      "evidence": "default palette instead of theme tokens: 26 distinct palette classes (text-gray-400 text-gray-500 bg-red-100 text-red-5ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\BusinessDashboard.jsx",
+      "line": 276,
+      "evidence": "default palette instead of theme tokens: 9 distinct palette classes (bg-red-100 text-red-500 text-gray-900 text-gray-50ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\CashPage.jsx",
+      "line": 273,
+      "evidence": "default palette instead of theme tokens: 19 distinct palette classes (text-gray-400 text-gray-500 text-gray-900 border-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ClientsPage.jsx",
+      "line": 179,
+      "evidence": "default palette instead of theme tokens: 14 distinct palette classes (bg-gray-100 text-gray-600 text-gray-400 text-grayÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ConfigPage.jsx",
+      "line": 164,
+      "evidence": "default palette instead of theme tokens: 17 distinct palette classes (text-gray-400 text-gray-500 bg-red-100 text-red-5ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\HoursPage.jsx",
+      "line": 162,
+      "evidence": "default palette instead of theme tokens: 14 distinct palette classes (text-gray-400 text-gray-500 bg-red-100 text-red-5ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\InventoryPage.jsx",
+      "line": 239,
+      "evidence": "default palette instead of theme tokens: 31 distinct palette classes (text-gray-400 text-gray-500 text-gray-900 bg-red-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\Login.jsx",
+      "line": 168,
+      "evidence": "default palette instead of theme tokens: 7 distinct palette classes (bg-red-500 border-red-500 text-red-400 bg-gray-900)",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\PlanesPage.jsx",
+      "line": 216,
+      "evidence": "default palette instead of theme tokens: 11 distinct palette classes (bg-red-500 text-red-400 border-emerald-500 bg-emeÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\PlansPage.jsx",
+      "line": 54,
+      "evidence": "default palette instead of theme tokens: 5 distinct palette classes (text-emerald-500 text-gray-300 border-gray-300 borÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ReportsPage.jsx",
+      "line": 489,
+      "evidence": "default palette instead of theme tokens: 18 distinct palette classes (text-gray-400 text-gray-500 text-gray-900 bg-red-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ResetPassword.jsx",
+      "line": 184,
+      "evidence": "default palette instead of theme tokens: 5 distinct palette classes (bg-red-500 text-red-400 bg-emerald-500 text-emeralÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\ServicesPage.jsx",
+      "line": 199,
+      "evidence": "default palette instead of theme tokens: 17 distinct palette classes (text-gray-400 text-gray-500 bg-red-100 text-red-5ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\SucursalesPage.jsx",
+      "line": 219,
+      "evidence": "default palette instead of theme tokens: 17 distinct palette classes (bg-red-100 text-red-500 border-gray-200 border-emÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\SuperBarberosPage.jsx",
+      "line": 243,
+      "evidence": "default palette instead of theme tokens: 15 distinct palette classes (bg-red-500 text-red-400 border-emerald-500 bg-emeÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\SuperConfigPage.jsx",
+      "line": 337,
+      "evidence": "default palette instead of theme tokens: 7 distinct palette classes (bg-emerald-500 text-emerald-400 bg-blue-500 text-bÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\admin\\SuperDashboard.jsx",
+      "line": 458,
+      "evidence": "default palette instead of theme tokens: 9 distinct palette classes (bg-red-500 text-red-400 text-emerald-400 text-emerÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\barber\\BarberDashboard.jsx",
+      "line": 296,
+      "evidence": "default palette instead of theme tokens: 17 distinct palette classes (bg-amber-500 text-amber-400 bg-blue-500 text-blueÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\barber\\BarberProfile.jsx",
+      "line": 159,
+      "evidence": "default palette instead of theme tokens: 5 distinct palette classes (bg-amber-500 text-amber-400 border-red-500 bg-red-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\barberia\\BarberiaPage.jsx",
+      "line": 418,
+      "evidence": "default palette instead of theme tokens: 5 distinct palette classes (border-gray-200 text-gray-900 text-gray-500 bg-graÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\barberia\\BookingPage.jsx",
+      "line": 574,
+      "evidence": "default palette instead of theme tokens: 8 distinct palette classes (bg-gray-100 text-gray-400 text-gray-900 text-gray-ÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "74",
+      "grade": "WARN",
+      "tier": "reflex",
+      "file": "src\\pages\\public\\Marketplace.jsx",
+      "line": 45,
+      "evidence": "default palette instead of theme tokens: 13 distinct palette classes (from-gray-50 to-gray-100 text-gray-400 bg-emeraldÔÇª",
+      "fix": "Extend the Tailwind theme with the Hallmark tokens and use those names"
+    },
+    {
+      "gate": "F3",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 42,
+      "evidence": "no text-wrap: balance on any display head (1 head rule(s), e.g. .card h2)",
+      "fix": "Add text-wrap: balance to h1/h2-level heads"
+    },
+    {
+      "gate": "F6",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 60,
+      "evidence": "numeric selector .number-badge at display size without tabular figures",
+      "fix": "Add font-variant-numeric: tabular-nums"
+    },
+    {
+      "gate": "F23",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "brag-output-2026-11-05-232528\\composition\\index.html",
+      "line": 1,
+      "evidence": "the document lacks a meta description",
+      "fix": "Name the language, title the page in its own words, and describe it in one sentence for link previews"
+    },
+    {
+      "gate": "F24",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "brag-output-2026-11-05-232528\\composition\\compositions\\scene2-4-canvas.html",
+      "line": 137,
+      "evidence": "a hairline border under a wide soft shadow on .web-frame",
+      "fix": "Commit to one: a defined edge, or elevation by shadow"
+    },
+    {
+      "gate": "F24",
+      "grade": "WARN",
+      "tier": "finish",
+      "file": "src\\pages\\barber\\BarberDashboard.jsx",
+      "line": 409,
+      "evidence": "a hairline border under a wide soft shadow (border with shadow-xl or shadow-2xl)",
+      "fix": "Commit to one: a defined edge, or elevation by shadow"
+    }
+  ]
+}

@@ -55,9 +55,9 @@ function NotFound() {
         </p>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-xl bg-[var(--color-accent)] text-white font-medium hover:brightness-110 transition-all active:scale-[0.98]"
+          className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-xl bg-[var(--color-accent)] text-white font-medium hover:brightness-110 transition active:scale-[0.98]"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           Volver al inicio
@@ -71,9 +71,9 @@ function PageLoader() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )

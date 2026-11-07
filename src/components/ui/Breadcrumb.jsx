@@ -36,7 +36,7 @@ export default function Breadcrumb() {
         {crumbs.map((crumb, i) => (
           <li key={crumb.path} className="flex items-center gap-1.5">
             {i > 0 && (
-              <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             )}

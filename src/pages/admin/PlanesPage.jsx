@@ -155,9 +155,9 @@ export default function PlanesPage() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -167,7 +167,7 @@ export default function PlanesPage() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-          <svg className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
@@ -198,7 +198,7 @@ export default function PlanesPage() {
 
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center px-6 py-16">
-            <svg className="h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
             <h3 className="mt-4 text-base font-medium text-white/60">No hay planes registrados</h3>
@@ -243,15 +243,15 @@ export default function PlanesPage() {
                 </div>
 
                 <div className="flex items-center justify-end gap-1 border-t border-white/[0.06] pt-3">
-                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white" title="Editar">
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-white/30 transition hover:bg-white/5 hover:text-white" title="Editar">
+                    <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                     </svg>
                   </button>
                   <button onClick={() => handleToggle(p)} disabled={actionLoading}
-                    className={`rounded-lg p-2 transition-all hover:bg-white/5 disabled:opacity-30 ${p.is_active ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'}`}
+                    className={`rounded-lg p-2 transition hover:bg-white/5 disabled:opacity-30 ${p.is_active ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'}`}
                     title={p.is_active ? 'Desactivar' : 'Activar'}>
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       {p.is_active
                         ? <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                         : <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -308,24 +308,24 @@ export default function PlanesPage() {
                       <div className="flex items-center justify-end gap-0.5">
                         <button
                           onClick={() => openEdit(p)}
-                          className="rounded-lg p-2 text-white/30 transition-all hover:bg-white/5 hover:text-white"
+                          className="rounded-lg p-2 text-white/30 transition hover:bg-white/5 hover:text-white"
                           title="Editar"
                         >
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                           </svg>
                         </button>
                         <button
                           onClick={() => handleToggle(p)}
                           disabled={actionLoading}
-                          className={`rounded-lg p-2 transition-all hover:bg-white/5 disabled:opacity-30 ${
+                          className={`rounded-lg p-2 transition hover:bg-white/5 disabled:opacity-30 ${
                             p.is_active
                               ? 'text-amber-400 hover:text-amber-300'
                               : 'text-emerald-400 hover:text-emerald-300'
                           }`}
                           title={p.is_active ? 'Desactivar' : 'Activar'}
                         >
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             {p.is_active
                               ? <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                               : <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -352,10 +352,10 @@ export default function PlanesPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => openEdit(p)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-white/20 opacity-0 transition-all hover:bg-white/5 hover:text-white group-hover:opacity-100"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-white/20 opacity-0 transition hover:bg-white/5 hover:text-white group-hover:opacity-100"
                     title="Editar plan"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                    <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                     </svg>
                   </button>
@@ -366,12 +366,12 @@ export default function PlanesPage() {
                 <button
                   onClick={() => handleToggle(p)}
                   disabled={actionLoading}
-                  className={`rounded-lg p-1.5 transition-all hover:bg-white/5 disabled:opacity-30 ${
+                  className={`rounded-lg p-1.5 transition hover:bg-white/5 disabled:opacity-30 ${
                     p.is_active ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'
                   }`}
                   title={p.is_active ? 'Desactivar' : 'Activar'}
                 >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     {p.is_active
                       ? <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                       : <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -400,7 +400,7 @@ export default function PlanesPage() {
                 <ul className="space-y-1 border-t border-white/[0.06] pt-3">
                   {p.features.map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-white/50">
-                      <svg className="h-3.5 w-3.5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                       {f}
@@ -430,7 +430,7 @@ export default function PlanesPage() {
               value={form.description}
               onChange={handleChange}
               rows={2}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
             />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
@@ -446,7 +446,7 @@ export default function PlanesPage() {
               value={form.features}
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 transition-all focus:border-white/20 focus:bg-white/10 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
               placeholder="Gestión de reservas&#10;Gestión de clientes&#10;1 sucursal&#10;3 empleados"
             />
           </div>

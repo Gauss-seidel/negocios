@@ -54,9 +54,9 @@ export default function BarberProfile() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -66,7 +66,7 @@ export default function BarberProfile() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10">
-          <svg className="h-8 w-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         </div>
@@ -107,7 +107,7 @@ export default function BarberProfile() {
 
             {barber?.specialty && (
               <div className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-3 py-1">
-                <svg className="h-3.5 w-3.5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
                 </svg>
                 <span className="text-xs font-medium text-white/60">{barber.specialty}</span>

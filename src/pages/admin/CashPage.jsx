@@ -230,11 +230,11 @@ export default function CashPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando caja...</p>
+          <p className="mt-4 text-sm text-gray-500">Cargando caja…</p>
         </div>
       </div>
     )
@@ -344,7 +344,7 @@ export default function CashPage() {
 
         {movements.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <svg className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
             <h3 className="mt-4 text-base font-medium text-gray-900">Sin movimientos</h3>
@@ -359,7 +359,7 @@ export default function CashPage() {
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`flex h-9 w-9 items-center justify-center rounded-full ${MOVEMENT_COLORS[mov.type] || 'bg-gray-100 text-gray-500'}`}>
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={MOVEMENT_ICONS[mov.type] || 'M12 4v16m8-8H4'} />
                     </svg>
                   </div>

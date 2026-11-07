@@ -117,7 +117,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
       {loading && (
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <svg
+            <svg aria-hidden="true" focusable="false"
               className="mx-auto h-8 w-8 animate-spin text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
@@ -125,7 +125,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            <p className="mt-3 text-sm text-gray-500">Cargando historial...</p>
+            <p className="mt-3 text-sm text-gray-500">Cargando historial…</p>
           </div>
         </div>
       )}
@@ -134,7 +134,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
       {!loading && error && (
         <div className="flex flex-col items-center justify-center py-16">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-            <svg className="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -165,7 +165,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
             <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
               {client?.phone && (
                 <span className="inline-flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   {client.phone}
@@ -173,7 +173,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
               )}
               {client?.email && (
                 <span className="inline-flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   {client.email}
@@ -216,7 +216,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
             {appointments.length === 0 ? (
               <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 py-12">
-                <svg className="h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <p className="mt-3 text-sm text-gray-400">Este cliente no tiene reservas.</p>
@@ -289,7 +289,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                           className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                           aria-label={isExpanded ? 'Cerrar detalle' : 'Ver detalle'}
                         >
-                          <svg
+                          <svg aria-hidden="true" focusable="false"
                             className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                             fill="none"
                             stroke="currentColor"

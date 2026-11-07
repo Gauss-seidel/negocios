@@ -209,11 +209,11 @@ export default function InventoryPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando inventario...</p>
+          <p className="mt-4 text-sm text-gray-500">Cargando inventario…</p>
         </div>
       </div>
     )
@@ -236,7 +236,7 @@ export default function InventoryPage() {
       <div className="flex items-center justify-center py-32">
         <div className="max-w-md text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-            <svg className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -259,7 +259,7 @@ export default function InventoryPage() {
           <p className="mt-1 text-sm text-gray-500">Control de productos e insumos</p>
         </div>
         <Button onClick={openCreateModal}>
-          <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           Agregar Producto
@@ -270,7 +270,7 @@ export default function InventoryPage() {
       {lowStockProducts.length > 0 && (
         <Card className="border-amber-200 bg-amber-50">
           <div className="flex items-center gap-3">
-            <svg className="h-6 w-6 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-6 w-6 shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414M16.95 7.05l1.414-1.414M7.05 7.05L5.636 5.636" />
             </svg>
             <div>
@@ -294,7 +294,7 @@ export default function InventoryPage() {
       {products.length === 0 ? (
         <Card>
           <div className="flex flex-col items-center justify-center py-12">
-            <svg className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
             <h3 className="mt-4 text-base font-medium text-gray-900">Inventario vacío</h3>
@@ -336,7 +336,7 @@ export default function InventoryPage() {
                     <p className={`font-semibold ${isLow ? 'text-red-600' : 'text-gray-900'}`}>
                       {product.current_stock ?? 0} {product.unit || ''}
                       {isLow && (
-                        <svg className="ml-1 inline h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg aria-hidden="true" focusable="false" className="ml-1 inline h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       )}
@@ -427,7 +427,7 @@ export default function InventoryPage() {
                           {product.current_stock ?? 0}
                         </span>
                         {isLow && (
-                          <svg className="ml-1 inline h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg aria-hidden="true" focusable="false" className="ml-1 inline h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         )}

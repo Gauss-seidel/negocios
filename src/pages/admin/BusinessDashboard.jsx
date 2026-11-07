@@ -191,9 +191,9 @@ export default function BusinessDashboard() {
   if (loading) return (
     <div className="flex items-center justify-center py-32">
       <div className="flex gap-1.5">
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-        <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+        <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   )
@@ -202,13 +202,13 @@ export default function BusinessDashboard() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-100">
-          <svg className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
         <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
         <p className="mt-2 text-sm text-gray-500">{error}</p>
-        <button onClick={fetchDashboard} className="mt-4 rounded-xl bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110">Reintentar</button>
+        <button onClick={fetchDashboard} className="mt-4 rounded-xl bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">Reintentar</button>
       </div>
     </div>
   )
@@ -231,7 +231,7 @@ export default function BusinessDashboard() {
             <Card key={m.key} hover>
               <div className="flex items-center gap-4">
                 <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${m.color.replace('text-', 'bg-').replace('500', '100')}`}>
-                  <svg className={`h-6 w-6 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <svg aria-hidden="true" focusable="false" className={`h-6 w-6 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={m.icon} />
                   </svg>
                 </div>
@@ -256,7 +256,7 @@ export default function BusinessDashboard() {
 
         {recent.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <svg className="h-12 w-12" style={{ color: 'var(--color-text-secondary)', opacity: 0.3 }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12" style={{ color: 'var(--color-text-secondary)', opacity: 0.3 }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <h3 className="mt-4 text-base font-medium" style={{ color: 'var(--color-text)' }}>No hay reservas aún</h3>
@@ -326,11 +326,11 @@ export default function BusinessDashboard() {
       {/* ── Toast notification ── */}
       {toast && (
         <div
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl bg-gray-900 px-5 py-4 text-white shadow-2xl ring-1 ring-white/10 transition-all"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl bg-gray-900 px-5 py-4 text-white shadow-2xl ring-1 ring-white/10 transition"
           style={{ animation: 'slideUpIn 0.35s ease-out' }}
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20">
-            <svg className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -344,7 +344,7 @@ export default function BusinessDashboard() {
             onClick={() => setToast(null)}
             className="ml-2 shrink-0 rounded-full p-1 text-white/30 transition-colors hover:bg-white/10 hover:text-white/70"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>

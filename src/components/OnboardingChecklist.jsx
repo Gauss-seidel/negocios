@@ -49,7 +49,7 @@ export default function OnboardingChecklist() {
     <div className="rounded-2xl border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 p-6">
       <div className="flex items-center gap-3 mb-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent)]/10">
-          <svg className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+          <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
@@ -59,7 +59,7 @@ export default function OnboardingChecklist() {
         </div>
         <div className="ml-auto h-2 w-24 overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full rounded-full bg-[var(--color-accent)] transition-all"
+            className="h-full rounded-full bg-[var(--color-accent)] transition"
             style={{ width: `${(completedCount / STEPS.length) * 100}%` }}
           />
         </div>
@@ -71,14 +71,14 @@ export default function OnboardingChecklist() {
             <Link
               key={step.key}
               to={step.path}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all ${
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
                 done
                   ? 'bg-emerald-50 text-emerald-700'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
               {done ? (
-                <svg className="h-5 w-5 flex-shrink-0 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg aria-hidden="true" focusable="false" className="h-5 w-5 flex-shrink-0 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               ) : (

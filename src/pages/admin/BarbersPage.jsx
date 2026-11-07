@@ -358,11 +358,11 @@ export default function BarbersPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando barberos...</p>
+          <p className="mt-4 text-sm text-gray-500">Cargando barberos…</p>
         </div>
       </div>
     )
@@ -373,7 +373,7 @@ export default function BarbersPage() {
       <div className="flex items-center justify-center py-32">
         <div className="max-w-md text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-            <svg className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
@@ -404,7 +404,7 @@ export default function BarbersPage() {
           )}
         </div>
         <Button onClick={openCreateModal} disabled={atLimit} title={atLimit ? `Limite de ${formatLimitShort(limits.max_barbers)} barberos alcanzado para tu plan` : ''}>
-          <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           {atLimit ? 'Limite alcanzado' : 'Nuevo Barbero'}
@@ -415,7 +415,7 @@ export default function BarbersPage() {
       {barbers.length === 0 ? (
         <Card>
           <div className="flex flex-col items-center justify-center py-12">
-            <svg className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             <h3 className="mt-4 text-base font-medium text-gray-900">No hay barberos</h3>
@@ -485,7 +485,7 @@ export default function BarbersPage() {
                 )}
                 {barberUsers[barber.id] && (
                   <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
-                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <svg aria-hidden="true" focusable="false" className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Usuario creado
@@ -620,7 +620,7 @@ export default function BarbersPage() {
         {userSuccess ? (
           <div className="space-y-4">
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-6 text-center">
-              <svg className="mx-auto h-10 w-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <h3 className="mt-3 text-base font-semibold text-emerald-800">Usuario creado exitosamente</h3>

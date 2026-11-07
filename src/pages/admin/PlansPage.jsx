@@ -8,7 +8,7 @@ import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 
 function CheckIcon() {
   return (
-    <svg className="h-5 w-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+    <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
   )
@@ -16,7 +16,7 @@ function CheckIcon() {
 
 function MinusIcon() {
   return (
-    <svg className="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+    <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
     </svg>
   )
@@ -43,7 +43,7 @@ function PlanCard({ plan, isCurrent }) {
   const features = Array.isArray(plan.features) ? plan.features : []
 
   return (
-    <div className={`relative flex flex-col rounded-2xl border-2 px-6 pb-6 pt-10 transition-all ${
+    <div className={`relative flex flex-col rounded-2xl border-2 px-6 pb-6 pt-10 transition ${
       isCurrent
         ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)] shadow-lg shadow-[var(--color-accent)]/10'
         : 'border-gray-300 hover:border-gray-400'
@@ -167,9 +167,9 @@ export default function PlansPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-          <span className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
+          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
     )

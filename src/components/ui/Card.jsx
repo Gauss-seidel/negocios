@@ -4,7 +4,7 @@ export default function Card({ children, className = '', padding = true, hover =
     : 'rounded-2xl border border-black/5 bg-white shadow-sm'
 
   const hoverClass = hover
-    ? 'transition-all duration-300 hover:shadow-md hover:-translate-y-0.5'
+    ? 'transition duration-300 hover:shadow-md hover:-translate-y-0.5'
     : ''
 
   return (
