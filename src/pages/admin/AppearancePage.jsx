@@ -109,11 +109,11 @@ export default function AppearancePage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando apariencia…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando apariencia…</p>
         </div>
       </div>
     )
@@ -123,14 +123,14 @@ export default function AppearancePage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Apariencia</h1>
-        <p className="mt-1 text-sm text-gray-500">Personaliza la apariencia de la página pública de tu negocio</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Apariencia</h1>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Personaliza la apariencia de la página pública de tu negocio</p>
       </div>
 
       {/* Success / Error */}
       {/* Template selection */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-1">Plantilla</h2>
+        <h2 className="text-lg font-semibold text-[var(--color-text)] mb-1">Plantilla</h2>
         {success && (
           <div className="mb-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
             Apariencia guardada exitosamente.
@@ -141,7 +141,7 @@ export default function AppearancePage() {
             {error}
           </div>
         )}
-        <p className="text-sm text-gray-500 mb-4">Selecciona el diseño base para tu página</p>
+        <p className="text-sm text-[var(--color-text-secondary)] mb-4">Selecciona el diseño base para tu página</p>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {Object.entries(TEMPLATES).map(([key, tpl]) => {
@@ -154,7 +154,7 @@ export default function AppearancePage() {
                 className={`relative overflow-hidden rounded-xl border-2 p-4 text-left transition hover:shadow-md ${
                   isSelected
                     ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-[var(--color-border)] hover:border-[var(--color-border)]'
                 }`}
               >
                 {/* Thumbnail placeholder */}
@@ -172,8 +172,8 @@ export default function AppearancePage() {
                   </div>
                 </div>
 
-                <h3 className="text-sm font-semibold text-gray-900">{tpl.name}</h3>
-                <p className="mt-0.5 text-xs text-gray-500">{tpl.description}</p>
+                <h3 className="text-sm font-semibold text-[var(--color-text)]">{tpl.name}</h3>
+                <p className="mt-0.5 text-xs text-[var(--color-text-secondary)]">{tpl.description}</p>
 
                 {isSelected && (
                   <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-accent)]">
@@ -190,8 +190,8 @@ export default function AppearancePage() {
 
       {/* Typography */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-1">Tipografía</h2>
-        <p className="text-sm text-gray-500 mb-4">Elegí un estilo tipográfico para tu plantilla (catálogo curado, carga segura).</p>
+        <h2 className="text-lg font-semibold text-[var(--color-text)] mb-1">Tipografía</h2>
+        <p className="text-sm text-[var(--color-text-secondary)] mb-4">Elegí un estilo tipográfico para tu plantilla (catálogo curado, carga segura).</p>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {Object.values(FONT_PRESETS).map((fp) => {
             const active = fontPreset === fp.id
@@ -200,11 +200,11 @@ export default function AppearancePage() {
                 key={fp.id}
                 type="button"
                 onClick={() => { setFontPreset(fp.id); if (success) setSuccess(false) }}
-                className={`overflow-hidden rounded-xl border-2 p-4 text-left transition hover:shadow-sm ${active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]' : 'border-gray-200 hover:border-gray-300'}`}
+                className={`overflow-hidden rounded-xl border-2 p-4 text-left transition hover:shadow-sm ${active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]' : 'border-[var(--color-border)] hover:border-[var(--color-border)]'}`}
               >
-                <div className="text-base font-semibold text-gray-900" style={{ fontFamily: fp.heading }}>{fp.name}</div>
-                <div className="mt-1 text-xs text-gray-500" style={{ fontFamily: fp.body }}>{fp.description}</div>
-                <div className="mt-2 truncate text-xs text-gray-400" style={{ fontFamily: fp.body }}>Aa Bb 123, Reserva tu turno</div>
+                <div className="text-base font-semibold text-[var(--color-text)]" style={{ fontFamily: fp.heading }}>{fp.name}</div>
+                <div className="mt-1 text-xs text-[var(--color-text-secondary)]" style={{ fontFamily: fp.body }}>{fp.description}</div>
+                <div className="mt-2 truncate text-xs text-[var(--color-muted)]" style={{ fontFamily: fp.body }}>Aa Bb 123, Reserva tu turno</div>
               </button>
             )
           })}
@@ -213,8 +213,8 @@ export default function AppearancePage() {
 
       {/* Colors */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-1">Colores</h2>
-        <p className="text-sm text-gray-500 mb-4">Personaliza la paleta de colores de tu página</p>
+        <h2 className="text-lg font-semibold text-[var(--color-text)] mb-1">Colores</h2>
+        <p className="text-sm text-[var(--color-text-secondary)] mb-4">Personaliza la paleta de colores de tu página</p>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <ColorPicker
@@ -250,8 +250,8 @@ export default function AppearancePage() {
 
       {/* Preview */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-1">Vista previa</h2>
-        <p className="text-sm text-gray-500 mb-4">Así se verán los colores en tu página</p>
+        <h2 className="text-lg font-semibold text-[var(--color-text)] mb-1">Vista previa</h2>
+        <p className="text-sm text-[var(--color-text-secondary)] mb-4">Así se verán los colores en tu página</p>
 
         <div
           className="overflow-hidden rounded-xl border"
@@ -328,25 +328,25 @@ export default function AppearancePage() {
 function ColorPicker({ label, value, onChange }) {
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-sm font-medium text-[var(--color-text)]">{label}</label>
       <div className="flex items-center gap-3">
         <div className="relative">
           <input
             type="color"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="h-10 w-10 cursor-pointer rounded-lg border border-gray-300 p-0.5"
+            className="h-10 w-10 cursor-pointer rounded-lg border border-[var(--color-border)] p-0.5"
           />
         </div>
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-mono focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+          className="flex-1 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm font-mono focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
           placeholder="#000000"
         />
         <div
-          className="h-8 w-8 shrink-0 rounded-full border border-gray-200"
+          className="h-8 w-8 shrink-0 rounded-full border border-[var(--color-border)]"
           style={{ backgroundColor: value }}
         />
       </div>

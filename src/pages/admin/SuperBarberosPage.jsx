@@ -251,7 +251,7 @@ export default function SuperBarberosPage() {
                     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-medium ${
                       b.is_active
                         ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                        : 'border-gray-500/20 bg-gray-500/10 text-gray-400'
+                        : 'border-gray-500/20 bg-gray-500/10 text-[var(--color-muted)]'
                     }`}>
                       <span className={`h-1.5 w-1.5 rounded-full ${b.is_active ? 'bg-emerald-400' : 'bg-gray-400'}`} />
                       {b.is_active ? 'Activo' : 'Inactivo'}
@@ -325,7 +325,7 @@ export default function SuperBarberosPage() {
                         <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                           b.is_active
                             ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                            : 'border-gray-500/20 bg-gray-500/10 text-gray-400'
+                            : 'border-gray-500/20 bg-gray-500/10 text-[var(--color-muted)]'
                         }`}>
                           <span className={`h-1.5 w-1.5 rounded-full ${b.is_active ? 'bg-emerald-400' : 'bg-gray-400'}`} />
                           {b.is_active ? 'Activo' : 'Inactivo'}

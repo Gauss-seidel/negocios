@@ -42,7 +42,7 @@ function StatusBadge({ status }) {
     [BUSINESS_STATUS.SUSPENDED]: { bg: 'bg-red-500/10', text: 'text-red-400', dot: 'bg-red-400', label: 'Suspendida' },
     [BUSINESS_STATUS.PENDING]: { bg: 'bg-yellow-500/10', text: 'text-yellow-400', dot: 'bg-yellow-400', label: 'Pendiente' },
   }
-  const s = map[status] || { bg: 'bg-gray-500/10', text: 'text-gray-400', dot: 'bg-gray-400', label: status }
+  const s = map[status] || { bg: 'bg-gray-500/10', text: 'text-[var(--color-muted)]', dot: 'bg-gray-400', label: status }
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
@@ -53,7 +53,7 @@ function StatusBadge({ status }) {
 
 function PlanBadge({ plan }) {
   const map = {
-    basic: { bg: 'bg-gray-500/10', text: 'text-gray-400' },
+    basic: { bg: 'bg-gray-500/10', text: 'text-[var(--color-muted)]' },
     professional: { bg: 'bg-blue-500/10', text: 'text-blue-400' },
     premium: { bg: 'bg-amber-500/10', text: 'text-amber-400' },
   }

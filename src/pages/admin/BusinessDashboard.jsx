@@ -328,7 +328,7 @@ export default function BusinessDashboard() {
       {/* ── Toast notification ── */}
       {toast && (
         <div
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl bg-gray-900 px-5 py-4 text-white shadow-2xl ring-1 ring-white/10 transition"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl bg-[var(--color-ink)] px-5 py-4 text-white shadow-2xl ring-1 ring-white/10 transition"
           style={{ animation: 'slideUpIn 0.35s ease-out' }}
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20">

@@ -204,7 +204,7 @@ export default function HoursPage() {
                       onChange={() => handleToggle(day.day_of_week)}
                       className="peer sr-only"
                     />
-                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition peer-checked:bg-[var(--color-accent)] peer-checked:after:translate-x-full" />
+                    <div className="h-6 w-11 rounded-full bg-[var(--color-paper-2)] after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition peer-checked:bg-[var(--color-accent)] peer-checked:after:translate-x-full" />
                   </label>
                   <span className="min-w-20 text-sm font-medium text-[var(--color-text)]">
                     {getDayName(day.day_of_week)}

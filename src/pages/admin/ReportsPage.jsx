@@ -519,7 +519,7 @@ export default function ReportsPage() {
                 className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition ${
                   period === p.value
                     ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                    : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)] hover:bg-gray-200'
+                    : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)] hover:bg-[var(--color-paper-2)]'
                 }`}
               >
                 {p.label}

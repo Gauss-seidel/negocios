@@ -509,13 +509,13 @@ export default function BookingPage() {
     return (
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01" />
             </svg>
           </div>
-          <h2 className="mt-4 text-xl font-bold text-gray-900">Barbería no encontrada</h2>
-          <p className="mt-1 text-sm text-gray-500">{error || 'La barbería que buscas no existe o no está disponible.'}</p>
+          <h2 className="mt-4 text-xl font-bold text-[var(--color-text)]">Barbería no encontrada</h2>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{error || 'La barbería que buscas no existe o no está disponible.'}</p>
           <Link to="/" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-accent)]/80">
             ← Volver al inicio
           </Link>
@@ -591,14 +591,14 @@ export default function BookingPage() {
                 <button
                   key={branch.id}
                   onClick={() => setSelectedBranch(branch)}
-                  className="rounded-xl border-2 border-gray-200 bg-white p-5 text-left transition hover:border-[var(--color-accent)] hover:shadow-md"
+                  className="rounded-xl border-2 border-[var(--color-border)] bg-white p-5 text-left transition hover:border-[var(--color-accent)] hover:shadow-md"
                 >
-                  <h3 className="font-semibold text-gray-900">{branch.name}</h3>
+                  <h3 className="font-semibold text-[var(--color-text)]">{branch.name}</h3>
                   {branch.address && (
-                    <p className="mt-1 text-sm text-gray-500">{branch.address}</p>
+                    <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{branch.address}</p>
                   )}
                   {branch.phone && (
-                    <p className="mt-1 text-sm text-gray-500">{branch.phone}</p>
+                    <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{branch.phone}</p>
                   )}
                 </button>
               ))}
@@ -636,8 +636,8 @@ export default function BookingPage() {
             {/* BOOK-001: Empty state when no services */}
             {services.length === 0 ? (
               <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
-                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
+                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -702,8 +702,8 @@ export default function BookingPage() {
                   backgroundColor: selectedBarber === null ? `${colors.accent}06` : 'transparent',
                 }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-2xl">
-                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-paper-2)] text-2xl">
+                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
@@ -726,11 +726,11 @@ export default function BookingPage() {
                       boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
                     }}
                   >
-                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-black/5">
+                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[var(--color-paper-2)] ring-1 ring-black/5">
                       {barber.photo_url ? (
                         <img src={barber.photo_url} alt={barber.name} className="h-full w-full object-cover" />
                       ) : (
-                        <span className="text-xl font-bold text-gray-400">{barber.name.charAt(0)}</span>
+                        <span className="text-xl font-bold text-[var(--color-muted)]">{barber.name.charAt(0)}</span>
                       )}
                     </div>
                     <div className="flex-1">
@@ -815,8 +815,8 @@ export default function BookingPage() {
               </div>
             ) : availableSlots.length === 0 ? (
               <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100">
-                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
+                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -899,7 +899,7 @@ export default function BookingPage() {
                         }}
                       >
                         {/* Image */}
-                        <div className="h-32 flex items-center justify-center overflow-hidden bg-gray-50">
+                        <div className="h-32 flex items-center justify-center overflow-hidden bg-[var(--color-paper)]">
                           {product.image_url && !imgErrors[product.id] ? (
                             <img src={product.image_url} alt={product.name} className="h-full w-full object-cover"
                               onError={() => setImgErrors(prev => ({ ...prev, [product.id]: true }))}
@@ -942,7 +942,7 @@ export default function BookingPage() {
                                     )
                                   })
                                 }}
-                                className="flex h-8 w-8 items-center justify-center rounded-full border text-lg font-medium transition-colors hover:bg-gray-50"
+                                className="flex h-8 w-8 items-center justify-center rounded-full border text-lg font-medium transition-colors hover:bg-[var(--color-paper)]"
                                 style={{ borderColor: `${colors.primary}20`, color: colors.text }}
                               >
                                 −

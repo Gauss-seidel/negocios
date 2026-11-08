@@ -229,19 +229,19 @@ function BarberiaBranches({ branches, colors, slug }) {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {branches.map(branch => (
-            <div key={branch.id} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div key={branch.id} className="rounded-xl border border-[var(--color-border)] bg-white p-5 shadow-sm">
               <div className="mb-3 flex items-center gap-2">
                 <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
-                <h3 className="font-semibold text-gray-900">{branch.name}</h3>
+                <h3 className="font-semibold text-[var(--color-text)]">{branch.name}</h3>
               </div>
               {branch.address && (
-                <p className="mb-1 text-sm text-gray-500">{branch.address}</p>
+                <p className="mb-1 text-sm text-[var(--color-text-secondary)]">{branch.address}</p>
               )}
               {branch.phone && (
-                <p className="mb-3 text-sm text-gray-500">{branch.phone}</p>
+                <p className="mb-3 text-sm text-[var(--color-text-secondary)]">{branch.phone}</p>
               )}
               <Link
                 to={`/barberia/${slug}/reservar?branch=${branch.slug}`}
@@ -405,8 +405,8 @@ export default function BarberiaPage() {
     return (
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
+            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>

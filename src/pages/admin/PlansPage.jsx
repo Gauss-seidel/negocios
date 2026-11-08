@@ -16,7 +16,7 @@ function CheckIcon() {
 
 function MinusIcon() {
   return (
-    <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+    <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
     </svg>
   )
@@ -46,7 +46,7 @@ function PlanCard({ plan, isCurrent }) {
     <div className={`relative flex flex-col rounded-2xl border-2 px-6 pb-6 pt-10 transition ${
       isCurrent
         ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)] shadow-lg shadow-[var(--color-accent)]/10'
-        : 'border-gray-300 hover:border-gray-400'
+        : 'border-[var(--color-border)] hover:border-gray-400'
     }`}
     >
       {isCurrent && (
