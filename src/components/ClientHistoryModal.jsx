@@ -9,7 +9,7 @@ const STATUS_STYLES = {
   in_progress: 'bg-blue-100 text-blue-700',
   pending: 'bg-amber-100 text-amber-700',
   cancelled: 'bg-red-100 text-red-700',
-  no_show: 'bg-gray-100 text-gray-500',
+  no_show: 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]',
 }
 
 const STATUS_LABELS = {
@@ -44,7 +44,7 @@ function StatusBadge({ status }) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-        STATUS_STYLES[status] || 'bg-gray-100 text-gray-600'
+        STATUS_STYLES[status] || 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'
       }`}
     >
       {STATUS_LABELS[status] || status}
@@ -118,14 +118,14 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
             <svg aria-hidden="true" focusable="false"
-              className="mx-auto h-8 w-8 animate-spin text-gray-400"
+              className="mx-auto h-8 w-8 animate-spin text-[var(--color-muted)]"
               fill="none"
               viewBox="0 0 24 24"
             >
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            <p className="mt-3 text-sm text-gray-500">Cargando historial…</p>
+            <p className="mt-3 text-sm text-[var(--color-text-secondary)]">Cargando historial…</p>
           </div>
         </div>
       )}
@@ -143,8 +143,8 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
               />
             </svg>
           </div>
-          <h3 className="mt-4 text-base font-semibold text-gray-900">Error al cargar</h3>
-          <p className="mt-1 text-sm text-gray-500">{error}</p>
+          <h3 className="mt-4 text-base font-semibold text-[var(--color-text)]">Error al cargar</h3>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{error}</p>
           <button
             onClick={fetchData}
             className="mt-4 rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-white hover:brightness-90"
@@ -159,13 +159,13 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
         <div className="space-y-6">
           {/* Client header */}
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-gray-900">
+            <h2 className="text-xl font-bold tracking-tight text-[var(--color-text)]">
               {client?.name || 'Cliente'}
             </h2>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-[var(--color-text-secondary)]">
               {client?.phone && (
                 <span className="inline-flex items-center gap-1.5">
-                  <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   {client.phone}
@@ -173,7 +173,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
               )}
               {client?.email && (
                 <span className="inline-flex items-center gap-1.5">
-                  <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   {client.email}
@@ -196,12 +196,12 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-xl border border-gray-100 bg-gray-50/50 p-4"
+                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)]/50 p-4"
               >
- <p className="text-xs font-medium text-gray-400">
+ <p className="text-xs font-medium text-[var(--color-muted)]">
                   {stat.label}
                 </p>
-                <p className="mt-1.5 text-lg font-bold tracking-tight text-gray-900">
+                <p className="mt-1.5 text-lg font-bold tracking-tight text-[var(--color-text)]">
                   {stat.value}
                 </p>
               </div>
@@ -210,16 +210,16 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
           {/* Appointments list */}
           <div>
-            <h3 className="mb-3 text-base font-semibold text-gray-900">
+            <h3 className="mb-3 text-base font-semibold text-[var(--color-text)]">
               Reservas {appointments.length > 0 && `(${appointments.length})`}
             </h3>
 
             {appointments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 py-12">
-                <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[var(--color-border)] py-12">
+                <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <p className="mt-3 text-sm text-gray-400">Este cliente no tiene reservas.</p>
+                <p className="mt-3 text-sm text-[var(--color-muted)]">Este cliente no tiene reservas.</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -239,26 +239,26 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                   return (
                     <div
                       key={appt.id}
-                      className="rounded-xl border border-gray-100 transition-colors hover:border-gray-200 hover:bg-gray-50/30"
+                      className="rounded-xl border border-[var(--color-border)] transition-colors hover:border-[var(--color-border)] hover:bg-[var(--color-paper)]/30"
                     >
                       {/* Main row — always visible */}
                       <div className="flex items-center gap-3 px-4 py-3">
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-gray-900">
+                            <span className="text-sm font-medium text-[var(--color-text)]">
                               {formatDate(appt.date)}
                             </span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-sm text-gray-600">
+                            <span className="text-xs text-[var(--color-muted)]">·</span>
+                            <span className="text-sm text-[var(--color-text-secondary)]">
                               {formatTime(appt.start_time)}
                               {appt.end_time && ` - ${formatTime(appt.end_time)}`}
                             </span>
                           </div>
-                          <div className="mt-0.5 flex items-center gap-2 text-xs text-gray-500">
+                          <div className="mt-0.5 flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
                             <span>{appt.barber?.name || '—'}</span>
                             {services.length > 0 && (
                               <>
-                                <span className="text-gray-300">·</span>
+                                <span className="text-[var(--color-muted)]">·</span>
                                 <span className="truncate max-w-[200px]">
                                   {services.map((s) => s.service?.name).join(', ')}
                                 </span>
@@ -268,7 +268,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                         </div>
 
                         <div className="hidden items-center gap-3 sm:flex">
-                          <span className="text-sm font-semibold text-gray-900">
+                          <span className="text-sm font-semibold text-[var(--color-text)]">
                             {fmtCurrency(appt.total)}
                           </span>
                           <StatusBadge status={appt.status} />
@@ -276,7 +276,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
                         {/* Mobile: total + status stacked */}
                         <div className="flex flex-col items-end gap-1 sm:hidden">
-                          <span className="text-sm font-semibold text-gray-900">
+                          <span className="text-sm font-semibold text-[var(--color-text)]">
                             {fmtCurrency(appt.total)}
                           </span>
                           <StatusBadge status={appt.status} />
@@ -286,7 +286,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                           onClick={() =>
                             setExpandedAppt(isExpanded ? null : appt.id)
                           }
-                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--color-muted)] transition-colors hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text-secondary)]"
                           aria-label={isExpanded ? 'Cerrar detalle' : 'Ver detalle'}
                         >
                           <svg aria-hidden="true" focusable="false"
@@ -302,21 +302,21 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
                       {/* Expanded detail */}
                       {isExpanded && (
-                        <div className="border-t border-gray-100 px-4 py-3">
+                        <div className="border-t border-[var(--color-border)] px-4 py-3">
                           <div className="grid gap-4 sm:grid-cols-2">
                             {/* Services */}
                             <div>
- <h4 className="mb-2 text-xs font-semibold text-gray-400">
+ <h4 className="mb-2 text-xs font-semibold text-[var(--color-muted)]">
                                 Servicios
                               </h4>
                               {services.length === 0 ? (
-                                <p className="text-xs text-gray-400">Sin servicios</p>
+                                <p className="text-xs text-[var(--color-muted)]">Sin servicios</p>
                               ) : (
                                 <ul className="space-y-1.5">
                                   {services.map((as, i) => (
                                     <li key={i} className="flex items-center justify-between text-sm">
-                                      <span className="text-gray-700">{as.service?.name || '—'}</span>
-                                      <span className="font-medium text-gray-900">
+                                      <span className="text-[var(--color-text)]">{as.service?.name || '—'}</span>
+                                      <span className="font-medium text-[var(--color-text)]">
                                         {fmtCurrency(as.service?.price)}
                                       </span>
                                     </li>
@@ -327,22 +327,22 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
                             {/* Products */}
                             <div>
- <h4 className="mb-2 text-xs font-semibold text-gray-400">
+ <h4 className="mb-2 text-xs font-semibold text-[var(--color-muted)]">
                                 Productos
                               </h4>
                               {products.length === 0 ? (
-                                <p className="text-xs text-gray-400">Sin productos</p>
+                                <p className="text-xs text-[var(--color-muted)]">Sin productos</p>
                               ) : (
                                 <ul className="space-y-1.5">
                                   {products.map((ap) => (
                                     <li key={ap.id} className="flex items-center justify-between text-sm">
-                                      <span className="text-gray-700">
+                                      <span className="text-[var(--color-text)]">
                                         {ap.product?.name || '—'}
-                                        <span className="text-gray-400">
+                                        <span className="text-[var(--color-muted)]">
                                           {' '}× {ap.quantity || 1}
                                         </span>
                                       </span>
-                                      <span className="font-medium text-gray-900">
+                                      <span className="font-medium text-[var(--color-text)]">
                                         {fmtCurrency(
                                           (Number(ap.product?.price) || 0) * (Number(ap.quantity) || 1)
                                         )}
@@ -356,19 +356,19 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
                           {/* Subtotal breakdown */}
                           {(servicesTotal > 0 || productsTotal > 0) && (
-                            <div className="mt-3 border-t border-gray-100 pt-3">
+                            <div className="mt-3 border-t border-[var(--color-border)] pt-3">
                               <div className="space-y-1 text-sm">
-                                <div className="flex justify-between text-gray-500">
+                                <div className="flex justify-between text-[var(--color-text-secondary)]">
                                   <span>Servicios</span>
                                   <span>{fmtCurrency(servicesTotal)}</span>
                                 </div>
                                 {productsTotal > 0 && (
-                                  <div className="flex justify-between text-gray-500">
+                                  <div className="flex justify-between text-[var(--color-text-secondary)]">
                                     <span>Productos</span>
                                     <span>{fmtCurrency(productsTotal)}</span>
                                   </div>
                                 )}
-                                <div className="flex justify-between font-semibold text-gray-900">
+                                <div className="flex justify-between font-semibold text-[var(--color-text)]">
                                   <span>Total</span>
                                   <span>{fmtCurrency(appt.total)}</span>
                                 </div>
@@ -377,7 +377,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                           )}
 
                           {/* Timestamps */}
-                          <div className="mt-3 flex gap-4 text-[10px] text-gray-400">
+                          <div className="mt-3 flex gap-4 text-[10px] text-[var(--color-muted)]">
                             {appt.created_at && (
                               <span>Creada: {formatDate(appt.created_at.split('T')[0])}</span>
                             )}

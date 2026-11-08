@@ -33,9 +33,9 @@ const STATUS_BADGE = {
   [APPOINTMENT_STATUS.PENDING]: 'bg-amber-100 text-amber-700',
   [APPOINTMENT_STATUS.CONFIRMED]: 'bg-emerald-100 text-emerald-700',
   [APPOINTMENT_STATUS.IN_PROGRESS]: 'bg-blue-100 text-blue-700',
-  [APPOINTMENT_STATUS.COMPLETED]: 'bg-gray-100 text-gray-600',
+  [APPOINTMENT_STATUS.COMPLETED]: 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]',
   [APPOINTMENT_STATUS.CANCELLED]: 'bg-red-100 text-red-700',
-  [APPOINTMENT_STATUS.NO_SHOW]: 'bg-gray-100 text-gray-500',
+  [APPOINTMENT_STATUS.NO_SHOW]: 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]',
 }
 
 const STATUS_LABEL = {
@@ -217,11 +217,11 @@ export default function AppointmentsPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando reservas…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando reservas…</p>
         </div>
       </div>
     )
@@ -231,10 +231,10 @@ export default function AppointmentsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Reservas</h1>
-        <p className="mt-1 text-sm text-gray-500">Gestiona todas las reservas de tu negocio</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Reservas</h1>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Gestiona todas las reservas de tu negocio</p>
         {!planLoading && (
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-[var(--color-muted)]">
             {isUnlimited(limits.max_monthly_bookings)
               ? <>Plan {planName}: <strong>Reservas ilimitadas</strong></>
               : <>Plan {planName}: Limite de <strong>{formatLimitCount(limits.max_monthly_bookings)}</strong> reservas/mes</>}
@@ -253,11 +253,11 @@ export default function AppointmentsPage() {
       <Card padding={false}>
         <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700">Estado:</label>
+            <label className="text-sm font-medium text-[var(--color-text)]">Estado:</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-               className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+               className="w-full rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
             >
               {STATUS_FILTERS.map((f) => (
                 <option key={f.value} value={f.value}>{f.label}</option>
@@ -266,12 +266,12 @@ export default function AppointmentsPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700">Fecha:</label>
+            <label className="text-sm font-medium text-[var(--color-text)]">Fecha:</label>
             <input
               type="date"
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+              className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
             />
           </div>
 
@@ -282,7 +282,7 @@ export default function AppointmentsPage() {
           {(statusFilter || dateFilter) && (
             <button
               onClick={() => { setStatusFilter(''); setDateFilter('') }}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
             >
               Limpiar filtros
             </button>
@@ -294,11 +294,11 @@ export default function AppointmentsPage() {
       <Card padding={false}>
         {appointments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-gray-900">No hay reservas</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text)]">No hay reservas</h3>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
               {statusFilter || dateFilter ? 'No se encontraron reservas con los filtros seleccionados.' : 'Aún no hay reservas registradas.'}
             </p>
           </div>
@@ -309,40 +309,40 @@ export default function AppointmentsPage() {
               <div key={appt.id} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="min-w-0 flex-1">
-                    <span className="font-medium text-gray-900">{appt.client?.name || '—'}</span>
+                    <span className="font-medium text-[var(--color-text)]">{appt.client?.name || '—'}</span>
                     {appt.client?.phone && (
-                      <span className="block text-xs text-gray-400">{appt.client.phone}</span>
+                      <span className="block text-xs text-[var(--color-muted)]">{appt.client.phone}</span>
                     )}
                   </div>
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE[appt.status] || 'bg-gray-100 text-gray-600'}`}>
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE[appt.status] || 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'}`}>
                     {STATUS_LABEL[appt.status] || appt.status}
                   </span>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <span className="text-xs text-gray-400">Barbero</span>
-                    <p className="text-gray-700">{appt.barber?.name || '—'}</p>
+                    <span className="text-xs text-[var(--color-muted)]">Barbero</span>
+                    <p className="text-[var(--color-text)]">{appt.barber?.name || '—'}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Servicio</span>
-                    <p className="truncate text-gray-700">{(appt.services || []).map(s => s.service?.name).filter(Boolean).join(', ') || '—'}</p>
+                    <span className="text-xs text-[var(--color-muted)]">Servicio</span>
+                    <p className="truncate text-[var(--color-text)]">{(appt.services || []).map(s => s.service?.name).filter(Boolean).join(', ') || '—'}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Fecha</span>
-                    <p className="text-gray-700">{formatDate(appt.date)}</p>
+                    <span className="text-xs text-[var(--color-muted)]">Fecha</span>
+                    <p className="text-[var(--color-text)]">{formatDate(appt.date)}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Hora</span>
-                    <p className="text-gray-700">{formatTime(appt.start_time)}</p>
+                    <span className="text-xs text-[var(--color-muted)]">Hora</span>
+                    <p className="text-[var(--color-text)]">{formatTime(appt.start_time)}</p>
                   </div>
                 </div>
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-[var(--color-text)]">
                     {formatCurrency(computeTotal(appt))}
                   </span>
                 </div>
                 {STATUS_ACTIONS.some((a) => canShowAction(appt, a)) && (
-                  <div className="mt-3 flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                  <div className="mt-3 flex items-center justify-end gap-2 border-t border-[var(--color-border)] pt-3">
                     {STATUS_ACTIONS.filter((a) => canShowAction(appt, a)).map((action) => (
                       <Button
                         key={action.status}
@@ -365,7 +365,7 @@ export default function AppointmentsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
- <tr className="border-b border-gray-200 text-xs font-medium text-gray-500">
+ <tr className="border-b border-[var(--color-border)] text-xs font-medium text-[var(--color-text-secondary)]">
                   <th className="px-4 py-3 sm:px-6">Cliente</th>
                   <th className="px-4 py-3 sm:px-6">Barbero</th>
                   <th className="px-4 py-3 sm:px-6">Servicio</th>
@@ -376,26 +376,26 @@ export default function AppointmentsPage() {
                   <th className="px-4 py-3 sm:px-6 text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-[var(--color-border)]">
                 {appointments.map((appt) => (
-                  <tr key={appt.id} className="transition-colors hover:bg-gray-50">
+                  <tr key={appt.id} className="transition-colors hover:bg-[var(--color-paper)]">
                     <td className="px-4 py-3 sm:px-6">
-                      <span className="font-medium text-gray-900">{appt.client?.name || '—'}</span>
+                      <span className="font-medium text-[var(--color-text)]">{appt.client?.name || '—'}</span>
                       {appt.client?.phone && (
-                        <span className="block text-xs text-gray-400">{appt.client.phone}</span>
+                        <span className="block text-xs text-[var(--color-muted)]">{appt.client.phone}</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 sm:px-6 text-gray-600">{appt.barber?.name || '—'}</td>
-                    <td className="px-4 py-3 sm:px-6 text-gray-600">
+                    <td className="px-4 py-3 sm:px-6 text-[var(--color-text-secondary)]">{appt.barber?.name || '—'}</td>
+                    <td className="px-4 py-3 sm:px-6 text-[var(--color-text-secondary)]">
                       {(appt.services || []).map(s => s.service?.name).filter(Boolean).join(', ') || '—'}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-gray-600 sm:px-6">{formatDate(appt.date)}</td>
-                    <td className="px-4 py-3 text-gray-600 sm:px-6">{formatTime(appt.start_time)}</td>
-                    <td className="px-4 py-3 font-medium text-gray-900 sm:px-6">
+                    <td className="whitespace-nowrap px-4 py-3 text-[var(--color-text-secondary)] sm:px-6">{formatDate(appt.date)}</td>
+                    <td className="px-4 py-3 text-[var(--color-text-secondary)] sm:px-6">{formatTime(appt.start_time)}</td>
+                    <td className="px-4 py-3 font-medium text-[var(--color-text)] sm:px-6">
                       {formatCurrency(computeTotal(appt))}
                     </td>
                     <td className="px-4 py-3 sm:px-6">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE[appt.status] || 'bg-gray-100 text-gray-600'}`}>
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE[appt.status] || 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'}`}>
                         {STATUS_LABEL[appt.status] || appt.status}
                       </span>
                     </td>
@@ -429,8 +429,8 @@ export default function AppointmentsPage() {
           const count = appointments.filter((a) => a.status === f.value).length
           return (
             <Card key={f.value} className="text-center">
- <p className="text-xs font-medium text-gray-500">{f.label}</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">{count}</p>
+ <p className="text-xs font-medium text-[var(--color-text-secondary)]">{f.label}</p>
+              <p className="mt-1 text-2xl font-bold text-[var(--color-text)]">{count}</p>
             </Card>
           )
         })}

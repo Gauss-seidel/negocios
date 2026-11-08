@@ -177,11 +177,11 @@ export default function ServicesPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando servicios…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando servicios…</p>
         </div>
       </div>
     )
@@ -196,8 +196,8 @@ export default function ServicesPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
-          <p className="mt-2 text-sm text-gray-500">{error}</p>
+          <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{error}</p>
           <Button variant="secondary" className="mt-4" onClick={fetchAll}>Reintentar</Button>
         </div>
       </div>
@@ -209,8 +209,8 @@ export default function ServicesPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Servicios</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestiona los servicios que ofrece tu negocio</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Servicios</h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Gestiona los servicios que ofrece tu negocio</p>
         </div>
         <Button onClick={openCreateModal}>
           <svg aria-hidden="true" focusable="false" className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,11 +224,11 @@ export default function ServicesPage() {
       {services.length === 0 ? (
         <Card>
           <div className="flex flex-col items-center justify-center py-12">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-gray-900">No hay servicios</h3>
-            <p className="mt-1 text-sm text-gray-500">Crea tu primer servicio para comenzar.</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text)]">No hay servicios</h3>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Crea tu primer servicio para comenzar.</p>
             <Button className="mt-4" onClick={openCreateModal}>
               Crear Servicio
             </Button>
@@ -240,9 +240,9 @@ export default function ServicesPage() {
             <Card key={service.id} className="transition-shadow hover:shadow-md">
               <div className="flex items-start justify-between">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-gray-900 truncate">{service.name}</h3>
+                  <h3 className="font-semibold text-[var(--color-text)] truncate">{service.name}</h3>
                   {service.category && (
-                    <span className="mt-0.5 inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                    <span className="mt-0.5 inline-block rounded-full bg-[var(--color-paper-2)] px-2 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
                       {service.category.name}
                     </span>
                   )}
@@ -251,7 +251,7 @@ export default function ServicesPage() {
                   className={`ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                     service.is_active
                       ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-gray-100 text-gray-500'
+                      : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'
                   }`}
                 >
                   {service.is_active ? 'Activo' : 'Inactivo'}
@@ -259,19 +259,19 @@ export default function ServicesPage() {
               </div>
 
               {service.description && (
-                <p className="mt-2 text-sm text-gray-500 line-clamp-2">{service.description}</p>
+                <p className="mt-2 text-sm text-[var(--color-text-secondary)] line-clamp-2">{service.description}</p>
               )}
 
               <div className="mt-4 flex items-center gap-4 text-sm">
-                <span className="text-gray-500">
-                  <span className="font-medium text-gray-700">{formatDuration(service.duration)}</span>
+                <span className="text-[var(--color-text-secondary)]">
+                  <span className="font-medium text-[var(--color-text)]">{formatDuration(service.duration)}</span>
                 </span>
-                <span className="text-lg font-bold text-gray-900">
+                <span className="text-lg font-bold text-[var(--color-text)]">
                   {formatCurrency(service.price)}
                 </span>
               </div>
 
-              <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3">
+              <div className="mt-4 flex items-center gap-2 border-t border-[var(--color-border)] pt-3">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -317,7 +317,7 @@ export default function ServicesPage() {
           />
 
           <div className="space-y-1">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="description" className="block text-sm font-medium text-[var(--color-text)]">
               Descripción
             </label>
             <textarea
@@ -326,7 +326,7 @@ export default function ServicesPage() {
               value={form.description}
               onChange={handleChange}
               rows={3}
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+              className="block w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm shadow-sm placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
               placeholder="Descripción opcional del servicio"
             />
           </div>
@@ -354,7 +354,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="category_id" className="block text-sm font-medium text-[var(--color-text)]">
               Categoría
             </label>
             <select
@@ -362,7 +362,7 @@ export default function ServicesPage() {
               name="category_id"
               value={form.category_id}
               onChange={handleChange}
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+              className="w-full rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
             >
               <option value="">Sin categoría</option>
               {categories.map((cat) => (
@@ -377,12 +377,12 @@ export default function ServicesPage() {
               name="is_active"
               checked={form.is_active}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+              className="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
             />
-            <span className="text-sm font-medium text-gray-700">Servicio activo</span>
+            <span className="text-sm font-medium text-[var(--color-text)]">Servicio activo</span>
           </label>
 
-          <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => setShowModal(false)}>
               Cancelar
             </Button>

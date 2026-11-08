@@ -358,11 +358,11 @@ export default function BarbersPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando barberos…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando barberos…</p>
         </div>
       </div>
     )
@@ -377,8 +377,8 @@ export default function BarbersPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
-          <p className="mt-2 text-sm text-gray-500">{error}</p>
+          <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{error}</p>
           <Button variant="secondary" className="mt-4" onClick={fetchAll}>Reintentar</Button>
         </div>
       </div>
@@ -390,12 +390,12 @@ export default function BarbersPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Barberos</h1>
-          <p className="mt-1 text-sm text-gray-500">Gestiona los barberos de tu negocio</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Barberos</h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Gestiona los barberos de tu negocio</p>
           {!planLoading && (
             <div className="mt-2 flex items-center gap-2">
               <div className="flex items-center gap-1.5 text-xs">
-                <span className="text-gray-400">Plan {planName}:</span>
+                <span className="text-[var(--color-muted)]">Plan {planName}:</span>
                 <span className={`font-semibold ${atLimit ? 'text-red-600' : 'text-emerald-600'}`}>
                   {activeBarbers.length}/{formatLimitShort(limits.max_barbers)} barberos activos
                 </span>
@@ -415,11 +415,11 @@ export default function BarbersPage() {
       {barbers.length === 0 ? (
         <Card>
           <div className="flex flex-col items-center justify-center py-12">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-gray-900">No hay barberos</h3>
-            <p className="mt-1 text-sm text-gray-500">Agrega barberos para empezar a recibir reservas.</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text)]">No hay barberos</h3>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Agrega barberos para empezar a recibir reservas.</p>
             <Button className="mt-4" onClick={openCreateModal}>Agregar Barbero</Button>
           </div>
         </Card>
@@ -428,7 +428,7 @@ export default function BarbersPage() {
           {barbers.map((barber) => (
             <Card key={barber.id} className="transition-shadow hover:shadow-md">
               <div className="flex flex-col items-center text-center">
-                <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gray-100">
+                <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[var(--color-paper-2)]">
                   {barber.photo_url ? (
                     <img
                       src={barber.photo_url}
@@ -441,22 +441,22 @@ export default function BarbersPage() {
                     />
                   ) : null}
                   <div
-                    className={`flex h-full w-full items-center justify-center text-2xl font-bold text-gray-500 ${barber.photo_url ? 'hidden' : ''}`}
+                    className={`flex h-full w-full items-center justify-center text-2xl font-bold text-[var(--color-text-secondary)] ${barber.photo_url ? 'hidden' : ''}`}
                   >
                     {barber.name ? barber.name.charAt(0).toUpperCase() : '?'}
                   </div>
                 </div>
 
-                <h3 className="mt-3 font-semibold text-gray-900">{barber.name}</h3>
+                <h3 className="mt-3 font-semibold text-[var(--color-text)]">{barber.name}</h3>
                 {barber.specialty && (
-                  <p className="text-sm text-gray-500">{barber.specialty}</p>
+                  <p className="text-sm text-[var(--color-text-secondary)]">{barber.specialty}</p>
                 )}
 
                 <span
                   className={`mt-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                     barber.is_active
                       ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-gray-100 text-gray-500'
+                      : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'
                   }`}
                 >
                   {barber.is_active ? 'Activo' : 'Inactivo'}
@@ -469,7 +469,7 @@ export default function BarbersPage() {
                       return svc ? (
                         <span
                           key={bs.service_id}
-                          className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700"
+                          className="rounded-full bg-[var(--color-paper-2)] px-2 py-0.5 text-xs font-medium text-[var(--color-text)]"
                         >
                           {svc.name}
                         </span>
@@ -492,7 +492,7 @@ export default function BarbersPage() {
                   </span>
                 )}
 
-                <div className="mt-3 flex items-center gap-2 border-t border-gray-100 pt-3 w-full justify-center">
+                <div className="mt-3 flex items-center gap-2 border-t border-[var(--color-border)] pt-3 w-full justify-center">
                   <Button variant="ghost" size="sm" onClick={() => openEditModal(barber)}>
                     Editar
                   </Button>
@@ -566,11 +566,11 @@ export default function BarbersPage() {
 
           {/* Services assignment */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">Servicios que realiza</label>
+            <label className="block text-sm font-medium text-[var(--color-text)]">Servicios que realiza</label>
             {services.length === 0 ? (
-              <p className="text-sm text-gray-400">No hay servicios disponibles. Crea servicios primero.</p>
+              <p className="text-sm text-[var(--color-muted)]">No hay servicios disponibles. Crea servicios primero.</p>
             ) : (
-              <div className="max-h-48 overflow-y-auto rounded-lg border border-gray-200 p-3">
+              <div className="max-h-48 overflow-y-auto rounded-lg border border-[var(--color-border)] p-3">
                 <div className="space-y-2">
                   {services.map((svc) => (
                     <label key={svc.id} className="flex items-center gap-2 cursor-pointer">
@@ -578,9 +578,9 @@ export default function BarbersPage() {
                         type="checkbox"
                         checked={form.service_ids.includes(svc.id)}
                         onChange={() => handleServiceToggle(svc.id)}
-                        className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                        className="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
                       />
-                      <span className="text-sm text-gray-700">{svc.name}</span>
+                      <span className="text-sm text-[var(--color-text)]">{svc.name}</span>
                     </label>
                   ))}
                 </div>
@@ -594,12 +594,12 @@ export default function BarbersPage() {
               name="is_active"
               checked={form.is_active}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+              className="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
             />
-            <span className="text-sm font-medium text-gray-700">Barbero activo</span>
+            <span className="text-sm font-medium text-[var(--color-text)]">Barbero activo</span>
           </label>
 
-          <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => setShowModal(false)}>
               Cancelar
             </Button>
@@ -635,7 +635,7 @@ export default function BarbersPage() {
         ) : (
           <form onSubmit={handleCreateUser} className="space-y-4">
             <div>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-[var(--color-text-secondary)] mb-3">
                 Creá un usuario para que <strong>{userBarber?.name}</strong> pueda acceder al sistema.
               </p>
             </div>
@@ -690,15 +690,15 @@ export default function BarbersPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-sm text-gray-600">
-            ¿Estás seguro de eliminar a <strong className="text-gray-900">{deleteTarget?.name}</strong>?
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            ¿Estás seguro de eliminar a <strong className="text-[var(--color-text)]">{deleteTarget?.name}</strong>?
           </p>
           {deleteTarget && barberUsers[deleteTarget.id] ? (
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
               <strong>Atención:</strong> Este barbero tiene un usuario asociado. Se eliminará también su cuenta de acceso al sistema.
             </div>
           ) : (
-            <p className="text-sm text-gray-500">Esta acción no se puede deshacer.</p>
+            <p className="text-sm text-[var(--color-text-secondary)]">Esta acción no se puede deshacer.</p>
           )}
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => { setShowDeleteConfirm(false); setDeleteTarget(null) }}>

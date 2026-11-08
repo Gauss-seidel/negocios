@@ -213,7 +213,7 @@ export default function SucursalesPage() {
         <Card padding={false}>
           <div className="space-y-3 p-4">
             {list.map(b => (
-              <div key={b.id} className="rounded-2xl border border-gray-200 bg-white p-4">
+              <div key={b.id} className="rounded-2xl border border-[var(--color-border)] bg-white p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-semibold" style={{ color: 'var(--color-text)' }}>{b.name}</span>
                   <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
@@ -225,12 +225,12 @@ export default function SucursalesPage() {
                 {b.address && <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{b.address}</p>}
                 {b.phone && <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{b.phone}</p>}
                 <div className="flex justify-end gap-1 mt-3 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
-                  <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100" title="Editar">
+                  <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-[var(--color-muted)] hover:bg-[var(--color-paper-2)]" title="Editar">
                         <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
                       </button>
-                      <button onClick={() => handleToggle(b)} className={`rounded-lg p-2 ${b.is_active ? 'text-amber-500' : 'text-emerald-500'} hover:bg-gray-100`} title={b.is_active ? 'Desactivar' : 'Activar'}>
+                      <button onClick={() => handleToggle(b)} className={`rounded-lg p-2 ${b.is_active ? 'text-amber-500' : 'text-emerald-500'} hover:bg-[var(--color-paper-2)]`} title={b.is_active ? 'Desactivar' : 'Activar'}>
                         <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                           {b.is_active
                             ? <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -276,12 +276,12 @@ export default function SucursalesPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-0.5">
-                      <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100" title="Editar">
+                      <button onClick={() => openEdit(b)} className="rounded-lg p-2 text-[var(--color-muted)] hover:bg-[var(--color-paper-2)]" title="Editar">
                         <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
                       </button>
-                      <button onClick={() => handleToggle(b)} className={`rounded-lg p-2 ${b.is_active ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'} hover:bg-gray-100`} title={b.is_active ? 'Desactivar' : 'Activar'}>
+                      <button onClick={() => handleToggle(b)} className={`rounded-lg p-2 ${b.is_active ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'} hover:bg-[var(--color-paper-2)]`} title={b.is_active ? 'Desactivar' : 'Activar'}>
                         <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                           {b.is_active
                             ? <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />

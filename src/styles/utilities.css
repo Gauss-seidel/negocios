@@ -752,15 +752,27 @@ table { border-collapse: collapse; }
 .bg-\[var\(--color-accent\)\] { background-color: var(--color-accent); }
 .bg-\[var\(--color-primary\)\] { background-color: var(--color-primary); }
 .bg-\[var\(--color-bg\)\] { background-color: var(--color-bg); }
+.bg-\[var\(--color-surface\)\] { background-color: var(--color-surface); }
+.bg-\[var\(--color-paper\)\] { background-color: var(--color-paper); }
+.bg-\[var\(--color-paper-2\)\] { background-color: var(--color-paper-2); }
 
 .text-\[var\(--color-accent\)\] { color: var(--color-accent); }
 .text-\[var\(--color-text\)\] { color: var(--color-text); }
 .text-\[var\(--color-text-secondary\)\] { color: var(--color-text-secondary); }
+.text-\[var\(--color-muted\)\] { color: var(--color-muted); }
 .text-\[var\(--color-accent\)\]\/80 { color: color-mix(in srgb, var(--color-accent) 80%, transparent); }
 .hover\:text-\[var\(--color-accent\)\]:hover { color: var(--color-accent); }
 .hover\:text-\[var\(--color-accent\)\]\/80:hover { color: color-mix(in srgb, var(--color-accent) 80%, transparent); }
+.hover\:text-\[var\(--color-text\)\]:hover { color: var(--color-text); }
+.hover\:bg-\[var\(--color-paper\)\]:hover { background-color: var(--color-paper); }
+.hover\:bg-\[var\(--color-paper-2\)\]:hover { background-color: var(--color-paper-2); }
+.hover\:bg-\[var\(--color-surface\)\]:hover { background-color: var(--color-surface); }
 
 .border-\[var\(--color-accent\)\] { border-color: var(--color-accent); }
+.border-\[var\(--color-border\)\] { border-color: var(--color-border); }
+.divide-\[var\(--color-border\)\] > * + * { border-color: var(--color-border); }
+.ring-\[var\(--color-border\)\] { --tw-ring-color: var(--color-border); }
+.placeholder\:text-\[var\(--color-muted\)\]::placeholder { color: var(--color-muted); }
 .bg-\[var\(--color-accent\)\]\/10 { background-color: color-mix(in srgb, var(--color-accent) 10%, transparent); }
 
 /* ─── 19. GROUP HOVER VARIANTS ─── */

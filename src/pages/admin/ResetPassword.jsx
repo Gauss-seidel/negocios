@@ -106,7 +106,7 @@ export default function ResetPassword() {
               className="w-full rounded-xl border px-4 py-3.5 text-[15px] leading-5 transition-[box-shadow,border-color] duration-150 focus:outline-none"
               style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)', boxShadow: 'inset 0 1px 0 rgba(255,253,250,.7)', minHeight: '48px' }} />
           </div>
-          {error && <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">{error}</div>}
+          {error && <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">{error}</div>}
           <button type="submit" disabled={loading} className="w-full rounded-xl px-4 py-3 text-sm font-bold transition hover:opacity-92 disabled:opacity-60" style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)' }}>
             {loading ? 'Guardando…' : 'Guardar contraseña'}
           </button>

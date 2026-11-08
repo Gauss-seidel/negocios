@@ -28,11 +28,11 @@ function StatusBadge({ status }) {
     [APPOINTMENT_STATUS.PENDING]: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Pendiente' },
     [APPOINTMENT_STATUS.CONFIRMED]: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Confirmada' },
     [APPOINTMENT_STATUS.IN_PROGRESS]: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'En curso' },
-    [APPOINTMENT_STATUS.COMPLETED]: { bg: 'bg-gray-100', text: 'text-gray-600', label: 'Completada' },
+    [APPOINTMENT_STATUS.COMPLETED]: { bg: 'bg-[var(--color-paper-2)]', text: 'text-[var(--color-text-secondary)]', label: 'Completada' },
     [APPOINTMENT_STATUS.CANCELLED]: { bg: 'bg-red-100', text: 'text-red-700', label: 'Cancelada' },
-    [APPOINTMENT_STATUS.NO_SHOW]: { bg: 'bg-gray-100', text: 'text-gray-500', label: 'No asistió' },
+    [APPOINTMENT_STATUS.NO_SHOW]: { bg: 'bg-[var(--color-paper-2)]', text: 'text-[var(--color-text-secondary)]', label: 'No asistió' },
   }
-  const s = map[status] || { bg: 'bg-gray-100', text: 'text-gray-600', label: status }
+  const s = map[status] || { bg: 'bg-[var(--color-paper-2)]', text: 'text-[var(--color-text-secondary)]', label: status }
   return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>{s.label}</span>
 }
 

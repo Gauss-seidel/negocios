@@ -21,9 +21,9 @@ function XIcon() {
 function DividerDashed() {
   return (
     <div className="flex items-center gap-2 py-1">
-      <div className="flex-1 border-t border-dashed border-gray-200" />
-      <span className="text-[10px] text-gray-300">·</span>
-      <div className="flex-1 border-t border-dashed border-gray-200" />
+      <div className="flex-1 border-t border-dashed border-[var(--color-border)]" />
+      <span className="text-[10px] text-[var(--color-muted)]">·</span>
+      <div className="flex-1 border-t border-dashed border-[var(--color-border)]" />
     </div>
   )
 }
@@ -168,17 +168,17 @@ export default function InvoiceModal({ appointment, business, onClose }) {
         >
           {/* ─── HEADER ─── */}
           <div className="px-6 pt-6 pb-2 text-center">
-            <h2 className="text-lg font-bold tracking-tight text-gray-900">Comprobante de servicio</h2>
-            <p className="mt-1 text-xs font-medium text-gray-400">BarberShifts</p>
+            <h2 className="text-lg font-bold tracking-tight text-[var(--color-text)]">Comprobante de servicio</h2>
+            <p className="mt-1 text-xs font-medium text-[var(--color-muted)]">BarberShifts</p>
           </div>
 
           <DividerDashed />
 
           {/* ─── BUSINESS INFO ─── */}
           <div className="px-6 py-3 text-center">
-            <p className="text-sm font-medium text-gray-900">{business?.name || 'BarberShifts Studio'}</p>
-            {business?.address && <p className="mt-0.5 text-xs text-gray-500">{business.address}</p>}
-            {business?.phone && <p className="text-xs text-gray-500">{business.phone}</p>}
+            <p className="text-sm font-medium text-[var(--color-text)]">{business?.name || 'BarberShifts Studio'}</p>
+            {business?.address && <p className="mt-0.5 text-xs text-[var(--color-text-secondary)]">{business.address}</p>}
+            {business?.phone && <p className="text-xs text-[var(--color-text-secondary)]">{business.phone}</p>}
           </div>
 
           <DividerDashed />
@@ -186,20 +186,20 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── APPOINTMENT INFO ─── */}
           <div className="px-6 py-3 space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Cliente</span>
-              <span className="text-sm font-medium text-gray-900">{appt.client_name || '—'}</span>
+              <span className="text-xs text-[var(--color-muted)]">Cliente</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">{appt.client_name || '—'}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Barbero</span>
-              <span className="text-sm font-medium text-gray-900">{barberName}</span>
+              <span className="text-xs text-[var(--color-muted)]">Barbero</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">{barberName}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Fecha</span>
-              <span className="text-sm font-medium text-gray-900">{dateStr}</span>
+              <span className="text-xs text-[var(--color-muted)]">Fecha</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">{dateStr}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400">Horario</span>
-              <span className="text-sm font-medium text-gray-900">
+              <span className="text-xs text-[var(--color-muted)]">Horario</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">
                 {appt.start_time ? formatTime(appt.start_time) : '—'}
                 {appt.end_time ? ` - ${formatTime(appt.end_time)}` : ''}
               </span>
@@ -211,7 +211,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── SERVICES ─── */}
           {services.length > 0 && (
             <div className="px-6 py-2">
- <p className="mb-2 text-[11px] font-semibold text-gray-500">
+ <p className="mb-2 text-[11px] font-semibold text-[var(--color-text-secondary)]">
                 Servicios
               </p>
               <div className="space-y-1.5">
@@ -220,8 +220,8 @@ export default function InvoiceModal({ appointment, business, onClose }) {
                   const price = svc.price || 0
                   return (
                     <div key={svc.id || idx} className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700 flex-1 pr-4">{name}</span>
-                      <span className="text-sm font-mono font-medium text-gray-900 tabular-nums">
+                      <span className="text-sm text-[var(--color-text)] flex-1 pr-4">{name}</span>
+                      <span className="text-sm font-mono font-medium text-[var(--color-text)] tabular-nums">
                         {fmtCurrency(price)}
                       </span>
                     </div>
@@ -235,7 +235,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {products.length > 0 && (
             <div className="px-6 py-2">
               {services.length > 0 && <DividerDashed />}
- <p className="mb-2 text-[11px] font-semibold text-gray-500">
+ <p className="mb-2 text-[11px] font-semibold text-[var(--color-text-secondary)]">
                 Productos
               </p>
               <div className="space-y-1.5">
@@ -246,12 +246,12 @@ export default function InvoiceModal({ appointment, business, onClose }) {
                   return (
                     <div key={prod.id || idx}>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700 flex-1 pr-4">{name}</span>
-                        <span className="text-sm font-mono font-medium text-gray-900 tabular-nums">
+                        <span className="text-sm text-[var(--color-text)] flex-1 pr-4">{name}</span>
+                        <span className="text-sm font-mono font-medium text-[var(--color-text)] tabular-nums">
                           {fmtCurrency(price * qty)}
                         </span>
                       </div>
-                      <p className="text-[11px] text-gray-400 mt-0.5">
+                      <p className="text-[11px] text-[var(--color-muted)] mt-0.5">
                         {qty} x {fmtCurrency(price)}
                       </p>
                     </div>
@@ -264,13 +264,13 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* Empty state */}
           {services.length === 0 && products.length === 0 && (
             <div className="px-6 py-6 text-center">
-              <p className="text-sm text-gray-400 italic">Sin servicios ni productos registrados</p>
+              <p className="text-sm text-[var(--color-muted)] italic">Sin servicios ni productos registrados</p>
             </div>
           )}
 
           {/* ─── TOTAL ─── */}
           <div className="mx-6 mt-3 mb-4 flex items-center justify-between rounded-lg bg-gradient-to-r from-[var(--color-accent)]/5 to-transparent border-l-4 border-[var(--color-accent)] px-4 py-3.5">
- <span className="text-sm font-semibold text-gray-700">Total</span>
+ <span className="text-sm font-semibold text-[var(--color-text)]">Total</span>
             <span className="text-xl font-bold font-mono tabular-nums text-[var(--color-accent)]">
               {fmtCurrency(total)}
             </span>
@@ -279,7 +279,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── DASHED SEPARATOR (tear line) ─── */}
           <div className="px-6 pb-1">
             <div className="relative">
-              <div className="border-t border-dashed border-gray-300" />
+              <div className="border-t border-dashed border-[var(--color-border)]" />
               {/* Tear dots on both sides */}
               <div className="absolute -left-2 -top-[5px] h-2.5 w-2.5 rounded-full bg-[var(--color-bg)]" />
               <div className="absolute -right-2 -top-[5px] h-2.5 w-2.5 rounded-full bg-[var(--color-bg)]" />
@@ -288,14 +288,14 @@ export default function InvoiceModal({ appointment, business, onClose }) {
 
           {/* ─── FOOTER ─── */}
           <div className="px-6 pb-6 pt-2 text-center">
-            <p className="text-sm font-medium text-gray-700">Gracias por tu visita!</p>
- <p className="mt-1 text-[11px] font-medium text-gray-400">
+            <p className="text-sm font-medium text-[var(--color-text)]">Gracias por tu visita!</p>
+ <p className="mt-1 text-[11px] font-medium text-[var(--color-muted)]">
               Emitido: {emissionDate}
             </p>
           </div>
 
           {/* ─── ACTIONS ─── */}
-          <div className="no-print flex items-center justify-center gap-3 border-t border-gray-100 px-6 py-4">
+          <div className="no-print flex items-center justify-center gap-3 border-t border-[var(--color-border)] px-6 py-4">
             {whatsappLink && (
               <a
                 href={whatsappLink}
@@ -318,7 +318,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
             </button>
             <button
               onClick={onClose}
-              className="inline-flex items-center gap-2 rounded-xl bg-gray-100/80 px-5 py-2.5 text-sm font-semibold text-gray-600 transition duration-200 hover:bg-gray-200 hover:text-gray-800 active:scale-[0.97]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-paper-2)]/80 px-5 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition duration-200 hover:bg-gray-200 hover:text-[var(--color-text)] active:scale-[0.97]"
             >
               <XIcon />
               Cerrar

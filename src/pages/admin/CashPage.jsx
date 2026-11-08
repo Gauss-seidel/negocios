@@ -230,11 +230,11 @@ export default function CashPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando caja…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando caja…</p>
         </div>
       </div>
     )
@@ -243,7 +243,7 @@ export default function CashPage() {
   if (!currentBranch) {
     return (
       <div className="flex items-center justify-center py-32">
-        <p className="text-sm text-gray-500">Selecciona una sucursal para ver la caja</p>
+        <p className="text-sm text-[var(--color-text-secondary)]">Selecciona una sucursal para ver la caja</p>
       </div>
     )
   }
@@ -252,8 +252,8 @@ export default function CashPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Caja</h1>
-          <p className="mt-1 text-sm text-gray-500">Control de ingresos y gastos</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Caja</h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de ingresos y gastos</p>
         </div>
         <UpgradePrompt feature="El modulo de Caja" requiredPlan="Profesional" />
       </div>
@@ -264,8 +264,8 @@ export default function CashPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Caja</h1>
-        <p className="mt-1 text-sm text-gray-500">Control de ingresos y gastos del día</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Caja</h1>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de ingresos y gastos del día</p>
       </div>
 
       {/* Success message */}
@@ -285,17 +285,17 @@ export default function CashPage() {
       <Card>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-500">Estado de caja</p>
+            <p className="text-sm font-medium text-[var(--color-text-secondary)]">Estado de caja</p>
             <div className="flex items-center gap-2 mt-1">
               <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
-                register ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                register ? 'bg-emerald-100 text-emerald-700' : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'
               }`}>
                 <span className={`mr-1.5 h-2 w-2 rounded-full ${
                   register ? 'bg-emerald-500' : 'bg-gray-400'
                 }`} />
                 {register ? 'Abierta' : 'Cerrada'}
               </span>
-              <span className="text-2xl font-bold text-gray-900">{formatCurrency(balance)}</span>
+              <span className="text-2xl font-bold text-[var(--color-text)]">{formatCurrency(balance)}</span>
             </div>
           </div>
 
@@ -337,35 +337,35 @@ export default function CashPage() {
       <Card>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Movimientos</h2>
-            <p className="text-sm text-gray-500">Últimos 50 movimientos registrados</p>
+            <h2 className="text-lg font-semibold text-[var(--color-text)]">Movimientos</h2>
+            <p className="text-sm text-[var(--color-text-secondary)]">Últimos 50 movimientos registrados</p>
           </div>
         </div>
 
         {movements.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-gray-900">Sin movimientos</h3>
-            <p className="mt-1 text-sm text-gray-500">Aún no hay movimientos registrados en la caja.</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text)]">Sin movimientos</h3>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Aún no hay movimientos registrados en la caja.</p>
           </div>
         ) : (
           <div className="space-y-2">
             {movements.map((mov) => (
               <div
                 key={mov.id}
-                className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 transition-colors hover:bg-gray-50"
+                className="flex items-center justify-between rounded-lg border border-[var(--color-border)] px-4 py-3 transition-colors hover:bg-[var(--color-paper)]"
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className={`flex h-9 w-9 items-center justify-center rounded-full ${MOVEMENT_COLORS[mov.type] || 'bg-gray-100 text-gray-500'}`}>
+                  <div className={`flex h-9 w-9 items-center justify-center rounded-full ${MOVEMENT_COLORS[mov.type] || 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'}`}>
                     <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={MOVEMENT_ICONS[mov.type] || 'M12 4v16m8-8H4'} />
                     </svg>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{mov.description}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-sm font-medium text-[var(--color-text)] truncate">{mov.description}</p>
+                    <p className="text-xs text-[var(--color-muted)]">
                       {MOVEMENT_LABELS[mov.type] || mov.type}
                       {mov.reference ? ` · Ref: ${mov.reference}` : ''}
                       {' · '}{formatDateTime(mov.created_at)}
@@ -423,7 +423,7 @@ export default function CashPage() {
             placeholder="Nº de ticket, factura, etc."
           />
 
-          <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => setShowMovementModal(false)}>
               Cancelar
             </Button>

@@ -129,9 +129,9 @@ export default function CompleteAppointmentModal({ appointment, services, produc
 
         {/* Modal */}
         <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">
-          <div className="border-b border-gray-100 px-6 py-4">
-            <h2 className="text-lg font-bold text-gray-900">Completar reserva</h2>
-            <p className="mt-1 text-sm text-gray-500">
+          <div className="border-b border-[var(--color-border)] px-6 py-4">
+            <h2 className="text-lg font-bold text-[var(--color-text)]">Completar reserva</h2>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
               Verificá qué servicios y productos se realizaron realmente
             </p>
           </div>
@@ -140,20 +140,20 @@ export default function CompleteAppointmentModal({ appointment, services, produc
             {/* Services */}
             {hasServices && (
               <div>
- <h3 className="mb-3 text-sm font-semibold text-gray-400">Servicios</h3>
+ <h3 className="mb-3 text-sm font-semibold text-[var(--color-muted)]">Servicios</h3>
                 <div className="space-y-2">
                   {services.map(s => (
                     <label key={s.id} className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
-                      checkedServices[s.id] ? 'bg-gray-50' : 'bg-gray-50/50 opacity-60'
+                      checkedServices[s.id] ? 'bg-[var(--color-paper)]' : 'bg-[var(--color-paper)]/50 opacity-60'
                     }`}>
                       <input
                         type="checkbox"
                         checked={checkedServices[s.id] || false}
                         onChange={() => toggleService(s.id)}
-                        className="h-4 w-4 rounded border-gray-300 text-emerald-600 accent-emerald-600"
+                        className="h-4 w-4 rounded border-[var(--color-border)] text-emerald-600 accent-emerald-600"
                       />
-                      <span className="flex-1 text-sm text-gray-700">{s.service?.name || s.name || 'Servicio'}</span>
-                      <span className="text-sm font-medium text-gray-900">{fmtCurrency(s.price)}</span>
+                      <span className="flex-1 text-sm text-[var(--color-text)]">{s.service?.name || s.name || 'Servicio'}</span>
+                      <span className="text-sm font-medium text-[var(--color-text)]">{fmtCurrency(s.price)}</span>
                     </label>
                   ))}
                 </div>
@@ -163,7 +163,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
             {/* Products */}
             {hasProducts && (
               <div>
- <h3 className="mb-3 text-sm font-semibold text-gray-400">Productos</h3>
+ <h3 className="mb-3 text-sm font-semibold text-[var(--color-muted)]">Productos</h3>
                 <div className="space-y-2">
                   {products.map(p => {
                     const available = p.product?.current_stock ?? p.current_stock
@@ -175,7 +175,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
                         className={`rounded-lg border px-4 py-3 transition-colors ${
                           checkedProducts[p.id]
                             ? isOverStock ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'
-                            : 'border-gray-200 bg-gray-50 opacity-60'
+                            : 'border-[var(--color-border)] bg-[var(--color-paper)] opacity-60'
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -183,35 +183,35 @@ export default function CompleteAppointmentModal({ appointment, services, produc
                             type="checkbox"
                             checked={checkedProducts[p.id] || false}
                             onChange={() => toggleProduct(p.id)}
-                            className="h-4 w-4 rounded border-gray-300 text-emerald-600 accent-emerald-600"
+                            className="h-4 w-4 rounded border-[var(--color-border)] text-emerald-600 accent-emerald-600"
                           />
-                          <span className="flex-1 text-sm text-gray-700">{p.product?.name || p.name || 'Producto'}</span>
-                          <span className="text-sm font-medium text-gray-900">{fmtCurrency(p.price)}</span>
+                          <span className="flex-1 text-sm text-[var(--color-text)]">{p.product?.name || p.name || 'Producto'}</span>
+                          <span className="text-sm font-medium text-[var(--color-text)]">{fmtCurrency(p.price)}</span>
                         </div>
 
                         {checkedProducts[p.id] && (
                           <div className="mt-2 ml-7 flex items-center gap-2">
-                            <span className="text-xs text-gray-400">Cant:</span>
+                            <span className="text-xs text-[var(--color-muted)]">Cant:</span>
                             <button
                               onClick={() => updateQuantity(p.id, -1)}
-                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-emerald-300 hover:text-emerald-600"
+                              className="flex h-7 w-7 items-center justify-center rounded-md border border-[var(--color-border)] bg-white text-[var(--color-text-secondary)] transition-colors hover:border-emerald-300 hover:text-emerald-600"
                             >
                               <MinusIcon />
                             </button>
-                            <span className="w-6 text-center text-sm font-medium text-gray-800">
+                            <span className="w-6 text-center text-sm font-medium text-[var(--color-text)]">
                               {qty}
                             </span>
                             <button
                               onClick={() => updateQuantity(p.id, 1)}
-                              className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 transition-colors hover:border-emerald-300 hover:text-emerald-600"
+                              className="flex h-7 w-7 items-center justify-center rounded-md border border-[var(--color-border)] bg-white text-[var(--color-text-secondary)] transition-colors hover:border-emerald-300 hover:text-emerald-600"
                             >
                               <PlusIcon />
                             </button>
-                            <span className="ml-2 text-xs text-gray-400">
+                            <span className="ml-2 text-xs text-[var(--color-muted)]">
                               = {fmtCurrency((p.price || 0) * qty)}
                             </span>
                             {available != null && (
-                              <span className="ml-2 text-[10px] text-gray-400">
+                              <span className="ml-2 text-[10px] text-[var(--color-muted)]">
                                 (stock: {available})
                               </span>
                             )}
@@ -225,7 +225,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
             )}
 
             {!hasServices && !hasProducts && (
-              <p className="py-8 text-center text-sm text-gray-400">Esta reserva no tiene servicios ni productos.</p>
+              <p className="py-8 text-center text-sm text-[var(--color-muted)]">Esta reserva no tiene servicios ni productos.</p>
             )}
 
             {/* Stock warning */}
@@ -236,8 +236,8 @@ export default function CompleteAppointmentModal({ appointment, services, produc
             )}
 
             {/* Total */}
-            <div className="flex items-center justify-between border-t border-gray-100 pt-4">
-              <span className="text-sm font-medium text-gray-500">Total final</span>
+            <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-4">
+              <span className="text-sm font-medium text-[var(--color-text-secondary)]">Total final</span>
               <span className="text-xl font-bold" style={{ color: 'var(--color-accent)' }}>
                 {fmtCurrency(total)}
               </span>
@@ -245,7 +245,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 border-t border-gray-100 px-6 py-4">
+          <div className="flex justify-end gap-3 border-t border-[var(--color-border)] px-6 py-4">
             <Button variant="secondary" onClick={onClose}>Cancelar</Button>
             <Button
               onClick={handleConfirm}

@@ -459,11 +459,11 @@ export default function ReportsPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando reportes…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando reportes…</p>
         </div>
       </div>
     )
@@ -473,8 +473,8 @@ export default function ReportsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Reportes</h1>
-          <p className="mt-1 text-sm text-gray-500">Estadisticas y analisis de tu negocio</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Reportes</h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Estadisticas y analisis de tu negocio</p>
         </div>
         <UpgradePrompt feature="El modulo de Reportes" requiredPlan="Profesional" />
       </div>
@@ -490,8 +490,8 @@ export default function ReportsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
-          <p className="mt-2 text-sm text-gray-500">{error}</p>
+          <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{error}</p>
           <button onClick={fetchReports} className="mt-4 rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-white hover:brightness-90">
             Reintentar
           </button>
@@ -504,8 +504,8 @@ export default function ReportsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Reportes</h1>
-        <p className="mt-1 text-sm text-gray-500">Estadisticas y analisis de tu negocio</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Reportes</h1>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Estadisticas y analisis de tu negocio</p>
       </div>
 
       {/* Period selector */}
@@ -519,7 +519,7 @@ export default function ReportsPage() {
                 className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition ${
                   period === p.value
                     ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)] hover:bg-gray-200'
                 }`}
               >
                 {p.label}
@@ -533,14 +533,14 @@ export default function ReportsPage() {
                 type="date"
                 value={customStart}
                 onChange={e => setCustomStart(e.target.value)}
-                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm"
+                className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm"
               />
-              <span className="text-sm text-gray-400">a</span>
+              <span className="text-sm text-[var(--color-muted)]">a</span>
               <input
                 type="date"
                 value={customEnd}
                 onChange={e => setCustomEnd(e.target.value)}
-                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm"
+                className="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm"
               />
             </div>
           )}
@@ -572,33 +572,33 @@ export default function ReportsPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card className="transition-shadow hover:shadow-md">
- <p className="text-xs font-medium text-gray-500">Ingresos</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">{fmtCurrency(income)}</p>
-          <p className="mt-1 text-xs text-gray-400">{periodLabel}</p>
+ <p className="text-xs font-medium text-[var(--color-text-secondary)]">Ingresos</p>
+          <p className="mt-1 text-3xl font-bold text-[var(--color-text)]">{fmtCurrency(income)}</p>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">{periodLabel}</p>
         </Card>
         <Card className="transition-shadow hover:shadow-md">
- <p className="text-xs font-medium text-gray-500">Reservas</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">{apptCount.toLocaleString('es-PY')}</p>
-          <p className="mt-1 text-xs text-gray-400">{periodLabel}</p>
+ <p className="text-xs font-medium text-[var(--color-text-secondary)]">Reservas</p>
+          <p className="mt-1 text-3xl font-bold text-[var(--color-text)]">{apptCount.toLocaleString('es-PY')}</p>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">{periodLabel}</p>
         </Card>
         <Card className="transition-shadow hover:shadow-md">
- <p className="text-xs font-medium text-gray-500">Ticket promedio</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">{fmtCurrency(avgTicket)}</p>
-          <p className="mt-1 text-xs text-gray-400">por reserva</p>
+ <p className="text-xs font-medium text-[var(--color-text-secondary)]">Ticket promedio</p>
+          <p className="mt-1 text-3xl font-bold text-[var(--color-text)]">{fmtCurrency(avgTicket)}</p>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">por reserva</p>
         </Card>
       </div>
 
       {/* Top services / barbers */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900">Servicios mas populares</h2>
-          <p className="text-sm text-gray-500">Top 5 servicios por cantidad de reservas</p>
+          <h2 className="text-lg font-semibold text-[var(--color-text)]">Servicios mas populares</h2>
+          <p className="text-sm text-[var(--color-text-secondary)]">Top 5 servicios por cantidad de reservas</p>
           {topServices.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8">
-              <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              <p className="mt-2 text-sm text-gray-400">Sin datos en este periodo</p>
+              <p className="mt-2 text-sm text-[var(--color-muted)]">Sin datos en este periodo</p>
             </div>
           ) : (
             <div className="mt-4 space-y-3">
@@ -610,14 +610,14 @@ export default function ReportsPage() {
                       {idx + 1}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 truncate">{svc.name}</p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <p className="text-sm font-medium text-[var(--color-text)] truncate">{svc.name}</p>
+                      <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
                         <span>{svc.count} reservas</span>
                         <span>·</span>
                         <span>{fmtCurrency(svc.total)}</span>
                       </div>
                     </div>
-                    <div className="h-2 w-24 overflow-hidden rounded-full bg-gray-100">
+                    <div className="h-2 w-24 overflow-hidden rounded-full bg-[var(--color-paper-2)]">
                       <div className="h-full rounded-full bg-[var(--color-accent)] transition" style={{ width: `${(svc.count / maxCount) * 100}%` }} />
                     </div>
                   </div>
@@ -628,14 +628,14 @@ export default function ReportsPage() {
         </Card>
 
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900">Barberos mas solicitados</h2>
-          <p className="text-sm text-gray-500">Top 5 barberos por cantidad de reservas</p>
+          <h2 className="text-lg font-semibold text-[var(--color-text)]">Barberos mas solicitados</h2>
+          <p className="text-sm text-[var(--color-text-secondary)]">Top 5 barberos por cantidad de reservas</p>
           {topBarbers.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8">
-              <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-              <p className="mt-2 text-sm text-gray-400">Sin datos en este periodo</p>
+              <p className="mt-2 text-sm text-[var(--color-muted)]">Sin datos en este periodo</p>
             </div>
           ) : (
             <div className="mt-4 space-y-3">
@@ -647,14 +647,14 @@ export default function ReportsPage() {
                       {idx + 1}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 truncate">{barber.name}</p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <p className="text-sm font-medium text-[var(--color-text)] truncate">{barber.name}</p>
+                      <div className="flex items-center gap-2 text-xs text-[var(--color-text-secondary)]">
                         <span>{barber.count} reservas</span>
                         <span>·</span>
                         <span>{fmtCurrency(barber.total)}</span>
                       </div>
                     </div>
-                    <div className="h-2 w-24 overflow-hidden rounded-full bg-gray-100">
+                    <div className="h-2 w-24 overflow-hidden rounded-full bg-[var(--color-paper-2)]">
                       <div className="h-full rounded-full bg-emerald-500 transition" style={{ width: `${(barber.count / maxCount) * 100}%` }} />
                     </div>
                   </div>
@@ -667,7 +667,7 @@ export default function ReportsPage() {
 
       {/* Charts - Profesional (todos) */}
       <div className="space-y-6">
-        <h2 className="text-xl font-bold text-gray-900">Gráficos</h2>
+        <h2 className="text-xl font-bold text-[var(--color-text)]">Gráficos</h2>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {Charts && (
             <>
@@ -692,7 +692,7 @@ export default function ReportsPage() {
       <div className="flex justify-center">
         <button
           onClick={fetchReports}
-          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="rounded-lg border border-[var(--color-border)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-paper)]"
         >
           Actualizar datos
         </button>

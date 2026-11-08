@@ -54,8 +54,8 @@ export default function OnboardingChecklist() {
           </svg>
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Configurá tu barbería</h3>
-          <p className="text-xs text-gray-500">{completedCount} de {STEPS.length} pasos completados</p>
+          <h3 className="text-sm font-semibold text-[var(--color-text)]">Configurá tu barbería</h3>
+          <p className="text-xs text-[var(--color-text-secondary)]">{completedCount} de {STEPS.length} pasos completados</p>
         </div>
         <div className="ml-auto h-2 w-24 overflow-hidden rounded-full bg-gray-200">
           <div
@@ -74,7 +74,7 @@ export default function OnboardingChecklist() {
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
                 done
                   ? 'bg-emerald-50 text-emerald-700'
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
+                  : 'bg-white text-[var(--color-text)] hover:bg-[var(--color-paper)]'
               }`}
             >
               {done ? (
@@ -82,7 +82,7 @@ export default function OnboardingChecklist() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               ) : (
-                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 border-gray-300 text-[10px] font-bold text-gray-400">
+                <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 border-[var(--color-border)] text-[10px] font-bold text-[var(--color-muted)]">
                   {STEPS.indexOf(step) + 1}
                 </span>
               )}

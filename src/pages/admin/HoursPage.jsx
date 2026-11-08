@@ -140,11 +140,11 @@ export default function HoursPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando horarios…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando horarios…</p>
         </div>
       </div>
     )
@@ -159,8 +159,8 @@ export default function HoursPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
-          <p className="mt-2 text-sm text-gray-500">{error}</p>
+          <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{error}</p>
           <Button variant="secondary" className="mt-4" onClick={fetchHours}>Reintentar</Button>
         </div>
       </div>
@@ -171,8 +171,8 @@ export default function HoursPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">Horarios</h1>
-        <p className="mt-1 text-sm text-gray-500">Configura los horarios de atención de tu negocio</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Horarios</h1>
+        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Configura los horarios de atención de tu negocio</p>
       </div>
 
       {/* Save feedback */}
@@ -206,7 +206,7 @@ export default function HoursPage() {
                     />
                     <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition peer-checked:bg-[var(--color-accent)] peer-checked:after:translate-x-full" />
                   </label>
-                  <span className="min-w-20 text-sm font-medium text-gray-900">
+                  <span className="min-w-20 text-sm font-medium text-[var(--color-text)]">
                     {getDayName(day.day_of_week)}
                   </span>
                 </div>
@@ -215,33 +215,33 @@ export default function HoursPage() {
                   <>
                     {/* Open time */}
                     <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Desde</label>
+                      <label className="text-xs text-[var(--color-text-secondary)]">Desde</label>
                       <input
                         type="time"
                         value={day.open_time}
                         onChange={(e) => handleChange(day.day_of_week, 'open_time', e.target.value)}
-                        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+                        className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
                       />
                     </div>
 
                     {/* Close time */}
                     <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Hasta</label>
+                      <label className="text-xs text-[var(--color-text-secondary)]">Hasta</label>
                       <input
                         type="time"
                         value={day.close_time}
                         onChange={(e) => handleChange(day.day_of_week, 'close_time', e.target.value)}
-                        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+                        className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
                       />
                     </div>
 
                     {/* Slot duration */}
                     <div className="flex items-center gap-2">
-                      <label className="text-xs text-gray-500">Duración</label>
+                      <label className="text-xs text-[var(--color-text-secondary)]">Duración</label>
                       <select
                         value={day.slot_duration}
                         onChange={(e) => handleChange(day.day_of_week, 'slot_duration', Number(e.target.value))}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+                        className="w-full rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
                       >
                         <option value={15}>15 min</option>
                         <option value={30}>30 min</option>
@@ -255,7 +255,7 @@ export default function HoursPage() {
                 )}
 
                 {day.is_closed && (
-                  <span className="text-sm text-gray-400">Cerrado</span>
+                  <span className="text-sm text-[var(--color-muted)]">Cerrado</span>
                 )}
               </div>
             </Card>

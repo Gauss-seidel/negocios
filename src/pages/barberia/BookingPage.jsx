@@ -94,7 +94,7 @@ function StepProgress({ step, colors }) {
                 )}
               </div>
  <span
-                className={`hidden text-[10px] font-semibold uppercase tracking-wider transition-colors sm:inline ${
+                className={`hidden text-[11px] font-semibold  transition-colors sm:inline ${
                   isCurrent ? 'opacity-100' : 'opacity-50'
                 }`}
                 style={{ color: isCurrent ? colors.accent : colors.textSecondary }}

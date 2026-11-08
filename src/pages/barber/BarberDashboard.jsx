@@ -300,7 +300,7 @@ export default function BarberDashboard() {
                 ? 'bg-blue-500/10 text-blue-400'
                 : a.status === 'completed'
                 ? 'bg-emerald-500/10 text-emerald-400'
-                : 'bg-gray-500/10 text-gray-400'
+                : 'bg-gray-500/10 text-[var(--color-muted)]'
             }`}>
               {a.status === 'pending' ? 'Pendiente'
                 : a.status === 'confirmed' ? 'Confirmada'

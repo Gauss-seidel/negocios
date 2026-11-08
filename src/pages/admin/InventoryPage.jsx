@@ -209,11 +209,11 @@ export default function InventoryPage() {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="mx-auto h-10 w-10 animate-spin text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="mt-4 text-sm text-gray-500">Cargando inventario…</p>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">Cargando inventario…</p>
         </div>
       </div>
     )
@@ -223,8 +223,8 @@ export default function InventoryPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Inventario</h1>
-          <p className="mt-1 text-sm text-gray-500">Control de productos e insumos</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Inventario</h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de productos e insumos</p>
         </div>
         <UpgradePrompt feature="El modulo de Inventario" requiredPlan="Profesional" />
       </div>
@@ -240,8 +240,8 @@ export default function InventoryPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
-          <p className="mt-2 text-sm text-gray-500">{error}</p>
+          <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{error}</p>
           <Button variant="secondary" className="mt-4" onClick={fetchProducts}>Reintentar</Button>
         </div>
       </div>
@@ -255,8 +255,8 @@ export default function InventoryPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Inventario</h1>
-          <p className="mt-1 text-sm text-gray-500">Control de productos e insumos</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Inventario</h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de productos e insumos</p>
         </div>
         <Button onClick={openCreateModal}>
           <svg aria-hidden="true" focusable="false" className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,11 +294,11 @@ export default function InventoryPage() {
       {products.length === 0 ? (
         <Card>
           <div className="flex flex-col items-center justify-center py-12">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-gray-900">Inventario vacío</h3>
-            <p className="mt-1 text-sm text-gray-500">Agrega productos para controlar tu inventario.</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text)]">Inventario vacío</h3>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Agrega productos para controlar tu inventario.</p>
             <Button className="mt-4" onClick={openCreateModal}>Agregar Producto</Button>
           </div>
         </Card>
@@ -316,13 +316,13 @@ export default function InventoryPage() {
                         onError={(e) => { e.target.style.display = 'none' }} />
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium text-gray-900">{product.name}</p>
+                      <p className="font-medium text-[var(--color-text)]">{product.name}</p>
                       {product.description && (
-                        <p className="truncate text-xs text-gray-500">{product.description}</p>
+                        <p className="truncate text-xs text-[var(--color-text-secondary)]">{product.description}</p>
                       )}
                       {product.is_product && (
                         <span className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                          product.is_active ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'
+                          product.is_active ? 'bg-purple-100 text-purple-700' : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'
                         }`}>
                           {product.is_active ? 'Producto' : 'Inactivo'}
                         </span>
@@ -332,8 +332,8 @@ export default function InventoryPage() {
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <span className="text-xs text-gray-400">Stock</span>
-                    <p className={`font-semibold ${isLow ? 'text-red-600' : 'text-gray-900'}`}>
+                    <span className="text-xs text-[var(--color-muted)]">Stock</span>
+                    <p className={`font-semibold ${isLow ? 'text-red-600' : 'text-[var(--color-text)]'}`}>
                       {product.current_stock ?? 0} {product.unit || ''}
                       {isLow && (
                         <svg aria-hidden="true" focusable="false" className="ml-1 inline h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -343,30 +343,30 @@ export default function InventoryPage() {
                     </p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Stock mínimo</span>
-                    <p className="text-gray-700">{product.min_stock ?? 0} {product.unit || ''}</p>
+                    <span className="text-xs text-[var(--color-muted)]">Stock mínimo</span>
+                    <p className="text-[var(--color-text)]">{product.min_stock ?? 0} {product.unit || ''}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Precio</span>
-                    <p className="font-medium text-gray-900">{product.price ? formatCurrency(product.price) : '—'}</p>
+                    <span className="text-xs text-[var(--color-muted)]">Precio</span>
+                    <p className="font-medium text-[var(--color-text)]">{product.price ? formatCurrency(product.price) : '—'}</p>
                   </div>
                   <div>
                     {product.is_product ? (
                       <>
-                        <span className="text-xs text-gray-400">Estado</span>
-                        <p className={`font-medium ${product.is_active ? 'text-emerald-600' : 'text-gray-500'}`}>
+                        <span className="text-xs text-[var(--color-muted)]">Estado</span>
+                        <p className={`font-medium ${product.is_active ? 'text-emerald-600' : 'text-[var(--color-text-secondary)]'}`}>
                           {product.is_active ? 'Activo' : 'Inactivo'}
                         </p>
                       </>
                     ) : (
                       <>
-                        <span className="text-xs text-gray-400">Unidad</span>
-                        <p className="text-gray-700">{product.unit || '—'}</p>
+                        <span className="text-xs text-[var(--color-muted)]">Unidad</span>
+                        <p className="text-[var(--color-text)]">{product.unit || '—'}</p>
                       </>
                     )}
                   </div>
                 </div>
-                <div className="mt-3 flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                <div className="mt-3 flex items-center justify-end gap-2 border-t border-[var(--color-border)] pt-3">
                   <Button variant="ghost" size="sm" onClick={() => openStockAdjustment(product)}>
                     Ajustar stock
                   </Button>
@@ -380,11 +380,11 @@ export default function InventoryPage() {
         </div>
       ) : (
         /* ── Desktop table ── */
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
- <tr className="border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500">
+ <tr className="border-b border-[var(--color-border)] bg-[var(--color-paper)] text-xs font-medium text-[var(--color-text-secondary)]">
                   <th className="px-6 py-3">Producto</th>
                   <th className="px-6 py-3">Stock</th>
                   <th className="px-6 py-3">Mínimo</th>
@@ -394,11 +394,11 @@ export default function InventoryPage() {
                   <th className="px-6 py-3 text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-[var(--color-border)]">
                 {products.map((product) => {
                   const isLow = product.min_stock > 0 && product.current_stock <= product.min_stock
                   return (
-                    <tr key={product.id} className={`transition-colors hover:bg-gray-50 ${isLow ? 'bg-amber-50' : ''}`}>
+                    <tr key={product.id} className={`transition-colors hover:bg-[var(--color-paper)] ${isLow ? 'bg-amber-50' : ''}`}>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           {product.is_product && product.image_url ? (
@@ -410,9 +410,9 @@ export default function InventoryPage() {
                             </div>
                           ) : null}
                           <div>
-                            <p className="font-medium text-gray-900">{product.name}</p>
+                            <p className="font-medium text-[var(--color-text)]">{product.name}</p>
                             {product.description && !product.is_product && (
-                              <p className="truncate max-w-xs text-xs text-gray-500">{product.description}</p>
+                              <p className="truncate max-w-xs text-xs text-[var(--color-text-secondary)]">{product.description}</p>
                             )}
                             {product.is_product && (
                               <span className="inline-flex items-center gap-1 text-xs font-medium text-purple-600">
@@ -423,7 +423,7 @@ export default function InventoryPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`font-semibold ${isLow ? 'text-red-600' : 'text-gray-900'}`}>
+                        <span className={`font-semibold ${isLow ? 'text-red-600' : 'text-[var(--color-text)]'}`}>
                           {product.current_stock ?? 0}
                         </span>
                         {isLow && (
@@ -432,20 +432,20 @@ export default function InventoryPage() {
                           </svg>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-gray-600">{product.min_stock ?? 0}</td>
-                      <td className="px-6 py-4 text-gray-600">{product.unit || '—'}</td>
+                      <td className="px-6 py-4 text-[var(--color-text-secondary)]">{product.min_stock ?? 0}</td>
+                      <td className="px-6 py-4 text-[var(--color-text-secondary)]">{product.unit || '—'}</td>
                       <td className="px-6 py-4">
                         {product.is_product ? (
                           <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            product.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                            product.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-[var(--color-paper-2)] text-[var(--color-text-secondary)]'
                           }`}>
                             {product.is_active ? 'Activo' : 'Inactivo'}
                           </span>
                         ) : (
-                          <span className="text-xs text-gray-400">·</span>
+                          <span className="text-xs text-[var(--color-muted)]">·</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 font-medium text-gray-900">
+                      <td className="px-6 py-4 font-medium text-[var(--color-text)]">
                         {product.price ? formatCurrency(product.price) : '·'}
                       </td>
                       <td className="px-6 py-4">
@@ -491,14 +491,14 @@ export default function InventoryPage() {
           />
 
           <div className="space-y-1">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Descripción</label>
+            <label htmlFor="description" className="block text-sm font-medium text-[var(--color-text)]">Descripción</label>
             <textarea
               id="description"
               name="description"
               value={form.description}
               onChange={handleChange}
               rows={2}
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+              className="block w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm shadow-sm placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
             />
           </div>
 
@@ -525,13 +525,13 @@ export default function InventoryPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label htmlFor="unit" className="block text-sm font-medium text-gray-700">Unidad</label>
+              <label htmlFor="unit" className="block text-sm font-medium text-[var(--color-text)]">Unidad</label>
               <select
                 id="unit"
                 name="unit"
                 value={form.unit}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+                className="w-full rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
               >
                 {UNITS.map((u) => (
                   <option key={u} value={u}>{u}</option>
@@ -550,16 +550,16 @@ export default function InventoryPage() {
           </div>
 
           {/* Product for sale toggle */}
-          <div className="space-y-4 border-t border-gray-200 pt-4">
+          <div className="space-y-4 border-t border-[var(--color-border)] pt-4">
             <label className="flex items-center gap-3">
               <input
                 type="checkbox"
                 name="is_product"
                 checked={form.is_product}
                 onChange={handleChange}
-                className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                className="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
               />
-              <span className="text-sm font-medium text-gray-700">Producto para la venta</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">Producto para la venta</span>
             </label>
 
             {form.is_product && (
@@ -578,15 +578,15 @@ export default function InventoryPage() {
                     name="is_active"
                     checked={form.is_active}
                     onChange={handleChange}
-                    className="h-4 w-4 rounded border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                    className="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
                   />
-                  <span className="text-sm font-medium text-gray-700">Producto activo (visible en página pública)</span>
+                  <span className="text-sm font-medium text-[var(--color-text)]">Producto activo (visible en página pública)</span>
                 </label>
               </>
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => setShowModal(false)}>Cancelar</Button>
             <Button type="submit" loading={actionLoading}>
               {editTarget ? 'Guardar Cambios' : 'Agregar Producto'}
@@ -609,8 +609,8 @@ export default function InventoryPage() {
         )}
 
         <form onSubmit={handleStockAdjustment} className="space-y-4">
-          <p className="text-sm text-gray-600">
-            Stock actual: <strong className="text-gray-900">{stockTarget?.current_stock ?? 0} {stockTarget?.unit}</strong>
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            Stock actual: <strong className="text-[var(--color-text)]">{stockTarget?.current_stock ?? 0} {stockTarget?.unit}</strong>
           </p>
 
           <div className="flex items-center gap-3">
@@ -621,9 +621,9 @@ export default function InventoryPage() {
                 value="in"
                 checked={stockAdjustmentType === 'in'}
                 onChange={() => setStockAdjustmentType('in')}
-                className="h-4 w-4 border-gray-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+                className="h-4 w-4 border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
               />
-              <span className="text-sm text-gray-700">Agregar</span>
+              <span className="text-sm text-[var(--color-text)]">Agregar</span>
             </label>
             <label className="flex items-center gap-2">
               <input
@@ -632,9 +632,9 @@ export default function InventoryPage() {
                 value="out"
                 checked={stockAdjustmentType === 'out'}
                 onChange={() => setStockAdjustmentType('out')}
-                className="h-4 w-4 border-gray-300 text-red-600 focus:ring-red-500"
+                className="h-4 w-4 border-[var(--color-border)] text-red-600 focus:ring-red-500"
               />
-              <span className="text-sm text-gray-700">Quitar</span>
+              <span className="text-sm text-[var(--color-text)]">Quitar</span>
             </label>
           </div>
 
@@ -646,7 +646,7 @@ export default function InventoryPage() {
             onChange={(e) => setStockAdjustment(e.target.value)}
           />
 
-          <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={() => { setShowStockModal(false); setStockTarget(null) }}>
               Cancelar
             </Button>
