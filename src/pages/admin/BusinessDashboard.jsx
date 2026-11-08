@@ -218,28 +218,28 @@ export default function BusinessDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>Dashboard</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Dashboard</h1>
           <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Resumen de actividad de tu negocio hoy.</p>
         </div>
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-5">
         {METRICS.map(m => {
           let val = metrics[m.key]
           if (m.key === 'revenue') val = fmtCurrency(val)
           else val = (val ?? 0).toLocaleString('es-PY')
           return (
-            <Card key={m.key} hover>
-              <div className="flex items-center gap-4">
-                <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${m.color.replace('text-', 'bg-').replace('500', '100')}`}>
-                  <svg aria-hidden="true" focusable="false" className={`h-6 w-6 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <Card key={m.key} className={m.key === 'revenue' ? 'col-span-2 max-lg:order-last lg:col-span-1' : ''}>
+              <div className="flex flex-col gap-3">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[var(--color-paper-2)] text-[var(--color-bottle)]">
+                  <svg aria-hidden="true" focusable="false" className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.6}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={m.icon} />
                   </svg>
                 </div>
                 <div className="min-w-0">
- <p className="text-xs font-semibold"style={{ color: 'var(--color-text-secondary)' }}>{m.label}</p>
-                  <p className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{val}</p>
+                  <p className="text-[13px] font-medium leading-tight text-[var(--color-text-secondary)]">{m.label}</p>
+                  <p className="mt-1 truncate text-2xl font-semibold tabular-nums text-[var(--color-ink)] sm:text-[1.75rem]">{val}</p>
                 </div>
               </div>
             </Card>
@@ -332,7 +332,7 @@ export default function BusinessDashboard() {
           style={{ animation: 'slideUpIn 0.35s ease-out' }}
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20">
-            <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg aria-hidden="true" focusable="false" className="h-5 w-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>

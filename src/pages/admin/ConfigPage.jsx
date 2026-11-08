@@ -173,7 +173,7 @@ export default function ConfigPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Configuración</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Configuración</h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Información general de tu negocio</p>
       </div>
 

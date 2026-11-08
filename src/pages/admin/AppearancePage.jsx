@@ -3,15 +3,16 @@ import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
+import TemplateThumb from '../../components/TemplateThumb'
 import { TEMPLATES, FONT_PRESETS, DEFAULT_FONT_PRESET_BY_TEMPLATE } from '../../templates/registry'
 import { deriveTemplateTokens, checkTemplateContrast } from '../../utils/color'
 
 const DEFAULT_COLORS = {
-  primary: '#1a1a2e',
-  secondary: '#16213e',
-  accent: '#e94560',
-  background: '#ffffff',
-  text: '#1a1a2e',
+  primary: '#1f3a2e',
+  secondary: '#142a20',
+  accent: '#b08d57',
+  background: '#fafbf8',
+  text: '#18201c',
 }
 
 export default function AppearancePage() {
@@ -123,7 +124,7 @@ export default function AppearancePage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Apariencia</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Apariencia</h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Personaliza la apariencia de la página pública de tu negocio</p>
       </div>
 
@@ -143,7 +144,7 @@ export default function AppearancePage() {
         )}
         <p className="text-sm text-[var(--color-text-secondary)] mb-4">Selecciona el diseño base para tu página</p>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-5">
           {Object.entries(TEMPLATES).map(([key, tpl]) => {
             const isSelected = selectedTemplate === key
             return (
@@ -151,32 +152,19 @@ export default function AppearancePage() {
                 key={key}
                 type="button"
                 onClick={() => { setSelectedTemplate(key); setFontPreset(DEFAULT_FONT_PRESET_BY_TEMPLATE[key] || 'modern') }}
-                className={`relative overflow-hidden rounded-xl border-2 p-4 text-left transition hover:shadow-md ${
+                className={`relative overflow-hidden rounded-xl border-2 p-3 text-left transition hover:shadow-md ${
                   isSelected
                     ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]'
                     : 'border-[var(--color-border)] hover:border-[var(--color-border)]'
                 }`}
               >
-                {/* Thumbnail placeholder */}
-                <div
-                  className="mb-3 flex h-24 items-center justify-center rounded-lg bg-gradient-to-br"
-                  style={{
-                    backgroundImage: `linear-gradient(135deg, ${colors.primary}22, ${colors.accent}22)`,
-                  }}
-                >
-                  <div
-                    className="flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold text-white"
-                    style={{ backgroundColor: colors.accent }}
-                  >
-                    {tpl.name.charAt(0)}
-                  </div>
-                </div>
+                <TemplateThumb templateId={key} colors={colors} />
 
-                <h3 className="text-sm font-semibold text-[var(--color-text)]">{tpl.name}</h3>
+                <h3 className="mt-3 text-sm font-semibold text-[var(--color-text)]">{tpl.name}</h3>
                 <p className="mt-0.5 text-xs text-[var(--color-text-secondary)]">{tpl.description}</p>
 
                 {isSelected && (
-                  <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-accent)]">
+                  <div className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-accent)] ring-2 ring-[var(--color-surface)]">
                     <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>

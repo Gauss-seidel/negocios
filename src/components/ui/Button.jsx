@@ -7,20 +7,22 @@ export default function Button({
   disabled = false,
   ...props
 }) {
-  const base = 'inline-flex items-center justify-center font-semibold transition duration-200 focus:outline-none active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50'
+  const base =
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg font-semibold transition-[background-color,box-shadow,color,transform] duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]'
 
   const variants = {
-    primary: 'rounded-xl bg-[var(--color-accent)] text-[var(--color-accent-ink,#fff)] hover:brightness-110 shadow-sm',
-    secondary: 'rounded-xl bg-[var(--color-paper-2,#f3f4f6)] text-[var(--color-text,#374151)] hover:brightness-95 border border-[var(--color-border,rgba(0,0,0,.08))]',
-    danger: 'rounded-xl bg-red-500/10 text-red-600 hover:bg-red-500/15 border border-red-500/20',
-    ghost: 'rounded-xl text-[var(--color-text-secondary,#6b7280)] hover:text-[var(--color-text,#374151)] hover:bg-[var(--color-paper-2,#f3f4f6)]',
-    light: 'rounded-xl bg-[var(--color-surface,#f9fafb)] text-[var(--color-text,#374151)] hover:brightness-95 border border-[var(--color-border,rgba(0,0,0,.08))]',
+    primary: 'bg-[var(--color-accent)] text-[var(--color-accent-ink)] shadow-sm hover:bg-[var(--color-accent-hover)]',
+    secondary: 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border-strong)] hover:bg-[var(--color-paper)]',
+    danger: 'bg-[var(--color-wine)] text-white hover:brightness-110',
+    ghost: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-paper-2)]',
+    light: 'bg-[var(--color-surface)] text-[var(--color-text)] border border-[var(--color-border)] hover:bg-[var(--color-paper)]',
+    brass: 'bg-[var(--color-brass)] text-[var(--color-ink)] hover:brightness-105 shadow-sm',
   }
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-xs gap-1.5',
-    md: 'px-4 py-2.5 text-sm gap-2',
-    lg: 'px-6 py-3 text-base gap-2',
+    sm: 'h-9 px-3 text-[13px]',
+    md: 'h-11 px-4 text-sm',
+    lg: 'h-12 px-6 text-[15px]',
   }
 
   return (

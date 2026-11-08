@@ -76,7 +76,7 @@ export default function CashPage() {
     setError(null)
 
     try {
-      const [registerRes, movementsRes] = await Promise.allSettled([
+      const [registerRes] = await Promise.allSettled([
         supabase
           .from('cash_register')
           .select('*')
@@ -85,11 +85,9 @@ export default function CashPage() {
           .order('opened_at', { ascending: false })
           .limit(1)
           .maybeSingle(),
-        // Use the open register's ID to filter movements (or branch_id as fallback)
-        null, // placeholder, computed below
       ])
 
-      // Re-fetch movements filtered by current open register
+      // Movements filtered by the current open register
       const currentRegister = registerRes.status === 'fulfilled' ? registerRes.value.data : null
       const movRes = await supabase
         .from('cash_movements')
@@ -252,7 +250,7 @@ export default function CashPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Caja</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Caja</h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de ingresos y gastos</p>
         </div>
         <UpgradePrompt feature="El modulo de Caja" requiredPlan="Profesional" />
@@ -264,7 +262,7 @@ export default function CashPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Caja</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Caja</h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de ingresos y gastos del día</p>
       </div>
 

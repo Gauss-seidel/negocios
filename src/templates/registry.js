@@ -1,6 +1,6 @@
 // Registro de plantillas visuales para barberías
 // Cada plantilla define su propia experiencia de animación y movimiento
-import { deriveTemplateTokens } from '../utils/color.js'
+import { deriveTemplateTokens, relativeLuminance, mix } from '../utils/color.js'
 
 // Definición de tipos de animación
 const ANIMATION_STYLES = {
@@ -51,10 +51,10 @@ export const FONT_PRESETS = {
   classic: {
     id: 'classic',
     name: 'Clásica',
-    description: 'Serif en títulos, sans legible en texto',
-    heading: 'Georgia, "Times New Roman", serif',
-    body: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-    google: null,
+    description: 'Serif de vidriera en títulos, sans legible en texto',
+    heading: '"Bodoni Moda", Didot, Georgia, serif',
+    body: '"Hanken Grotesk", system-ui, sans-serif',
+    google: 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap',
   },
   modern: {
     id: 'modern',
@@ -111,74 +111,78 @@ export function getFontPreset(presetId, templateId = 'classic') {
   return FONT_PRESETS[id] || FONT_PRESETS.modern
 }
 
+// Each template is a real visual direction: `shape` drives the layout of the public page.
+// Colors always come from the barbería; the template decides form, rhythm and typography.
 export const TEMPLATES = {
   classic: {
     id: 'classic',
     name: 'Clásica',
-    description: 'Estilo tradicional con tonos cálidos',
+    description: 'Hero centrado, logo en óvalo y pizarra de precios con filetes.',
     thumbnail: '/templates/classic.jpg',
     config: {
       fonts: { heading: 'serif', body: 'sans-serif' },
       layout: 'centered',
-      borderRadius: 'md',
+      borderRadius: 'sm',
       shadows: 'soft',
       animation: ANIMATION_STYLES.classic,
+      shape: { hero: 'centered', services: 'board', radius: '6px', logo: 'oval', width: '64rem' },
     },
   },
   modern: {
     id: 'modern',
     name: 'Moderna',
-    description: 'Minimalista y elegante',
+    description: 'Hero dividido, tarjetas limpias y tipografía sans.',
     thumbnail: '/templates/modern.jpg',
-    config: {
-      fonts: { heading: 'sans-serif', body: 'sans-serif' },
-      layout: 'fullwidth',
-      borderRadius: 'sm',
-      shadows: 'medium',
-      animation: ANIMATION_STYLES.modern,
-    },
-  },
-  dark: {
-    id: 'dark',
-    name: 'Dark',
-    description: 'Estilo oscuro y sofisticado',
-    thumbnail: '/templates/dark.jpg',
-    config: {
-      fonts: { heading: 'sans-serif', body: 'sans-serif' },
-      layout: 'fullwidth',
-      borderRadius: 'lg',
-      shadows: 'hard',
-      animation: ANIMATION_STYLES.dark,
-      colors: {
-       text: '#f8fafc',
-      },
-      
-    },
-  },
-  premium: {
-    id: 'premium',
-    name: 'Premium',
-    description: 'Diseño de lujo con tipografía elegante',
-    thumbnail: '/templates/premium.jpg',
-    config: {
-      fonts: { heading: 'Playfair Display, serif', body: 'Inter, sans-serif' },
-      layout: 'centered',
-      borderRadius: 'lg',
-      shadows: 'soft',
-      animation: ANIMATION_STYLES.premium,
-    },
-  },
-  vibrant: {
-    id: 'vibrant',
-    name: 'Vibrante',
-    description: 'Colores vivos y moderno',
-    thumbnail: '/templates/vibrant.jpg',
     config: {
       fonts: { heading: 'sans-serif', body: 'sans-serif' },
       layout: 'fullwidth',
       borderRadius: 'md',
       shadows: 'medium',
+      animation: ANIMATION_STYLES.modern,
+      shape: { hero: 'split', services: 'cards', radius: '14px', logo: 'square', width: '72rem' },
+    },
+  },
+  dark: {
+    id: 'dark',
+    name: 'Nocturna',
+    description: 'Fondo oscuro a pantalla completa, contraste alto y títulos grandes.',
+    thumbnail: '/templates/dark.jpg',
+    config: {
+      fonts: { heading: 'sans-serif', body: 'sans-serif' },
+      layout: 'fullwidth',
+      borderRadius: 'md',
+      shadows: 'hard',
+      animation: ANIMATION_STYLES.dark,
+      dark: true,
+      shape: { hero: 'fullbleed', services: 'board', radius: '10px', logo: 'square', width: '72rem' },
+    },
+  },
+  premium: {
+    id: 'premium',
+    name: 'Premium',
+    description: 'Editorial, márgenes amplios y la carta de servicios como protagonista.',
+    thumbnail: '/templates/premium.jpg',
+    config: {
+      fonts: { heading: 'Playfair Display, serif', body: 'Inter, sans-serif' },
+      layout: 'centered',
+      borderRadius: 'none',
+      shadows: 'none',
+      animation: ANIMATION_STYLES.premium,
+      shape: { hero: 'editorial', services: 'board', radius: '2px', logo: 'oval', width: '60rem' },
+    },
+  },
+  vibrant: {
+    id: 'vibrant',
+    name: 'Vibrante',
+    description: 'Bloques de color, esquinas redondas y botones grandes.',
+    thumbnail: '/templates/vibrant.jpg',
+    config: {
+      fonts: { heading: 'sans-serif', body: 'sans-serif' },
+      layout: 'fullwidth',
+      borderRadius: 'xl',
+      shadows: 'medium',
       animation: ANIMATION_STYLES.vibrant,
+      shape: { hero: 'blocks', services: 'cards', radius: '22px', logo: 'round', width: '72rem' },
     },
   },
 }
@@ -192,14 +196,18 @@ export function getTemplateConfig(templateId, colors = {}, fontPreset = null) {
   const { fontPreset: colorFontPreset, __fontPreset, ...safeColors } = (colors && typeof colors === 'object') ? colors : {}
   const resolvedFont = getFontPreset(fontPreset || colorFontPreset || __fontPreset, templateId)
   const baseColors = {
-    primary: '#1a1a2e',
-    secondary: '#16213e',
-    accent: '#e94560',
-    background: '#ffffff',
-    text: '#1a1a2e',
-    textSecondary: '#64748b',
-    ...(template.config?.colors || {}),
+    primary: '#1f3a2e',
+    secondary: '#142a20',
+    accent: '#b08d57',
+    background: '#fafbf8',
+    text: '#18201c',
     ...safeColors,
+  }
+  // Nocturna: if the barbería kept a light background, switch to a dark ground tinted by its primary.
+  if (template.config.dark && relativeLuminance(baseColors.background) > 0.2) {
+    baseColors.background = mix(baseColors.primary, '#000000', 0.72)
+    baseColors.text = '#eef0eb'
+    delete baseColors.textSecondary
   }
   const derived = deriveTemplateTokens(baseColors)
   // keep any extra custom keys from admin JSON, but prefer normalized/derived core tokens

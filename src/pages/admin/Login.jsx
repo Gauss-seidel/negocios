@@ -1,3 +1,4 @@
+import Logo from '../../components/ui/Logo'
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
@@ -69,8 +70,8 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}>
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <Link to="/" className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text)' }}>
-            BarberShifts
+          <Link to="/" className="inline-flex rounded-md" aria-label="BarberShifts, inicio">
+            <Logo size="lg" />
           </Link>
           <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Panel de administración

@@ -178,7 +178,7 @@ export default function PlansPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>Planes</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Planes</h1>
         <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
           {currentPlan
             ? `Actualmente estás en el plan ${currentPlanName}.`

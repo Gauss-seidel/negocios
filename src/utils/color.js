@@ -45,13 +45,21 @@ export function onColor(bg, { light = '#fffaf8', dark = '#1f1a17', min = 4.5 } =
   return lightOk >= darkOk ? light : dark
 }
 
+// Linear blend of two hex colours: t = 0 → a, t = 1 → b.
+export function mix(a, b, t) {
+  const A = hexToRgb(a), B = hexToRgb(b)
+  if (!A || !B) return a
+  const c = (k) => Math.round(A[k] + (B[k] - A[k]) * t).toString(16).padStart(2, '0')
+  return `#${c('r')}${c('g')}${c('b')}`
+}
+
 export function deriveTemplateTokens(colors = {}) {
-  const bg = normalizeHex(colors.background) || '#ffffff'
-  const primary = normalizeHex(colors.primary) || '#1a1a2e'
-  const secondary = normalizeHex(colors.secondary) || '#16213e'
-  const accent = normalizeHex(colors.accent) || '#e94560'
-  const text = normalizeHex(colors.text) || '#1a1a2e'
-  const textSecondary = normalizeHex(colors.textSecondary) || '#64748b'
+  const bg = normalizeHex(colors.background) || '#fafbf8'
+  const primary = normalizeHex(colors.primary) || '#1f3a2e'
+  const secondary = normalizeHex(colors.secondary) || '#142a20'
+  const accent = normalizeHex(colors.accent) || '#b08d57'
+  const text = normalizeHex(colors.text) || '#18201c'
+  const textSecondary = normalizeHex(colors.textSecondary) || mix(text, bg, 0.32)
   return {
     background: bg,
     primary,
@@ -63,6 +71,9 @@ export function deriveTemplateTokens(colors = {}) {
     onPrimary: onColor(primary),
     onSecondary: onColor(secondary),
     onBackground: onColor(bg, { light: '#ffffff', dark: text }),
+    // Accent used as text (prices, links): fall back to body text if it can't be read on the background.
+    accentText: contrastRatio(accent, bg) >= 3 ? accent : text,
+    isDarkBg: relativeLuminance(bg) < 0.2,
   }
 }
 

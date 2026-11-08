@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase'
+import { useAuth } from '../../contexts/AuthContext'
 import { useState, useEffect } from 'react'
 import { useResponsiveTable } from '../../hooks/useResponsiveTable'
 import Button from '../../components/ui/Button'
@@ -9,6 +10,7 @@ import Card from '../../components/ui/Card'
 /* ─── Main ─── */
 
 export default function SuperBarberosPage() {
+  const { session } = useAuth()
   const [barbers, setBarbers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -177,7 +179,7 @@ export default function SuperBarberosPage() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
@@ -195,7 +197,7 @@ export default function SuperBarberosPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Barberos del Sistema</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Barberos del Sistema</h1>
         <p className="mt-1 text-sm text-[var(--color-muted)]">
           {barbers.length} {barbers.length === 1 ? 'barbero registrado' : 'barberos registrados'} ({activeCount} activos)
         </p>
@@ -242,15 +244,15 @@ export default function SuperBarberosPage() {
                   <div className="flex items-center gap-2 text-xs mb-3">
                     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-medium ${
                       b.has_user
-                        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                        : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
+                        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
+                        : 'border-amber-500/20 bg-amber-500/10 text-amber-600'
                     }`}>
                       <span className={`h-1.5 w-1.5 rounded-full ${b.has_user ? 'bg-emerald-400' : 'bg-amber-400'}`} />
                       {b.has_user ? 'Con usuario' : 'Sin usuario'}
                     </span>
                     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-medium ${
                       b.is_active
-                        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
                         : 'border-gray-500/20 bg-gray-500/10 text-[var(--color-muted)]'
                     }`}>
                       <span className={`h-1.5 w-1.5 rounded-full ${b.is_active ? 'bg-emerald-400' : 'bg-gray-400'}`} />
@@ -264,7 +266,7 @@ export default function SuperBarberosPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                       </svg>
                     </button>
-                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
+                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-600" title="Eliminar">
                       <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                       </svg>
@@ -314,8 +316,8 @@ export default function SuperBarberosPage() {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                           b.has_user
-                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                            : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
+                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
+                            : 'border-amber-500/20 bg-amber-500/10 text-amber-600'
                         }`}>
                           <span className={`h-1.5 w-1.5 rounded-full ${b.has_user ? 'bg-emerald-400' : 'bg-amber-400'}`} />
                           {b.has_user ? 'Con usuario' : 'Sin usuario'}
@@ -324,7 +326,7 @@ export default function SuperBarberosPage() {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                           b.is_active
-                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
                             : 'border-gray-500/20 bg-gray-500/10 text-[var(--color-muted)]'
                         }`}>
                           <span className={`h-1.5 w-1.5 rounded-full ${b.is_active ? 'bg-emerald-400' : 'bg-gray-400'}`} />
@@ -344,7 +346,7 @@ export default function SuperBarberosPage() {
                           </button>
                           <button
                             onClick={() => confirmDelete(b)}
-                            className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400"
+                            className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-600"
                             title="Eliminar"
                           >
                             <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -364,7 +366,7 @@ export default function SuperBarberosPage() {
 
       {/* Edit Modal */}
       <Modal open={showEdit} onClose={() => { setShowEdit(false); setEditTarget(null) }} title={`Editar: ${editTarget?.name || ''}`} size="md" dark>
-        {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>}
+        {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600">{formError}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input label="Nombre" name="name" value={form.name} onChange={handleChange} error={formErrors.name} />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

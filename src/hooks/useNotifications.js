@@ -4,24 +4,46 @@ import { useAuth } from '../contexts/AuthContext'
 
 export function useNotifications() {
   const { user, businessId } = useAuth()
+  const userId = user?.id
   const [notifications, setNotifications] = useState([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user?.id || !businessId) return
+    if (!userId || !businessId) return
+    let cancelled = false
+
+    async function fetchNotifications() {
+      try {
+        const { data, error } = await supabase
+          .from('notifications')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(20)
+
+        if (error) throw error
+        if (cancelled) return
+        setNotifications(data || [])
+        setUnreadCount((data || []).filter(n => !n.is_read).length)
+      } catch {
+        // silent
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
     fetchNotifications()
 
     // Realtime: escuchar nuevas notificaciones
     const channel = supabase
-      .channel(`notifications-${user.id}`)
+      .channel(`notifications-${userId}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: `user_id=eq.${user.id}`,
+          filter: `user_id=eq.${userId}`,
         },
         (payload) => {
           setNotifications(prev => [payload.new, ...prev])
@@ -30,27 +52,11 @@ export function useNotifications() {
       )
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
-  }, [user?.id, businessId])
-
-  async function fetchNotifications() {
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(20)
-
-      if (error) throw error
-      setNotifications(data || [])
-      setUnreadCount((data || []).filter(n => !n.is_read).length)
-    } catch {
-      // silent
-    } finally {
-      setLoading(false)
+    return () => {
+      cancelled = true
+      supabase.removeChannel(channel)
     }
-  }
+  }, [userId, businessId])
 
   const markAsRead = useCallback(async (notificationId) => {
     try {
@@ -58,7 +64,7 @@ export function useNotifications() {
         .from('notifications')
         .update({ is_read: true })
         .eq('id', notificationId)
-        .eq('user_id', user?.id)
+        .eq('user_id', userId)
 
       setNotifications(prev =>
         prev.map(n => n.id === notificationId ? { ...n, is_read: true } : n)
@@ -67,14 +73,14 @@ export function useNotifications() {
     } catch {
       // silent
     }
-  }, [user?.id])
+  }, [userId])
 
   const markAllAsRead = useCallback(async () => {
     try {
       await supabase
         .from('notifications')
         .update({ is_read: true })
-        .eq('user_id', user?.id)
+        .eq('user_id', userId)
         .eq('is_read', false)
 
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
@@ -82,7 +88,7 @@ export function useNotifications() {
     } catch {
       // silent
     }
-  }, [user?.id])
+  }, [userId])
 
   return { notifications, unreadCount, loading, markAsRead, markAllAsRead }
 }

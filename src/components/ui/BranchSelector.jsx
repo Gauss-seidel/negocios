@@ -9,13 +9,13 @@ export default function BranchSelector({ planLimit, variant = 'dark' }) {
   const isDark = variant === 'dark'
 
   return (
-    <div className="relative px-3 py-2">
+    <div className="relative px-4 pb-1">
       <select
         value={currentBranch?.id || ''}
         onChange={(e) => switchBranch(e.target.value)}
-        className={`w-full rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-0 ${
+        className={`h-10 w-full rounded-lg border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brass)] ${
           isDark
-            ? 'border-white/10 bg-white/5 text-white focus:border-white/20'
+            ? 'border-white/15 bg-white/5 text-white [&>option]:text-[var(--color-ink)]'
             : 'border-gray-200 bg-white text-gray-900 focus:border-[var(--color-accent)]'
         }`}
       >
@@ -23,7 +23,7 @@ export default function BranchSelector({ planLimit, variant = 'dark' }) {
           <option key={b.id} value={b.id}>{b.name}</option>
         ))}
       </select>
-      <p className={`mt-1 text-[10px] text-center ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
+      <p className={`mt-1.5 text-xs ${isDark ? 'text-white/45' : 'text-[var(--color-muted)]'}`}>
         {branchCount}/{planLimit === undefined || planLimit === null ? '?' : formatLimitShort(planLimit)} sucursales
       </p>
     </div>

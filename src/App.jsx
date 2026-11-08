@@ -69,7 +69,7 @@ function NotFound() {
 
 function PageLoader() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)]">
       <div className="flex gap-1.5">
         <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
         <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
@@ -89,11 +89,13 @@ export default function App() {
           {/* Páginas públicas */}
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Marketplace />} />
-            <Route path="/barberia/:slug" element={<BarberiaPage />} />
-            <Route path="/barberia/:slug/reservar" element={<BookingPage />} />
             <Route path="/terminos" element={<TermsPage />} />
             <Route path="/privacidad" element={<PrivacyPage />} />
           </Route>
+
+          {/* Páginas de cada barbería: usan su propia plantilla, sin el header de la plataforma */}
+          <Route path="/barberia/:slug" element={<BarberiaPage />} />
+          <Route path="/barberia/:slug/reservar" element={<BookingPage />} />
 
           {/* TV Mode - sin layout */}
           <Route path="/barberia/:slug/tv" element={<TVQueue />} />

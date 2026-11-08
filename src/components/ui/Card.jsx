@@ -1,16 +1,10 @@
 export default function Card({ children, className = '', padding = true, hover = false, dark = false }) {
-  const base = dark
-    ? 'rounded-2xl border border-white/[0.06] bg-card-dark'
-    : 'rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm'
-
-  const hoverClass = hover
-    ? 'transition duration-300 hover:shadow-md hover:-translate-y-0.5'
-    : ''
-
+  // `dark` kept for API compatibility; the admin is light-only now, so it renders the standard surface.
+  void dark
+  const base = 'rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xs'
+  const hoverClass = hover ? 'transition-shadow duration-200 hover:shadow-md' : ''
   return (
-    <div
-      className={`${base} ${hoverClass} ${padding ? 'p-5 lg:p-6' : ''} ${className}`}
-    >
+    <div className={`${base} ${hoverClass} ${padding ? 'p-4 sm:p-5 lg:p-6' : ''} ${className}`}>
       {children}
     </div>
   )

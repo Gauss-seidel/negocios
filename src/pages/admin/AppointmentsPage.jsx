@@ -231,7 +231,7 @@ export default function AppointmentsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Reservas</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Reservas</h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Gestiona todas las reservas de tu negocio</p>
         {!planLoading && (
           <p className="mt-1 text-xs text-[var(--color-muted)]">

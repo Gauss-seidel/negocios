@@ -473,7 +473,7 @@ export default function ReportsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Reportes</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Reportes</h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Estadisticas y analisis de tu negocio</p>
         </div>
         <UpgradePrompt feature="El modulo de Reportes" requiredPlan="Profesional" />
@@ -504,7 +504,7 @@ export default function ReportsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Reportes</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Reportes</h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Estadisticas y analisis de tu negocio</p>
       </div>
 
@@ -570,7 +570,7 @@ export default function ReportsPage() {
       )}
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 [&>*:first-child]:col-span-2 sm:[&>*:first-child]:col-span-1">
         <Card className="transition-shadow hover:shadow-md">
  <p className="text-xs font-medium text-[var(--color-text-secondary)]">Ingresos</p>
           <p className="mt-1 text-3xl font-bold text-[var(--color-text)]">{fmtCurrency(income)}</p>

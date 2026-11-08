@@ -18,7 +18,6 @@ export default function OnboardingChecklist() {
 
   useEffect(() => {
     if (!businessId) return
-    setLoading(true)
     Promise.allSettled([
       supabase.from('businesses').select('name, address').eq('id', businessId).single(),
       supabase.from('business_hours').select('id', { count: 'exact', head: true }).eq('business_id', businessId),

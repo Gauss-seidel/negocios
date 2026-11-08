@@ -16,12 +16,12 @@ import { ROLES } from '../../lib/constants'
 const PLAN_LABELS = { basic: 'Básico', professional: 'Profesional', premium: 'Premium' }
 
 const METRICS = [
-  { key: 'total', label: 'Total Barberías', color: 'text-blue-400', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
-  { key: 'active', label: 'Activas', color: 'text-emerald-400', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-  { key: 'suspended', label: 'Suspendidas', color: 'text-red-400', icon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' },
-  { key: 'pending', label: 'Pendientes', color: 'text-yellow-400', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-  { key: 'revenue', label: 'Ingresos mensuales', color: 'text-violet-400', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-  { key: 'bookings', label: 'Total reservas', color: 'text-cyan-400', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
+  { key: 'total', label: 'Total Barberías', color: 'text-blue-600', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+  { key: 'active', label: 'Activas', color: 'text-emerald-600', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { key: 'suspended', label: 'Suspendidas', color: 'text-red-600', icon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { key: 'pending', label: 'Pendientes', color: 'text-yellow-600', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { key: 'revenue', label: 'Ingresos mensuales', color: 'text-violet-600', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { key: 'bookings', label: 'Total reservas', color: 'text-cyan-600', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
 ]
 
 const INITIAL_CREATE = { name: '', slug: '', email: '', phone: '', address: '', plan: 'basic', template_id: 'classic', password: '',
@@ -38,9 +38,9 @@ const fmtDate = (d) => d ? new Intl.DateTimeFormat('es-PY', { year: 'numeric', m
 
 function StatusBadge({ status }) {
   const map = {
-    [BUSINESS_STATUS.ACTIVE]: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', dot: 'bg-emerald-400', label: 'Activa' },
-    [BUSINESS_STATUS.SUSPENDED]: { bg: 'bg-red-500/10', text: 'text-red-400', dot: 'bg-red-400', label: 'Suspendida' },
-    [BUSINESS_STATUS.PENDING]: { bg: 'bg-yellow-500/10', text: 'text-yellow-400', dot: 'bg-yellow-400', label: 'Pendiente' },
+    [BUSINESS_STATUS.ACTIVE]: { bg: 'bg-emerald-500/10', text: 'text-emerald-600', dot: 'bg-emerald-400', label: 'Activa' },
+    [BUSINESS_STATUS.SUSPENDED]: { bg: 'bg-red-500/10', text: 'text-red-600', dot: 'bg-red-400', label: 'Suspendida' },
+    [BUSINESS_STATUS.PENDING]: { bg: 'bg-yellow-500/10', text: 'text-yellow-600', dot: 'bg-yellow-400', label: 'Pendiente' },
   }
   const s = map[status] || { bg: 'bg-gray-500/10', text: 'text-[var(--color-muted)]', dot: 'bg-gray-400', label: status }
   return (
@@ -54,8 +54,8 @@ function StatusBadge({ status }) {
 function PlanBadge({ plan }) {
   const map = {
     basic: { bg: 'bg-gray-500/10', text: 'text-[var(--color-muted)]' },
-    professional: { bg: 'bg-blue-500/10', text: 'text-blue-400' },
-    premium: { bg: 'bg-amber-500/10', text: 'text-amber-400' },
+    professional: { bg: 'bg-blue-500/10', text: 'text-blue-600' },
+    premium: { bg: 'bg-amber-500/10', text: 'text-amber-600' },
   }
   const s = map[plan] || map.basic
   return <span className={`inline-flex items-center rounded-full border border-[var(--color-border)] px-2.5 py-0.5 text-xs font-medium ${s.bg} ${s.text}`}>{PLAN_LABELS[plan] || plan}</span>
@@ -356,7 +356,7 @@ export default function SuperDashboard() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
@@ -374,7 +374,7 @@ export default function SuperDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Panel de Administración</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Panel de Administración</h1>
           <p className="mt-1 text-sm text-[var(--color-muted)]">Gestioná todas las barberías registradas</p>
         </div>
         <Button onClick={() => { setCreateForm({ ...INITIAL_CREATE }); setCreateErrors({}); setSlugManual(false); setShowCreate(true) }}>
@@ -384,15 +384,15 @@ export default function SuperDashboard() {
       </div>
 
       {/* Metrics — con text-base en mobile para evitar truncado de valores grandes */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
         {METRICS.map(m => {
           let val = metrics[m.key]
           if (m.key === 'revenue') val = fmtCurrency(val)
           else if (m.key === 'bookings') val = val.toLocaleString('es-PY')
           return (
-            <div key={m.key} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 transition duration-300 hover:border-[var(--color-border)] hover:-translate-y-0.5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-paper-2)]">
+            <div key={m.key} className={`rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 `}>
+              <div className="flex flex-col items-start gap-2.5 xl:flex-row xl:items-center xl:gap-3">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[var(--color-paper-2)]">
                   <svg aria-hidden="true" focusable="false" className={`h-5 w-5 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={m.icon} />
                   </svg>
@@ -455,7 +455,7 @@ export default function SuperDashboard() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                       </svg>
                     </button>
-                    <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-400 hover:text-emerald-300' : 'text-amber-400 hover:text-amber-300'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
+                    <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-600 hover:text-emerald-700' : 'text-amber-600 hover:text-amber-700'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
                       <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         {b.status === BUSINESS_STATUS.SUSPENDED
                           ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -469,7 +469,7 @@ export default function SuperDashboard() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </button>
-                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
+                    <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-600" title="Eliminar">
                       <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                       </svg>
@@ -512,7 +512,7 @@ export default function SuperDashboard() {
                     <td className="px-6 py-4">
                       <span className="text-[var(--color-text-secondary)]">{b._branch_count || '—'}</span>
                       <button onClick={() => openBranchManager(b)}
-                        className="ml-2 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                        className="ml-2 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
                         Ver
                       </button>
                     </td>
@@ -524,7 +524,7 @@ export default function SuperDashboard() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                           </svg>
                         </button>
-                        <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-400 hover:text-emerald-300' : 'text-amber-400 hover:text-amber-300'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
+                        <button onClick={() => handleToggleStatus(b)} disabled={actionLoading} className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${b.status === BUSINESS_STATUS.SUSPENDED ? 'text-emerald-600 hover:text-emerald-700' : 'text-amber-600 hover:text-amber-700'}`} title={b.status === BUSINESS_STATUS.SUSPENDED ? 'Activar' : 'Suspender'}>
                           <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             {b.status === BUSINESS_STATUS.SUSPENDED
                               ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -538,7 +538,7 @@ export default function SuperDashboard() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
                         </button>
-                        <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-400" title="Eliminar">
+                        <button onClick={() => confirmDelete(b)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-red-500/10 hover:text-red-600" title="Eliminar">
                           <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                           </svg>
@@ -555,7 +555,7 @@ export default function SuperDashboard() {
 
       {/* Create Modal */}
       <Modal open={showCreate} onClose={() => { setShowCreate(false); setCreateForm({ ...INITIAL_CREATE }); setCreateErrors({}); setSlugManual(false) }} title="Nueva Barbería" size="lg" dark>
-        {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>}
+        {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600">{formError}</div>}
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input label="Nombre" name="name" value={createForm.name} onChange={handleCreateChange} placeholder="Ej: Barbería El Clásico" error={createErrors.name} />
@@ -607,7 +607,7 @@ export default function SuperDashboard() {
 
       {/* Edit Modal */}
       <Modal open={showEdit} onClose={() => { setShowEdit(false); setEditTarget(null) }} title={editTarget ? `Editar: ${editTarget.name}` : 'Editar'} size="lg" dark>
-        {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>}
+        {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600">{formError}</div>}
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input label="Nombre" name="name" value={editForm.name} onChange={handleEditChange} error={editErrors.name} />

@@ -209,7 +209,7 @@ export default function ServicesPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Servicios</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Servicios</h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Gestiona los servicios que ofrece tu negocio</p>
         </div>
         <Button onClick={openCreateModal}>

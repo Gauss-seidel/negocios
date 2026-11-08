@@ -1,6 +1,7 @@
 import { useMediaQuery } from './useMediaQuery'
 
-const MOBILE_BREAKPOINT = '(max-width: 767px)'
+// Hasta 1023px las tablas pasan a tarjetas: coincide con el punto donde aparece el sidebar (lg).
+const MOBILE_BREAKPOINT = '(max-width: 1023px)'
 
 /**
  * Hook estandarizado para responsividad de tablas en admin.

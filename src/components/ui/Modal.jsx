@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react'
 export default function Modal({ open, onClose, title, children, size = 'md', dark = false }) {
   const modalRef = useRef(null)
   const onCloseRef = useRef(onClose)
-  onCloseRef.current = onClose
+  // Keep the latest onClose without re-binding the keydown listener.
+  useEffect(() => { onCloseRef.current = onClose }, [onClose])
 
   useEffect(() => {
     if (open) {
@@ -56,20 +57,16 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
     xl: 'max-w-4xl',
   }
 
-  const bgClass = dark
-    ? 'bg-surface-dark border border-white/[0.08] text-white'
-    : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
-
-  const titleClass = dark ? 'text-white' : 'text-[var(--color-text)]'
-  const borderClass = dark ? 'border-white/[0.08]' : 'border-[var(--color-border)]'
-  const closeClass = dark
-    ? 'text-white/60 hover:bg-white/10 hover:text-white'
-    : 'text-[var(--color-muted)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]'
+  void dark
+  const bgClass = 'bg-[var(--color-surface)] border border-[var(--color-border)]'
+  const titleClass = 'text-[var(--color-text)]'
+  const borderClass = 'border-[var(--color-border)]'
+  const closeClass = 'text-[var(--color-muted)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 pt-[8vh] pb-10">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto sm:items-start sm:px-4 sm:pt-[8vh] sm:pb-10">
       <div
-        className="fixed inset-0 bg-black/45"
+        className="fixed inset-0 bg-[rgb(20_42_32/0.45)] animate-fade-in"
         onClick={onClose}
       />
       <div
@@ -77,11 +74,10 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`relative z-10 w-full ${sizes[size]} rounded-2xl shadow-2xl ${bgClass}`}
-        style={{ boxShadow: dark ? undefined : '0 24px 60px -32px rgba(31,26,23,.35)' }}
+        className={`relative z-10 max-h-[92dvh] w-full overflow-y-auto ${sizes[size]} rounded-t-3xl pb-safe shadow-lg animate-fade-up sm:max-h-none sm:overflow-visible sm:rounded-2xl sm:pb-0 ${bgClass}`}
       >
         <div className={`flex items-center justify-between gap-3 border-b px-5 py-4 sm:px-6 ${borderClass}`}>
-          <h3 className={`min-w-0 text-lg font-semibold tracking-tight ${titleClass}`}>{title}</h3>
+          <h3 className={`min-w-0 text-lg font-semibold ${titleClass}`}>{title}</h3>
           <button
             onClick={onClose}
             aria-label="Cerrar"
@@ -92,7 +88,7 @@ export default function Modal({ open, onClose, title, children, size = 'md', dar
             </svg>
           </button>
         </div>
-        <div className="px-5 py-4 sm:px-6">{children}</div>
+        <div className="px-5 py-5 sm:px-6">{children}</div>
       </div>
     </div>
   )

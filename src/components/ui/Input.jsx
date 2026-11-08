@@ -1,39 +1,29 @@
-export default function Input({
-  label,
-  error,
-  className = '',
-  id,
-  dark = false,
-  style,
-  ...props
-}) {
+export default function Input({ label, error, hint, className = '', id, dark = false, style, ...props }) {
+  void dark
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
-
-  const base = dark
-    ? 'bg-white/5 border-white/10 text-white placeholder:text-white/25 focus:border-white/20 focus:bg-white/10'
-    : 'border-[var(--color-border)] bg-[var(--color-paper)] text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)]'
-
   return (
     <div className="space-y-1.5">
       {label && (
-        <label
-          htmlFor={inputId}
-          className={`block text-sm font-medium ${dark ? 'text-white/70' : 'text-[var(--color-text)]'}`}
-        >
+        <label htmlFor={inputId} className="block text-sm font-medium text-[var(--color-text)]">
           {label}
         </label>
       )}
       <input
         id={inputId}
-        className={`block w-full min-w-0 rounded-xl border px-4 py-3 text-[15px] leading-5 shadow-sm transition-[box-shadow,border-color,background-color] duration-150 focus:outline-none focus:ring-2 ${
+        aria-invalid={error ? 'true' : undefined}
+        className={`block h-11 w-full min-w-0 rounded-lg border bg-[var(--color-surface)] px-3.5 text-[15px] text-[var(--color-text)] placeholder:text-[var(--color-muted)] transition-[border-color,box-shadow] duration-150 focus:outline-none focus:ring-3 ${
           error
-            ? 'border-red-400 focus:border-red-500'
-            : base
+            ? 'border-[var(--color-wine)] focus:ring-[color-mix(in_srgb,var(--color-wine)_18%,transparent)]'
+            : 'border-[var(--color-border-strong)] focus:border-[var(--color-brass)] focus:ring-[color-mix(in_srgb,var(--color-brass)_22%,transparent)]'
         } ${className}`}
-        style={{ minHeight: '44px', ...(error ? {} : dark ? {} : { boxShadow: 'inset 0 1px 0 rgba(255,253,250,.6)' }), ...style }}
+        style={style}
         {...props}
       />
-      {error && <p className="text-sm font-medium text-red-500">{error}</p>}
+      {error ? (
+        <p className="text-sm font-medium text-[var(--color-wine)]">{error}</p>
+      ) : hint ? (
+        <p className="text-sm text-[var(--color-muted)]">{hint}</p>
+      ) : null}
     </div>
   )
 }

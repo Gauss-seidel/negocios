@@ -8,16 +8,13 @@ export default function ResetPassword() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [checking, setChecking] = useState(true)
+  // Without a recovery token in the URL there is nothing to verify, so start out "not checking".
+  const [checking, setChecking] = useState(() => window.location.hash.includes('access_token'))
   const [validToken, setValidToken] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const hash = window.location.hash
-    if (!hash || !hash.includes('access_token')) {
-      setChecking(false)
-      return
-    }
+    if (!window.location.hash.includes('access_token')) return
     const timer = setTimeout(() => {
       setValidToken(true)
       setChecking(false)

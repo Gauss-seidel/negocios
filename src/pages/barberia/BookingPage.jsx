@@ -3,8 +3,7 @@ import { useParams, Link, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { getTemplateConfig } from '../../templates/registry'
 import { fmtCurrency } from '../../utils/format'
-import Button from '../../components/ui/Button'
-import Input from '../../components/ui/Input'
+import { templateStyleVars } from '../../templates/useTemplateTheme'
 
 /* ─── Utilities ─── */
 
@@ -18,7 +17,7 @@ function generateTimeSlots(openTime, closeTime, durationMinutes, existingAppoint
 
   // Ponytail: one-line now filter — skip past slots for today
   const now = new Date()
-  const isToday = selectedDate && selectedDate === now.toISOString().split('T')[0]
+  const isToday = selectedDate && selectedDate === localISO(now)
   const currentMinutes = isToday ? now.getHours() * 60 + now.getMinutes() : 0
 
   for (let mins = openMinutes; mins + durationMinutes <= closeMinutes; mins += durationMinutes) {
@@ -49,128 +48,96 @@ function getNext7Days() {
   return Array.from({ length: 7 }, (_, i) => {
     const d = new Date(today)
     d.setDate(d.getDate() + i)
-    const dateStr = d.toISOString().split('T')[0]
+    const dateStr = localISO(d)
     const label = d.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' })
-    return { date: dateStr, label, dayOfWeek: d.getDay() === 0 ? 7 : d.getDay() }
+    const weekday = d.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '')
+    const month = d.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')
+    return { date: dateStr, label, weekday, dayNum: d.getDate(), month, isToday: i === 0, dayOfWeek: d.getDay() === 0 ? 7 : d.getDay() }
   })
 }
 
-/* ─── Step progress ─── */
+/* ─── Presentational helpers (template-aware via --t-* vars) ─── */
+const localISO = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
-function StepProgress({ step, colors }) {
-  const steps = ['Servicio', 'Barbero', 'Fecha', 'Hora', 'Producto', 'Datos']
-
+function StepHeading({ title, subtitle, onBack }) {
   return (
-    <div className="flex items-center justify-center gap-0 sm:gap-1">
-      {steps.map((label, i) => {
-        const num = i + 1
-        const isDone = step > num
-        const isCurrent = step === num
-        const isLast = i === steps.length - 1
-
-        return (
-          <div key={label} className="flex items-center">
-            <div className="flex flex-col items-center gap-1">
-              <div
-                className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold transition duration-500 ${
-                  isDone
-                    ? 'scale-100'
-                    : isCurrent
-                    ? 'scale-110 shadow-lg'
-                    : 'scale-100'
-                }`}
-                style={{
-                  backgroundColor: isDone || isCurrent ? colors.accent : `${colors.primary}10`,
-                  color: isDone || isCurrent ? colors.onAccent : colors.textSecondary,
-                  boxShadow: isCurrent ? `0 4px 20px ${colors.accent}40` : 'none',
-                }}
-              >
-                {isDone ? (
-                  <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  num
-                )}
-              </div>
- <span
-                className={`hidden text-[11px] font-semibold  transition-colors sm:inline ${
-                  isCurrent ? 'opacity-100' : 'opacity-50'
-                }`}
-                style={{ color: isCurrent ? colors.accent : colors.textSecondary }}
-              >
-                {label}
-              </span>
-            </div>
-            {!isLast && (
-              <div
-                className={`mx-1 h-px w-6 sm:mx-2 sm:w-10 transition-colors duration-500 ${
-                  isDone ? 'opacity-60' : 'opacity-20'
-                }`}
-                style={{ backgroundColor: isDone ? colors.accent : colors.textSecondary }}
-              />
-            )}
-          </div>
-        )
-      })}
+    <div className="mb-6 sm:mb-8">
+      {onBack && (
+        <button type="button" onClick={onBack} className="-ml-2 mb-3 inline-flex h-10 items-center gap-1.5 rounded-[var(--t-radius-btn)] px-2 text-sm font-medium text-[var(--t-muted)] hover:text-[var(--t-text)]">
+          <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Atrás
+        </button>
+      )}
+      <h1 className="text-[clamp(1.75rem,1.35rem+1.6vw,2.5rem)] font-semibold leading-tight text-[var(--t-text)]" style={{ fontFamily: 'var(--t-font-h)' }}>{title}</h1>
+      {subtitle && <p className="mt-2 text-[15px] text-[var(--t-muted)]">{subtitle}</p>}
     </div>
   )
 }
 
-/* ─── Step transitions ─── */
-
-
-/* ─── Service card ─── */
-
-function ServiceCard({ service, isSelected, onClick, colors }) {
+// Selectable surface used by every option in the flow.
+function Option({ selected, onClick, disabled, className = '', children, ...rest }) {
   return (
     <button
+      type="button"
       onClick={onClick}
-      className="group relative w-full rounded-2xl border p-5 text-left transition duration-300 hover:-translate-y-0.5"
-      style={{
-        borderColor: isSelected ? colors.accent : `${colors.primary}12`,
-        backgroundColor: isSelected ? `${colors.accent}06` : 'white',
-        boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
-      }}
+      disabled={disabled}
+      aria-pressed={selected}
+      className={`rounded-[var(--t-radius)] border transition-[border-color,box-shadow,background-color] duration-150 disabled:cursor-not-allowed disabled:opacity-40 ${
+        selected
+          ? 'border-[var(--t-accent)] bg-[color-mix(in_srgb,var(--t-accent)_8%,var(--t-surface))] shadow-[0_0_0_1px_var(--t-accent)]'
+          : 'border-[var(--t-border)] bg-[var(--t-surface)] hover:border-[var(--t-border-strong)]'
+      } ${className}`}
+      {...rest}
     >
-      {isSelected && (
-        <div
-          className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full"
-          style={{ backgroundColor: colors.accent, color: colors.onAccent }}
-        >
-          <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-      )}
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div
-            className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold"
-            style={{ backgroundColor: colors.primary, color: colors.onPrimary }}
-          >
-            {service.name.charAt(0)}
-          </div>
-          <div className="font-semibold" style={{ color: colors.text }}>{service.name}</div>
-          {service.description && (
-            <div className="mt-0.5 text-sm leading-relaxed" style={{ color: colors.textSecondary }}>
-              {service.description}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col items-end gap-0.5">
-          <div className="text-lg font-bold" style={{ color: colors.accent }}>{fmtCurrency(service.price)}</div>
-          <div className="flex items-center gap-1 text-xs" style={{ color: colors.textSecondary }}>
-            <svg aria-hidden="true" focusable="false" className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {service.duration} min
-          </div>
-        </div>
-      </div>
+      {children}
     </button>
   )
 }
+
+function Avatar({ name, photo, size = 'h-12 w-12' }) {
+  return (
+    <div className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--t-sunken)] text-[var(--t-accent-text)] ${size}`}>
+      {photo ? <img src={photo} alt="" className="h-full w-full object-cover" /> : (
+        <span className="text-base font-semibold">{name.split(' ').map((w) => w[0]).slice(0, 2).join('')}</span>
+      )}
+    </div>
+  )
+}
+
+function TField({ label, error, id, ...props }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[var(--t-text)]">{label}</label>
+      <input
+        id={id}
+        aria-invalid={error ? 'true' : undefined}
+        className={`block h-12 w-full rounded-[var(--t-radius-btn)] border bg-[var(--t-bg)] px-4 text-base text-[var(--t-text)] placeholder:text-[var(--t-muted)] placeholder:opacity-70 focus:outline-none focus:ring-3 focus:ring-[color-mix(in_srgb,var(--t-accent)_25%,transparent)] ${error ? 'border-red-500' : 'border-[var(--t-border-strong)] focus:border-[var(--t-accent)]'}`}
+        {...props}
+      />
+      {error && <p className="mt-1.5 text-sm font-medium text-red-500">{error}</p>}
+    </div>
+  )
+}
+
+function SummaryRow({ label, value, onEdit }) {
+  return (
+    <div className="flex items-start justify-between gap-4 py-3">
+      <div className="min-w-0">
+        <p className="text-xs font-medium text-[var(--t-muted)]">{label}</p>
+        <p className={`mt-0.5 text-[15px] ${value ? 'font-semibold text-[var(--t-text)]' : 'text-[var(--t-muted)]'}`}>{value || 'Sin elegir'}</p>
+      </div>
+      {value && onEdit && (
+        <button type="button" onClick={onEdit} className="shrink-0 pt-4 text-sm font-semibold text-[var(--t-accent-text)] underline-offset-4 hover:underline">Cambiar</button>
+      )}
+    </div>
+  )
+}
+
+const SLOT_GROUPS = [
+  { label: 'Mañana', test: (t) => t < '12:00' },
+  { label: 'Tarde', test: (t) => t >= '12:00' && t < '18:00' },
+  { label: 'Noche', test: (t) => t >= '18:00' },
+]
 
 /* ─── Main component ─── */
 
@@ -483,7 +450,6 @@ export default function BookingPage() {
           throw new Error(rpcData?.error || 'No se pudo crear la reserva')
         }
 
-        setSuccess(true)
       setStep(7)
     } catch (err) {
       setSubmitError(err.message || 'Error al crear la reserva. Intenta de nuevo.')
@@ -495,11 +461,11 @@ export default function BookingPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
-        <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '0ms' }} />
-          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '150ms' }} />
-          <span className="h-2.5 w-2.5 animate-pulse-soft rounded-full bg-[var(--color-accent)]" style={{ animationDelay: '300ms' }} />
+      <div className="min-h-screen bg-[var(--color-bg)]" aria-label="Cargando reserva">
+        <div className="mx-auto max-w-3xl px-4 pt-20">
+          <div className="skeleton h-9 w-2/3" />
+          <div className="skeleton mt-3 h-5 w-1/2" />
+          <div className="mt-8 space-y-3">{[0, 1, 2].map((i) => <div key={i} className="skeleton h-20 w-full" />)}</div>
         </div>
       </div>
     )
@@ -507,17 +473,12 @@ export default function BookingPage() {
 
   if (error || !business) {
     return (
-      <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
-        <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
-            <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01" />
-            </svg>
-          </div>
-          <h2 className="mt-4 text-xl font-bold text-[var(--color-text)]">Barbería no encontrada</h2>
-          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{error || 'La barbería que buscas no existe o no está disponible.'}</p>
-          <Link to="/" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-accent)]/80">
-            ← Volver al inicio
+      <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-4">
+        <div className="max-w-sm text-center">
+          <h1 className="font-serif text-3xl font-semibold text-[var(--color-ink)]">No se puede reservar en esta barbería</h1>
+          <p className="mt-3 text-[15px] text-[var(--color-text-secondary)]">{error || 'La barbería no existe o todavía no acepta reservas online.'}</p>
+          <Link to="/" className="mt-6 inline-flex h-11 items-center rounded-lg bg-[var(--color-accent)] px-5 text-sm font-semibold text-[var(--color-accent-ink)]">
+            Ver todas las barberías
           </Link>
         </div>
       </div>
@@ -525,675 +486,365 @@ export default function BookingPage() {
   }
 
   const templateConfig = getTemplateConfig(business.template_id, business.template_colors)
-  const { colors } = templateConfig
-
-  // Obtener clase de animación para el template actual
-  const getStepAnimationClass = () => `animate-${business.template_id || 'classic'}-card`
+  const shape = templateConfig.shape || { radius: '10px', width: '72rem' }
+  const anim = `animate-${business.template_id || 'classic'}-card`
   // BOOK-002: Use businessPlan instead of plan from usePlan hook
   const showProductStep = businessPlan !== 'basic' && products.length > 0
 
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: colors.background, color: colors.text, fontFamily: templateConfig.fonts?.body }}>
-      <style>{`
-        :root {
-          --barber-primary: ${colors.primary};
-          --barber-secondary: ${colors.secondary};
-          --barber-accent: ${colors.accent};
-          --barber-bg: ${colors.background};
-          --barber-text: ${colors.text};
-          --barber-text-secondary: ${colors.textSecondary};
-          --barber-on-accent: ${colors.onAccent};
-          --barber-on-primary: ${colors.onPrimary};
-          --barber-on-secondary: ${colors.onSecondary};
-          --barber-on-background: ${colors.onBackground};
-          --barber-font-heading: ${templateConfig.fonts?.heading || 'inherit'};
-          --barber-font-body: ${templateConfig.fonts?.body || 'inherit'};
-        }
-      `}</style>
+  const flow = [1, 2, 3, 4, ...(showProductStep ? [5] : []), 6]
+  const stepPos = Math.max(0, flow.indexOf(step))
+  const stepNames = { 1: 'Servicio', 2: 'Barbero', 3: 'Fecha', 4: 'Hora', 5: 'Productos', 6: 'Tus datos' }
+  const goBack = { 2: () => setStep(1), 3: () => setStep(2), 4: () => setStep(3), 5: () => setStep(4), 6: () => setStep(showProductStep ? 5 : 4) }[step]
 
-      {/* Navbar */}
-      <nav
-        className="sticky top-0 z-40 border-b backdrop-blur-xl"
-        style={{ borderColor: `${colors.primary}08`, backgroundColor: `${colors.background}D9` }}
-      >
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link
-            to={`/barberia/${slug}`}
-            className="group flex items-center gap-1.5 text-sm font-medium transition-colors"
-            style={{ color: colors.textSecondary }}
-          >
-            <svg aria-hidden="true" focusable="false" className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Volver
-          </Link>
-          <span className="text-sm font-semibold" style={{ color: colors.text }}>
-            Reservar en {business.name}
-          </span>
-        </div>
-      </nav>
+  const barberName = selectedBarber ? barbers.find((b) => b.id === selectedBarber)?.name : (step > 2 ? 'Cualquier barbero' : null)
+  const productsTotal = selectedProducts.reduce((sum, sp) => sum + sp.price * sp.quantity, 0)
+  const total = Number(selectedService?.price || 0) + productsTotal
+  const dateLabel = selectedDate ? formatDate(selectedDate) : null // e.g. 'lunes, 9 de noviembre'
+  const needsBranch = branches.length > 1 && !selectedBranch
 
-      {/* Progress */}
-      <div className="mx-auto max-w-3xl px-4 py-6">
-        <StepProgress step={step} colors={colors} />
-      </div>
+  const changeQty = (product, delta) => {
+    setSelectedProducts((prev) => {
+      const existing = prev.find((p) => p.product_id === product.id)
+      if (delta < 0) {
+        if (!existing || existing.quantity <= 1) return prev.filter((p) => p.product_id !== product.id)
+        return prev.map((p) => (p.product_id === product.id ? { ...p, quantity: p.quantity - 1 } : p))
+      }
+      if (existing) {
+        if (existing.quantity >= product.current_stock) return prev
+        return prev.map((p) => (p.product_id === product.id ? { ...p, quantity: p.quantity + 1 } : p))
+      }
+      return [...prev, { product_id: product.id, name: product.name, quantity: 1, price: product.price }]
+    })
+  }
 
-      {/* Content */}
-      <div ref={contentRef} className="mx-auto max-w-3xl px-4 pb-20">
-        {/* Branch Selector (multi branch) */}
-        {branches.length > 1 && !selectedBranch && (
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
-              Elegí tu sucursal
-            </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {branches.map(branch => (
-                <button
-                  key={branch.id}
-                  onClick={() => setSelectedBranch(branch)}
-                  className="rounded-xl border-2 border-[var(--color-border)] bg-white p-5 text-left transition hover:border-[var(--color-accent)] hover:shadow-md"
-                >
-                  <h3 className="font-semibold text-[var(--color-text)]">{branch.name}</h3>
-                  {branch.address && (
-                    <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{branch.address}</p>
-                  )}
-                  {branch.phone && (
-                    <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{branch.phone}</p>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Branch indicator (always visible when branch is selected) */}
-        {selectedBranch && (
-          <div
-            className="mb-6 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm"
-            style={{ backgroundColor: `${colors.accent}08`, border: `1px solid ${colors.accent}20` }}
-          >
-            <svg aria-hidden="true" focusable="false" className="h-4 w-4" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-            </svg>
-            <span style={{ color: colors.text }}>
-              <strong>{selectedBranch.name}</strong>
-              {selectedBranch.address && <span className="ml-1 opacity-60">· {selectedBranch.address}</span>}
-            </span>
-          </div>
-        )}
-
-        {/* Guard: don't show booking form until branch is selected when multiple exist */}
-        {branches.length > 1 && !selectedBranch ? null : (
-        <>
-        {/* Step 1: Service */}
-        {step === 1 && (
-          <div className={step === 1 ? getStepAnimationClass() : ''}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí un servicio</h2>
-              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>Seleccioná el servicio que querés recibir</p>
-            </div>
-            {/* BOOK-001: Empty state when no services */}
-            {services.length === 0 ? (
-              <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
-                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <p className="mt-4 text-lg font-medium" style={{ color: colors.textSecondary }}>
-                  No hay servicios disponibles
-                </p>
-                <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
-                  Esta barbería aún no publicó sus servicios. Volvé pronto.
-                </p>
-                <Link
-                  to={`/barberia/${slug}`}
-                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium transition-colors"
-                  style={{ color: colors.accent }}
-                >
-                  ← Volver a la barbería
-                </Link>
+  const summary = (
+    <div>
+      <p className="text-lg font-semibold text-[var(--t-text)]" style={{ fontFamily: 'var(--t-font-h)' }}>Tu reserva</p>
+      <div className="mt-2 divide-y divide-[var(--t-border)]">
+        {selectedBranch && branches.length > 1 && <SummaryRow label="Sucursal" value={selectedBranch.name} onEdit={() => setSelectedBranch(null)} />}
+        <SummaryRow label="Servicio" value={selectedService && `${selectedService.name} · ${selectedService.duration} min`} onEdit={() => setStep(1)} />
+        <SummaryRow label="Barbero" value={barberName} onEdit={() => setStep(2)} />
+        <SummaryRow label="Fecha" value={dateLabel} onEdit={() => setStep(3)} />
+        <SummaryRow label="Hora" value={selectedTime && `${selectedTime} hs`} onEdit={() => setStep(4)} />
+        {selectedProducts.length > 0 && (
+          <div className="py-3">
+            <p className="text-xs font-medium text-[var(--t-muted)]">Productos</p>
+            {selectedProducts.map((sp) => (
+              <div key={sp.product_id} className="mt-1 flex justify-between text-[15px] text-[var(--t-text)]">
+                <span>{sp.name} × {sp.quantity}</span>
+                <span className="tabular-nums">{fmtCurrency(sp.price * sp.quantity)}</span>
               </div>
-            ) : (
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="mt-2 flex items-baseline justify-between border-t border-[var(--t-border-strong)] pt-4">
+        <span className="font-semibold text-[var(--t-text)]">Total</span>
+        <span className="text-xl font-semibold tabular-nums text-[var(--t-text)]">{fmtCurrency(total)}</span>
+      </div>
+      <p className="mt-1 text-xs text-[var(--t-muted)]">Se paga en la barbería.</p>
+    </div>
+  )
+
+  return (
+    <div className="min-h-screen bg-[var(--t-bg)] text-[var(--t-text)]" style={templateStyleVars(templateConfig, shape)}>
+      {/* Header + progress */}
+      <header className="sticky top-0 z-40 border-b border-[var(--t-border)] bg-[color-mix(in_srgb,var(--t-bg)_92%,transparent)] backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-[72rem] items-center justify-between gap-4 px-[var(--gutter)] sm:h-16">
+          <Link to={`/barberia/${slug}`} className="inline-flex min-w-0 items-center gap-1.5 text-sm font-medium text-[var(--t-muted)] hover:text-[var(--t-text)]">
+            <svg aria-hidden="true" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            <span className="truncate">{business.name}</span>
+          </Link>
+          {step < 7 && !needsBranch && (
+            <span className="shrink-0 text-sm text-[var(--t-muted)]">
+              Paso <span className="font-semibold text-[var(--t-text)] tabular-nums">{stepPos + 1}</span> de {flow.length}
+              <span className="hidden sm:inline"> · {stepNames[step]}</span>
+            </span>
+          )}
+        </div>
+        {step < 7 && !needsBranch && (
+          <div className="h-[3px] bg-[var(--t-border)]" role="progressbar" aria-valuemin={1} aria-valuemax={flow.length} aria-valuenow={stepPos + 1} aria-label="Progreso de la reserva">
+            <div className="h-full transition-[width] duration-500 ease-out" style={{ width: `${((stepPos + 1) / flow.length) * 100}%`, backgroundColor: 'var(--t-accent)' }} />
+          </div>
+        )}
+      </header>
+
+      <div ref={contentRef} className={`mx-auto max-w-[72rem] px-[var(--gutter)] pt-8 pb-16 sm:pt-12 ${step < 7 && !needsBranch ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-12' : ''}`}>
+        <div className="mx-auto w-full max-w-2xl lg:mx-0">
+          {/* Branch selector (multi branch) */}
+          {needsBranch && (
+            <div className={anim}>
+              <StepHeading title="¿En qué sucursal?" subtitle="Cada sucursal tiene su propio equipo y horarios." />
               <div className="grid gap-3 sm:grid-cols-2">
-                {services.map((svc) => (
-                  <ServiceCard
-                    key={svc.id}
-                    service={svc}
-                    isSelected={selectedService?.id === svc.id}
-                    onClick={() => { setSelectedService(svc); setStep(2) }}
-                    colors={colors}
-                  />
+                {branches.map((branch) => (
+                  <Option key={branch.id} onClick={() => setSelectedBranch(branch)} className="w-full p-5 text-left">
+                    <p className="font-semibold text-[var(--t-text)]">{branch.name}</p>
+                    {branch.address && <p className="mt-1 text-sm text-[var(--t-muted)]">{branch.address}</p>}
+                  </Option>
                 ))}
               </div>
-            )}
-          </div>
-        )}
-
-        {/* Step 2: Barber */}
-        {step === 2 && (
-          <div className={getStepAnimationClass()}>
-            {/* BOOK-011: Back button on step 2 */}
-            <div className="mb-6">
-              <button
-                onClick={() => { setSelectedService(null); setStep(1) }}
-                className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-                style={{ color: colors.textSecondary }}
-              >
-                <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Volver a servicios
-              </button>
-              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>
-                Elegí un barbero
-              </h2>
-              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
-                Opcional: podés dejar que te atienda cualquier barbero disponible
-              </p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <button
-                onClick={() => { setSelectedBarber(null); setStep(3) }}
-                className="group flex flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition duration-300 hover:-translate-y-0.5"
-                style={{
-                  borderColor: selectedBarber === null ? colors.accent : `${colors.primary}20`,
-                  backgroundColor: selectedBarber === null ? `${colors.accent}06` : 'transparent',
-                }}
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-paper-2)] text-2xl">
-                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="whitespace-nowrap font-semibold" style={{ color: colors.text }}>Cualquier barbero</div>
-                  <div className="text-xs" style={{ color: colors.textSecondary }}>Sin preferencia</div>
-                </div>
-              </button>
+          )}
 
-              {eligibleBarbers.map((barber) => {
-                const isSelected = selectedBarber === barber.id
-                return (
-                  <button
-                    key={barber.id}
-                    onClick={() => { setSelectedBarber(barber.id); setStep(3) }}
-                    className="group flex items-center gap-4 rounded-2xl border p-5 text-left transition duration-300 hover:-translate-y-0.5"
-                    style={{
-                      borderColor: isSelected ? colors.accent : `${colors.primary}12`,
-                      backgroundColor: isSelected ? `${colors.accent}06` : 'white',
-                      boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
-                    }}
-                  >
-                    <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[var(--color-paper-2)] ring-1 ring-black/5">
-                      {barber.photo_url ? (
-                        <img src={barber.photo_url} alt={barber.name} className="h-full w-full object-cover" />
-                      ) : (
-                        <span className="text-xl font-bold text-[var(--color-muted)]">{barber.name.charAt(0)}</span>
-                      )}
+          {!needsBranch && (
+            <>
+              {/* Step 1: Service */}
+              {step === 1 && (
+                <div className={anim}>
+                  <StepHeading title="Elegí el servicio" subtitle="Después elegís barbero, día y hora." />
+                  {services.length === 0 ? (
+                    <div className="rounded-[var(--t-radius)] border border-dashed border-[var(--t-border-strong)] p-10 text-center">
+                      <p className="font-semibold text-[var(--t-text)]">Esta barbería todavía no publicó sus servicios</p>
+                      <p className="mt-1 text-sm text-[var(--t-muted)]">Mientras tanto podés escribirles para reservar.</p>
+                      <Link to={`/barberia/${slug}`} className="mt-4 inline-flex text-sm font-semibold text-[var(--t-accent-text)]">Volver a la barbería</Link>
                     </div>
-                    <div className="flex-1">
-                      <div className="font-semibold" style={{ color: colors.text }}>{barber.name}</div>
-                      {barber.specialty && (
-                        <div className="text-sm" style={{ color: colors.textSecondary }}>{barber.specialty}</div>
-                      )}
-                    </div>
-                    {isSelected && (
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full" style={{ backgroundColor: colors.accent, color: colors.onAccent }}>
-                        <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Date */}
-        {step === 3 && (
-          <div className={getStepAnimationClass()}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí una fecha</h2>
-              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>Seleccioná el día para tu turno</p>
-            </div>
-            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-              {days.map((day) => {
-                const isSelected = selectedDate === day.date
-                // BOOK-012: Check if date is a holiday (closed)
-                const isClosed = holidays.some(h => h.date === day.date)
-                return (
-                  <button
-                    key={day.date}
-                    onClick={() => { if (!isClosed) { setSelectedDate(day.date); setStep(4) } }}
-                    disabled={isClosed}
-                    className="group rounded-2xl border p-4 text-center transition duration-300 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-                    style={{
-                      borderColor: isSelected ? colors.accent : isClosed ? `${colors.primary}08` : `${colors.primary}12`,
-                      backgroundColor: isSelected ? `${colors.accent}06` : 'white',
-                      boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
-                    }}
-                  >
- <div className="text-[11px] font-semibold"style={{ color: colors.textSecondary }}>
-                      {day.label.split(' ')[0]}
-                    </div>
-                    <div className="mt-1.5 text-2xl font-bold" style={{ color: colors.text }}>
-                      {day.label.split(' ')[1]}
-                    </div>
-                    {isClosed && (
- <div className="mt-1 text-[9px] font-medium"style={{ color: '#ef4444' }}>
-                        Cerrado
-                      </div>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Time */}
-        {step === 4 && (
-          <div className={getStepAnimationClass()}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Elegí un horario</h2>
-              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
-                {selectedDate && formatDate(selectedDate)}
-              </p>
-            </div>
-
-            {slotsLoading ? (
-              <div className="flex justify-center py-16">
-                <div className="flex gap-1.5">
-                  <span className="h-2 w-2 animate-pulse-soft rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '0ms' }} />
-                  <span className="h-2 w-2 animate-pulse-soft rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '150ms' }} />
-                  <span className="h-2 w-2 animate-pulse-soft rounded-full" style={{ backgroundColor: colors.accent, animationDelay: '300ms' }} />
-                </div>
-              </div>
-            ) : availableSlots.length === 0 ? (
-              <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-paper-2)]">
-                  <svg aria-hidden="true" focusable="false" className="h-7 w-7 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <p className="mt-4 text-lg font-medium" style={{ color: colors.textSecondary }}>
-                  No hay horarios disponibles para esta fecha
-                </p>
-                <button
-                  onClick={() => setStep(3)}
-                  className="mt-2 inline-flex items-center gap-1 text-sm font-medium transition-colors"
-                  style={{ color: colors.accent }}
-                >
-                  ← Elegir otra fecha
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
-                {availableSlots.map((slot) => {
-                  const isSelected = selectedTime === slot
-                  return (
-                    <button
-                      key={slot}
-                      onClick={() => { setSelectedTime(slot); setStep(showProductStep ? 5 : 6) }}
-                      className="rounded-2xl border px-3 py-3.5 text-center font-semibold transition duration-300 hover:-translate-y-0.5"
-                      style={{
-                        borderColor: isSelected ? colors.accent : `${colors.primary}12`,
-                        backgroundColor: isSelected ? `${colors.accent}06` : 'white',
-                        color: colors.text,
-                        boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
-                      }}
-                    >
-                      {slot}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Step 5: Products */}
-        {step === 5 && (
-          <div className={getStepAnimationClass()}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>
-                ¿Quieres un producto más?
-              </h2>
-              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
-                Agregá productos a tu reserva para llevarte el cuidado a casa
-              </p>
-            </div>
-
-            {products.length === 0 ? (
-              <div className="rounded-2xl border border-dashed p-12 text-center" style={{ borderColor: `${colors.primary}20` }}>
-                <p className="text-sm" style={{ color: colors.textSecondary }}>
-                  No hay productos disponibles en este momento
-                </p>
-                <button
-                  onClick={() => setStep(6)}
-                  className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-sm font-medium transition-colors"
-                  style={{ color: colors.accent }}
-                >
-                  Continuar sin productos
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {products.map((product) => {
-                    const sp = selectedProducts.find(p => p.product_id === product.id)
-                    const qty = sp?.quantity || 0
-                    return (
-                      <div
-                        key={product.id}
-                        className={`rounded-2xl border overflow-hidden transition duration-300 ${
-                          qty > 0 ? 'shadow-lg' : ''
-                        }`}
-                        style={{
-                          borderColor: qty > 0 ? colors.accent : `${colors.primary}12`,
-                          backgroundColor: 'white',
-                        }}
-                      >
-                        {/* Image */}
-                        <div className="h-32 flex items-center justify-center overflow-hidden bg-[var(--color-paper)]">
-                          {product.image_url && !imgErrors[product.id] ? (
-                            <img src={product.image_url} alt={product.name} className="h-full w-full object-cover"
-                              onError={() => setImgErrors(prev => ({ ...prev, [product.id]: true }))}
-                            />
-                          ) : (
-                            <span className="text-2xl font-bold" style={{ color: `${colors.accent}44` }}>
-                              {product.name.charAt(0)}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Info */}
-                        <div className="p-4">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h3 className="font-semibold" style={{ color: colors.text }}>{product.name}</h3>
-                              <p className="text-xs" style={{ color: colors.textSecondary }}>
-                                Stock: {product.current_stock} {product.unit}
+                  ) : (
+                    <div className="space-y-3">
+                      {services.map((svc) => (
+                        <Option key={svc.id} selected={selectedService?.id === svc.id} onClick={() => { setSelectedService(svc); setStep(2) }} className="w-full p-4 text-left sm:p-5">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="min-w-0">
+                              <p className="text-base font-semibold text-[var(--t-text)] sm:text-lg">{svc.name}</p>
+                              <p className="mt-1 text-sm text-[var(--t-muted)]">
+                                {svc.duration} min{svc.description ? ` · ${svc.description}` : ''}
                               </p>
                             </div>
-                            <span className="text-lg font-bold" style={{ color: colors.accent }}>
-                              {fmtCurrency(product.price)}
-                            </span>
+                            <p className="shrink-0 text-base font-semibold tabular-nums text-[var(--t-accent-text)] sm:text-lg">{fmtCurrency(svc.price)}</p>
                           </div>
-
-                          {/* Quantity selector */}
-                          <div className="mt-3 flex items-center justify-between">
-                            <span className="text-sm font-medium" style={{ color: colors.textSecondary }}>Cantidad</span>
-                            <div className="flex items-center gap-3">
-                              <button
-                                onClick={() => {
-                                  setSelectedProducts(prev => {
-                                    const existing = prev.find(p => p.product_id === product.id)
-                                    if (!existing || existing.quantity <= 1) {
-                                      return prev.filter(p => p.product_id !== product.id)
-                                    }
-                                    return prev.map(p => p.product_id === product.id
-                                      ? { ...p, quantity: p.quantity - 1 }
-                                      : p
-                                    )
-                                  })
-                                }}
-                                className="flex h-8 w-8 items-center justify-center rounded-full border text-lg font-medium transition-colors hover:bg-[var(--color-paper)]"
-                                style={{ borderColor: `${colors.primary}20`, color: colors.text }}
-                              >
-                                −
-                              </button>
-                              <span className="w-6 text-center font-semibold" style={{ color: colors.text }}>{qty}</span>
-                              <button
-                                onClick={() => {
-                                  setSelectedProducts(prev => {
-                                    const existing = prev.find(p => p.product_id === product.id)
-                                    if (existing) {
-                                      if (existing.quantity >= product.current_stock) return prev
-                                      return prev.map(p => p.product_id === product.id
-                                        ? { ...p, quantity: p.quantity + 1 }
-                                        : p
-                                      )
-                                    }
-                                    return [...prev, {
-                                      product_id: product.id,
-                                      name: product.name,
-                                      quantity: 1,
-                                      price: product.price,
-                                    }]
-                                  })
-                                }}
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-lg font-medium transition-colors"
-                                style={{ backgroundColor: colors.accent, color: colors.onAccent }}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* Actions */}
-                <div className="mt-8 flex items-center justify-between">
-                  <button
-                    onClick={() => { setSelectedProducts([]); setStep(4) }}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-                    style={{ color: colors.textSecondary }}
-                  >
-                    ← Volver
-                  </button>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => { setSelectedProducts([]); setStep(6) }}
-                      className="rounded-2xl border px-5 py-2.5 text-sm font-medium transition"
-                      style={{ borderColor: `${colors.primary}20`, color: colors.textSecondary }}
-                    >
-                      Saltar
-                    </button>
-                    <button
-                      onClick={() => setStep(6)}
-                      className="rounded-2xl px-5 py-2.5 text-sm font-semibold transition-colors active:scale-[0.98]"
-                      style={{ backgroundColor: colors.accent, color: colors.onAccent }}
-                    >
-                      Continuar
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Step 6: Client data */}
-        {step === 6 && (
-          <div className={getStepAnimationClass()}>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight" style={{ color: colors.accent }}>Tus datos</h2>
-              <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
-                Completá tus datos para confirmar la reserva
-              </p>
-              {showProductStep && (
-                <button
-                  onClick={() => setStep(5)}
-                  className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-                  style={{ color: colors.textSecondary }}
-                >
-                  ← Volver a productos
-                </button>
-              )}
-            </div>
-
-            <div className="space-y-5 rounded-2xl border p-6" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
-              <Input
-                label="Nombre completo"
-                value={clientName}
-                onChange={(e) => { setClientName(e.target.value); if (formErrors.clientName) setFormErrors(prev => ({ ...prev, clientName: null })) }}
-                placeholder="Ej: Juan Pérez"
-                required
-                maxLength={100}
-                error={formErrors.clientName}
-              />
-              <Input
-                label="Teléfono"
-                type="tel"
-                value={clientPhone}
-                onChange={(e) => { setClientPhone(e.target.value); if (formErrors.clientPhone) setFormErrors(prev => ({ ...prev, clientPhone: null })) }}
-                placeholder="Ej: 11 1234 5678"
-                required
-                maxLength={20}
-                error={formErrors.clientPhone}
-              />
-              <Input
-                label="Correo electrónico (opcional)"
-                type="email"
-                value={clientEmail}
-                onChange={(e) => setClientEmail(e.target.value)}
-                placeholder="ej: juan@email.com"
-                maxLength={100}
-              />
-
-              {/* Summary */}
-              <div className="rounded-xl p-4" style={{ backgroundColor: `${colors.primary}05` }}>
-                <p className="mb-3 text-sm font-semibold" style={{ color: colors.text }}>Resumen de la reserva</p>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span style={{ color: colors.textSecondary }}>Sucursal</span>
-                    <span className="font-medium" style={{ color: colors.text }}>{selectedBranch?.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: colors.textSecondary }}>Servicio</span>
-                    <span className="font-medium" style={{ color: colors.text }}>{selectedService?.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: colors.textSecondary }}>Barbero</span>
-                    <span className="font-medium" style={{ color: colors.text }}>
-                      {selectedBarber ? barbers.find(b => b.id === selectedBarber)?.name || '—' : 'Cualquier barbero'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: colors.textSecondary }}>Fecha</span>
-                    <span className="font-medium" style={{ color: colors.text }}>{selectedDate && formatDate(selectedDate)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: colors.textSecondary }}>Hora</span>
-                    <span className="font-medium" style={{ color: colors.text }}>{selectedTime} hs</span>
-                  </div>
-                  {selectedProducts.length > 0 && (
-                    <>
-                      <div className="border-t pt-2" style={{ borderColor: `${colors.primary}12` }}>
- <p className="mb-2 text-xs font-semibold"style={{ color: colors.textSecondary }}>
-                          Productos adicionales
-                        </p>
-                        {selectedProducts.map(sp => (
-                          <div key={sp.product_id} className="flex justify-between text-sm">
-                            <span style={{ color: colors.textSecondary }}>
-                              {sp.name} ×{sp.quantity}
-                            </span>
-                            <span className="font-medium" style={{ color: colors.text }}>
-                              {fmtCurrency(sp.price * sp.quantity)}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </>
+                        </Option>
+                      ))}
+                    </div>
                   )}
-                  <div className="border-t pt-2" style={{ borderColor: `${colors.primary}12` }}>
-                    <div className="flex justify-between">
-                      <span className="font-semibold" style={{ color: colors.text }}>Total</span>
-                      <span className="text-lg font-bold" style={{ color: colors.accent }}>
-                        {fmtCurrency(
-                          Number(selectedService?.price || 0) +
-                          selectedProducts.reduce((sum, sp) => sum + sp.price * sp.quantity, 0)
-                        )}
-                      </span>
+                </div>
+              )}
+
+              {/* Step 2: Barber */}
+              {step === 2 && (
+                <div className={anim}>
+                  <StepHeading title="¿Con quién?" subtitle="Si no tenés preferencia, te asignamos el primero libre." onBack={goBack} />
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Option selected={selectedBarber === null && step > 2} onClick={() => { setSelectedBarber(null); setStep(3) }} className="flex w-full items-center gap-4 p-4 text-left">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--t-border-strong)] text-[var(--t-muted)]">
+                        <svg aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.6}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" /></svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[var(--t-text)]">Cualquier barbero</p>
+                        <p className="text-sm text-[var(--t-muted)]">Más horarios disponibles</p>
+                      </div>
+                    </Option>
+                    {eligibleBarbers.map((barber) => (
+                      <Option key={barber.id} selected={selectedBarber === barber.id} onClick={() => { setSelectedBarber(barber.id); setStep(3) }} className="flex w-full items-center gap-4 p-4 text-left">
+                        <Avatar name={barber.name} photo={barber.photo_url} />
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold text-[var(--t-text)]">{barber.name}</p>
+                          {barber.specialty && <p className="truncate text-sm text-[var(--t-muted)]">{barber.specialty}</p>}
+                        </div>
+                      </Option>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Date */}
+              {step === 3 && (
+                <div className={anim}>
+                  <StepHeading title="¿Qué día?" subtitle="Mostramos los próximos 7 días." onBack={goBack} />
+                  <div className="-mx-[var(--gutter)] overflow-x-auto px-[var(--gutter)] pb-2 [scrollbar-width:none] sm:mx-0 sm:overflow-visible sm:px-0">
+                    <div className="grid w-max grid-flow-col gap-2 sm:w-full sm:grid-flow-row sm:grid-cols-7">
+                      {days.map((day) => {
+                        const isClosedHoliday = holidays.some((h) => h.date === day.date)
+                        const dh = hours.find((h) => h.day_of_week === day.dayOfWeek)
+                        const isClosed = isClosedHoliday || (hours.length > 0 && (!dh || dh.is_closed))
+                        return (
+                          <Option
+                            key={day.date}
+                            selected={selectedDate === day.date}
+                            disabled={isClosed}
+                            onClick={() => { setSelectedDate(day.date); setStep(4) }}
+                            className="flex w-[4.5rem] flex-col items-center py-3 text-center sm:w-full"
+                          >
+                            <span className="text-xs font-medium capitalize text-[var(--t-muted)]">{day.isToday ? 'Hoy' : day.weekday}</span>
+                            <span className="mt-1 text-2xl font-semibold tabular-nums text-[var(--t-text)]">{day.dayNum}</span>
+                            <span className="text-xs capitalize text-[var(--t-muted)]">{isClosed ? 'Cerrado' : day.month}</span>
+                          </Option>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <Button
-                onClick={handleSubmit}
-                loading={submitting}
-                disabled={cooldown > 0}
-                className="w-full"
-                size="lg"
-                style={{ backgroundColor: colors.accent, color: colors.onAccent }}
-              >
-                {cooldown > 0 ? `Esperá ${cooldown}s para agendar otra` : 'Confirmar reserva'}
-              </Button>
-
-              {submitError && (
-                <div className="rounded-xl bg-red-50 p-4 text-sm text-red-600">{submitError}</div>
               )}
-            </div>
-          </div>
-        )}
 
-        {/* Step 7: Success */}
-        {step === 7 && (
-          <div className={`${getStepAnimationClass()} py-8`}>
-            <div className="rounded-2xl border p-8 text-center" style={{ borderColor: `${colors.primary}12`, backgroundColor: 'white' }}>
-              {/* Celebration check */}
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl" style={{ backgroundColor: `${colors.accent}12` }}>
-                <svg aria-hidden="true" focusable="false" className="h-10 w-10" style={{ color: colors.accent }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
+              {/* Step 4: Time */}
+              {step === 4 && (
+                <div className={anim}>
+                  <StepHeading title="¿A qué hora?" subtitle={dateLabel && dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1)} onBack={goBack} />
+                  {slotsLoading ? (
+                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5" aria-label="Cargando horarios">
+                      {Array.from({ length: 10 }).map((_, i) => <div key={i} className="skeleton h-12" />)}
+                    </div>
+                  ) : availableSlots.length === 0 ? (
+                    <div className="rounded-[var(--t-radius)] border border-dashed border-[var(--t-border-strong)] p-10 text-center">
+                      <p className="font-semibold text-[var(--t-text)]">No quedan horarios libres ese día</p>
+                      <p className="mt-1 text-sm text-[var(--t-muted)]">Probá con otro día{selectedBarber ? ' o con cualquier barbero' : ''}.</p>
+                      <button type="button" onClick={() => setStep(3)} className="mt-4 text-sm font-semibold text-[var(--t-accent-text)]">Elegir otro día</button>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      {SLOT_GROUPS.map((g) => {
+                        const slots = availableSlots.filter(g.test)
+                        if (!slots.length) return null
+                        return (
+                          <div key={g.label}>
+                            <p className="mb-2.5 text-sm font-medium text-[var(--t-muted)]">{g.label}</p>
+                            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5">
+                              {slots.map((slot) => (
+                                <Option
+                                  key={slot}
+                                  selected={selectedTime === slot}
+                                  onClick={() => { setSelectedTime(slot); setStep(showProductStep ? 5 : 6) }}
+                                  className="h-12 w-full text-center text-[15px] font-semibold tabular-nums text-[var(--t-text)]"
+                                >
+                                  {slot}
+                                </Option>
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
 
-              <h2 className="mt-6 text-2xl font-bold tracking-tight" style={{ color: colors.text }}>
-                ¡Reserva confirmada!
-              </h2>
-              <p className="mt-2" style={{ color: colors.textSecondary }}>
-                Te esperamos{' '}
-                <strong style={{ color: colors.text }}>
-                  {selectedDate && formatDate(selectedDate)} a las {selectedTime} hs
-                </strong>
-                {' '}en {business.name}.
-              </p>
+              {/* Step 5: Products */}
+              {step === 5 && (
+                <div className={anim}>
+                  <StepHeading title="¿Algo para llevar?" subtitle="Opcional. Lo pagás junto con el servicio." onBack={goBack} />
+                  <div className="divide-y divide-[var(--t-border)] rounded-[var(--t-radius)] border border-[var(--t-border)] bg-[var(--t-surface)]">
+                    {products.map((product) => {
+                      const qty = selectedProducts.find((p) => p.product_id === product.id)?.quantity || 0
+                      return (
+                        <div key={product.id} className="flex w-full items-center gap-4 p-4 text-left">
+                          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[var(--t-radius-btn)] bg-[var(--t-sunken)]">
+                            {product.image_url && !imgErrors[product.id] ? (
+                              <img src={product.image_url} alt="" className="h-full w-full object-cover" onError={() => setImgErrors((prev) => ({ ...prev, [product.id]: true }))} />
+                            ) : (
+                              <span className="text-xl text-[var(--t-muted)]">{product.name.charAt(0)}</span>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-semibold leading-snug text-[var(--t-text)]">{product.name}</p>
+                            <p className="mt-0.5 text-[15px] font-semibold tabular-nums text-[var(--t-accent-text)]">{fmtCurrency(product.price)}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {qty > 0 && (
+                              <>
+                                <button type="button" onClick={() => changeQty(product, -1)} aria-label={`Quitar un ${product.name}`} className="flex h-11 w-11 items-center justify-center rounded-full text-xl text-[var(--t-text)] ring-1 ring-inset ring-[var(--t-border-strong)]">−</button>
+                                <span className="w-7 text-center font-semibold tabular-nums">{qty}</span>
+                              </>
+                            )}
+                            <button type="button" onClick={() => changeQty(product, 1)} aria-label={`Agregar ${product.name}`} disabled={qty >= product.current_stock} className="flex h-11 w-11 items-center justify-center rounded-full text-xl disabled:opacity-40" style={{ backgroundColor: 'var(--t-accent)', color: 'var(--t-on-accent)' }}>+</button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:justify-end">
+                    <button type="button" onClick={() => { setSelectedProducts([]); setStep(6) }} className="h-12 rounded-[var(--t-radius-btn)] px-6 text-[15px] font-semibold text-[var(--t-text)] ring-1 ring-inset ring-[var(--t-border-strong)]">
+                      No, gracias
+                    </button>
+                    <button type="button" onClick={() => setStep(6)} disabled={selectedProducts.length === 0} className="h-12 rounded-[var(--t-radius-btn)] px-6 text-[15px] font-semibold disabled:opacity-40" style={{ backgroundColor: 'var(--t-accent)', color: 'var(--t-on-accent)' }}>
+                      Agregar y seguir
+                    </button>
+                  </div>
+                </div>
+              )}
 
-              {/* BOOK-005: Use branch address/phone when available */}
-              <div className="mt-4 flex flex-col items-center gap-2 text-sm" style={{ color: colors.textSecondary }}>
-                {(selectedBranch?.address || business.address) && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
-                    {selectedBranch?.address || business.address}
-                  </span>
-                )}
-                {(selectedBranch?.phone || business.phone) && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
-                    {selectedBranch?.phone || business.phone}
-                  </span>
-                )}
-              </div>
+              {/* Step 6: Client data */}
+              {step === 6 && (
+                <div className={anim}>
+                  <StepHeading title="Tus datos" subtitle="Los usamos solo para confirmarte el turno." onBack={goBack} />
+                  <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); handleSubmit() }} noValidate>
+                    <TField
+                      id="client-name" label="Nombre y apellido" autoComplete="name" value={clientName} maxLength={100} required
+                      placeholder="Juan Pérez" error={formErrors.clientName}
+                      onChange={(e) => { setClientName(e.target.value); if (formErrors.clientName) setFormErrors((prev) => ({ ...prev, clientName: null })) }}
+                    />
+                    <TField
+                      id="client-phone" label="Teléfono (WhatsApp)" type="tel" inputMode="tel" autoComplete="tel" value={clientPhone} maxLength={20} required
+                      placeholder="0981 123 456" error={formErrors.clientPhone}
+                      onChange={(e) => { setClientPhone(e.target.value); if (formErrors.clientPhone) setFormErrors((prev) => ({ ...prev, clientPhone: null })) }}
+                    />
+                    <TField
+                      id="client-email" label="Correo (opcional)" type="email" autoComplete="email" value={clientEmail} maxLength={100}
+                      placeholder="juan@correo.com" onChange={(e) => setClientEmail(e.target.value)}
+                    />
 
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link
-                  to={`/barberia/${slug}`}
-                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold transition-colors active:scale-[0.98]"
-                  style={{ backgroundColor: colors.accent, color: colors.onAccent }}
-                >
-                  Volver a la barbería
-                </Link>
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-semibold transition"
-                  style={{ backgroundColor: `${colors.primary}08`, color: colors.text }}
-                >
-                  Ver más barberías
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-        </>
+                    <div className="rounded-[var(--t-radius)] border border-[var(--t-border)] bg-[var(--t-surface)] p-5 lg:hidden">{summary}</div>
+
+                    {submitError && (
+                      <div role="alert" className="rounded-[var(--t-radius-btn)] border border-red-500/30 bg-red-500/10 p-4 text-sm text-[var(--t-text)]">{submitError}</div>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={submitting || cooldown > 0}
+                      className="inline-flex h-13 w-full items-center justify-center gap-2 rounded-[var(--t-radius-btn)] text-base font-semibold transition-[filter] hover:brightness-110 disabled:opacity-50"
+                      style={{ backgroundColor: 'var(--t-accent)', color: 'var(--t-on-accent)' }}
+                    >
+                      {submitting && <svg aria-hidden="true" className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>}
+                      {cooldown > 0 ? `Podés reservar otra vez en ${cooldown} s` : `Confirmar reserva · ${fmtCurrency(total)}`}
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* Step 7: Success */}
+              {step === 7 && (
+                <div className={`${anim} mx-auto max-w-lg py-4 text-center`}>
+                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--t-accent)', color: 'var(--t-on-accent)' }}>
+                    <svg aria-hidden="true" className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <h1 className="mt-6 text-[clamp(1.875rem,1.4rem+2vw,2.75rem)] font-semibold leading-tight" style={{ fontFamily: 'var(--t-font-h)' }}>Reserva confirmada</h1>
+                  <p className="mt-2 text-[15px] text-[var(--t-muted)]">Te esperamos en {business.name}.</p>
+
+                  <div className="mt-8 rounded-[var(--t-radius)] border border-[var(--t-border)] bg-[var(--t-surface)] text-left">
+                    <div className="border-b border-dashed border-[var(--t-border-strong)] p-5 sm:p-6">
+                      <p className="text-sm text-[var(--t-muted)]">{dateLabel && dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1)}</p>
+                      <p className="mt-1 text-4xl font-semibold tabular-nums" style={{ fontFamily: 'var(--t-font-h)' }}>{selectedTime} hs</p>
+                    </div>
+                    <dl className="grid gap-3 p-5 text-[15px] sm:p-6">
+                      <div className="flex justify-between gap-4"><dt className="text-[var(--t-muted)]">Servicio</dt><dd className="text-right font-semibold">{selectedService?.name}</dd></div>
+                      <div className="flex justify-between gap-4"><dt className="text-[var(--t-muted)]">Barbero</dt><dd className="text-right font-semibold">{barberName || 'Cualquier barbero'}</dd></div>
+                      {(selectedBranch?.address || business.address) && (
+                        <div className="flex justify-between gap-4"><dt className="text-[var(--t-muted)]">Dirección</dt><dd className="text-right font-semibold">{selectedBranch?.address || business.address}</dd></div>
+                      )}
+                      <div className="flex justify-between gap-4 border-t border-[var(--t-border)] pt-3"><dt className="text-[var(--t-muted)]">Total a pagar</dt><dd className="font-semibold tabular-nums">{fmtCurrency(total)}</dd></div>
+                    </dl>
+                  </div>
+
+                  <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                    <Link to={`/barberia/${slug}`} className="inline-flex h-12 items-center justify-center rounded-[var(--t-radius-btn)] text-[15px] font-semibold" style={{ backgroundColor: 'var(--t-accent)', color: 'var(--t-on-accent)' }}>
+                      Volver a la barbería
+                    </Link>
+                    {(selectedBranch?.phone || business.phone) ? (
+                      <a href={`https://wa.me/${(selectedBranch?.phone || business.phone).replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="inline-flex h-12 items-center justify-center rounded-[var(--t-radius-btn)] text-[15px] font-semibold ring-1 ring-inset ring-[var(--t-border-strong)]">
+                        Escribir por WhatsApp
+                      </a>
+                    ) : (
+                      <Link to="/" className="inline-flex h-12 items-center justify-center rounded-[var(--t-radius-btn)] text-[15px] font-semibold ring-1 ring-inset ring-[var(--t-border-strong)]">Ver más barberías</Link>
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Desktop summary */}
+        {step < 7 && !needsBranch && (
+          <aside className="hidden lg:block">
+            <div className="sticky top-24 rounded-[var(--t-radius)] border border-[var(--t-border)] bg-[var(--t-surface)] p-6">{summary}</div>
+          </aside>
         )}
       </div>
     </div>

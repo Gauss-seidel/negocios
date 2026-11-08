@@ -390,7 +390,7 @@ export default function BarbersPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Barberos</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Barberos</h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Gestiona los barberos de tu negocio</p>
           {!planLoading && (
             <div className="mt-2 flex items-center gap-2">

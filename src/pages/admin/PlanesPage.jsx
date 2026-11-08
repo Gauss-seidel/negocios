@@ -167,7 +167,7 @@ export default function PlanesPage() {
     <div className="flex items-center justify-center py-32">
       <div className="max-w-md text-center">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" focusable="false" className="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
@@ -184,7 +184,7 @@ export default function PlanesPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Planes de Suscripción</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Planes de Suscripción</h1>
         <p className="mt-1 text-sm text-[var(--color-muted)]">Administrá los planes disponibles para las barberías</p>
       </div>
 
@@ -215,8 +215,8 @@ export default function PlanesPage() {
                   </div>
                   <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                     p.is_active
-                      ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                      : 'border-red-500/20 bg-red-500/10 text-red-400'
+                      ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
+                      : 'border-red-500/20 bg-red-500/10 text-red-600'
                   }`}>
                     <span className={`h-1.5 w-1.5 rounded-full ${p.is_active ? 'bg-emerald-400' : 'bg-red-400'}`} />
                     {p.is_active ? 'Activo' : 'Inactivo'}
@@ -243,13 +243,13 @@ export default function PlanesPage() {
                 </div>
 
                 <div className="flex items-center justify-end gap-1 border-t border-[var(--color-border)] pt-3">
-                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-white/5 hover:text-[var(--color-text)]" title="Editar">
+                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]" title="Editar">
                     <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                     </svg>
                   </button>
                   <button onClick={() => handleToggle(p)} disabled={actionLoading}
-                    className={`rounded-lg p-2 transition hover:bg-white/5 disabled:opacity-30 ${p.is_active ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'}`}
+                    className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${p.is_active ? 'text-amber-600 hover:text-amber-700' : 'text-emerald-600 hover:text-emerald-700'}`}
                     title={p.is_active ? 'Desactivar' : 'Activar'}>
                     <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       {p.is_active
@@ -297,8 +297,8 @@ export default function PlanesPage() {
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                         p.is_active
-                          ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                          : 'border-red-500/20 bg-red-500/10 text-red-400'
+                          ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600'
+                          : 'border-red-500/20 bg-red-500/10 text-red-600'
                       }`}>
                         <span className={`h-1.5 w-1.5 rounded-full ${p.is_active ? 'bg-emerald-400' : 'bg-red-400'}`} />
                         {p.is_active ? 'Activo' : 'Inactivo'}
@@ -308,7 +308,7 @@ export default function PlanesPage() {
                       <div className="flex items-center justify-end gap-0.5">
                         <button
                           onClick={() => openEdit(p)}
-                          className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-white/5 hover:text-[var(--color-text)]"
+                          className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]"
                           title="Editar"
                         >
                           <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -318,10 +318,10 @@ export default function PlanesPage() {
                         <button
                           onClick={() => handleToggle(p)}
                           disabled={actionLoading}
-                          className={`rounded-lg p-2 transition hover:bg-white/5 disabled:opacity-30 ${
+                          className={`rounded-lg p-2 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${
                             p.is_active
-                              ? 'text-amber-400 hover:text-amber-300'
-                              : 'text-emerald-400 hover:text-emerald-300'
+                              ? 'text-amber-600 hover:text-amber-700'
+                              : 'text-emerald-600 hover:text-emerald-700'
                           }`}
                           title={p.is_active ? 'Desactivar' : 'Activar'}
                         >
@@ -352,7 +352,7 @@ export default function PlanesPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => openEdit(p)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--color-muted)] opacity-0 transition hover:bg-white/5 hover:text-[var(--color-text)] group-hover:opacity-100"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--color-muted)] opacity-0 transition hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)] group-hover:opacity-100"
                     title="Editar plan"
                   >
                     <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -366,8 +366,8 @@ export default function PlanesPage() {
                 <button
                   onClick={() => handleToggle(p)}
                   disabled={actionLoading}
-                  className={`rounded-lg p-1.5 transition hover:bg-white/5 disabled:opacity-30 ${
-                    p.is_active ? 'text-amber-400 hover:text-amber-300' : 'text-emerald-400 hover:text-emerald-300'
+                  className={`rounded-lg p-1.5 transition hover:bg-[var(--color-paper-2)] disabled:opacity-30 ${
+                    p.is_active ? 'text-amber-600 hover:text-amber-700' : 'text-emerald-600 hover:text-emerald-700'
                   }`}
                   title={p.is_active ? 'Desactivar' : 'Activar'}
                 >
@@ -400,7 +400,7 @@ export default function PlanesPage() {
                 <ul className="space-y-1 border-t border-[var(--color-border)] pt-3">
                   {p.features.map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
-                      <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 flex-shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                       {f}
@@ -416,7 +416,7 @@ export default function PlanesPage() {
       {/* Edit Modal */}
       <Modal open={showEdit} onClose={closeEdit} title={`Editar: ${editTarget?.name || ''}`} size="lg">
         {formError && (
-          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>
+          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-600">{formError}</div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -430,7 +430,7 @@ export default function PlanesPage() {
               value={form.description}
               onChange={handleChange}
               rows={2}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-[var(--color-text)]/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 py-2.5 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] transition focus:border-[var(--color-brass)] focus:bg-[var(--color-surface)] focus:outline-none"
             />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
@@ -446,7 +446,7 @@ export default function PlanesPage() {
               value={form.features}
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-[var(--color-text)]/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+              className="w-full rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 py-2.5 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] transition focus:border-[var(--color-brass)] focus:bg-[var(--color-surface)] focus:outline-none"
               placeholder="Gestión de reservas&#10;Gestión de clientes&#10;1 sucursal&#10;3 empleados"
             />
           </div>
@@ -456,7 +456,7 @@ export default function PlanesPage() {
               name="is_active"
               checked={form.is_active}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-white/20 bg-white/5 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+              className="h-4 w-4 rounded border-[var(--color-border-strong)] bg-[var(--color-surface)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
             />
             <span className="text-sm font-medium text-[var(--color-text-secondary)]">Plan activo</span>
           </label>

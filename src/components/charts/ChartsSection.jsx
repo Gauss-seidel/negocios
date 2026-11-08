@@ -25,6 +25,12 @@ ChartJS.register(
   ArcElement
 )
 
+// Brand palette for charts ("Cuero y latón"); distinct enough to tell series apart.
+const BRAND = { bottle: '#1f3a2e', brass: '#b08d57', teal: '#3d6f75', wine: '#8a3a42', sage: '#9aa39b' }
+ChartJS.defaults.font.family = '"Hanken Grotesk", system-ui, sans-serif'
+ChartJS.defaults.color = '#5e6862'
+ChartJS.defaults.borderColor = 'rgba(24, 32, 28, 0.08)'
+
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: true,
@@ -36,7 +42,7 @@ const chartOptions = {
 function EmptyChart({ title, message = 'Sin datos disponibles por ahora.' }) {
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">{title}</h3>
       <div className="flex flex-col items-center justify-center py-8 text-center">
         <svg aria-hidden="true" focusable="false" className="h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -58,20 +64,20 @@ export function IncomeChart({ data }) {
       {
         label: 'Ingresos',
         data: data.map(d => d.income),
-        borderColor: '#2980b9',
-        backgroundColor: 'rgba(41, 128, 185, 0.1)',
+        borderColor: BRAND.bottle,
+        backgroundColor: 'rgba(31, 58, 46, 0.08)',
         borderWidth: 2,
         fill: true,
         tension: 0.4,
         pointRadius: 4,
-        pointBackgroundColor: '#2980b9',
+        pointBackgroundColor: BRAND.bottle,
       },
     ],
   }
 
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Tendencia de Ingresos</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">Tendencia de Ingresos</h3>
       <Line data={chartData} options={chartOptions} />
     </Card>
   )
@@ -88,8 +94,8 @@ export function DayOfWeekChart({ data }) {
       {
         label: 'Reservas',
         data: data.map(d => d.count),
-        backgroundColor: '#2980b9',
-        borderColor: '#2980b9',
+        backgroundColor: BRAND.bottle,
+        borderColor: BRAND.bottle,
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -98,7 +104,7 @@ export function DayOfWeekChart({ data }) {
 
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Reservas por Día</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">Reservas por Día</h3>
       <Bar data={chartData} options={chartOptions} />
     </Card>
   )
@@ -114,8 +120,8 @@ export function StatusChart({ data }) {
     datasets: [
       {
         data: [data.completed, data.cancelled],
-        backgroundColor: ['#27ae60', '#e74c3c'],
-        borderColor: ['#27ae60', '#e74c3c'],
+        backgroundColor: [BRAND.bottle, BRAND.wine],
+        borderColor: [BRAND.bottle, BRAND.wine],
         borderWidth: 2,
       },
     ],
@@ -123,7 +129,7 @@ export function StatusChart({ data }) {
 
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Estado de Reservas</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">Estado de Reservas</h3>
       <div style={{ maxWidth: '300px', margin: '0 auto' }}>
         <Doughnut data={chartData} options={chartOptions} />
       </div>
@@ -136,7 +142,7 @@ export function ServiceChart({ data }) {
     return <EmptyChart title="Ingresos por Servicio" />
   }
 
-  const colors = ['#2980b9', '#27ae60', '#f39c12', '#9b59b6', '#e74c3c']
+  const colors = [BRAND.bottle, '#27ae60', '#f39c12', '#9b59b6', '#e74c3c']
 
   const chartData = {
     labels: data.map(d => d.name),
@@ -152,7 +158,7 @@ export function ServiceChart({ data }) {
 
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Ingresos por Servicio</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">Ingresos por Servicio</h3>
       <div style={{ maxWidth: '350px', margin: '0 auto' }}>
         <Doughnut data={chartData} options={chartOptions} />
       </div>
@@ -171,8 +177,8 @@ export function BarbersChart({ data }) {
       {
         label: 'Ingresos',
         data: data.map(d => d.total),
-        backgroundColor: '#2980b9',
-        borderColor: '#2980b9',
+        backgroundColor: BRAND.bottle,
+        borderColor: BRAND.bottle,
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -186,7 +192,7 @@ export function BarbersChart({ data }) {
 
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Ingresos por Barbero</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">Ingresos por Barbero</h3>
       <Bar data={chartData} options={opts} />
     </Card>
   )
@@ -203,8 +209,8 @@ export function HoursChart({ data }) {
       {
         label: 'Reservas',
         data: data.map(d => d.count),
-        backgroundColor: '#2980b9',
-        borderColor: '#2980b9',
+        backgroundColor: BRAND.bottle,
+        borderColor: BRAND.bottle,
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -213,7 +219,7 @@ export function HoursChart({ data }) {
 
   return (
     <Card>
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Horas Pico</h3>
+      <h3 className="mb-4 text-base font-semibold text-[var(--color-ink)]">Horas Pico</h3>
       <Bar data={chartData} options={chartOptions} />
     </Card>
   )

@@ -198,7 +198,7 @@ export default function ClientsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Clientes</h1>
+        <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Clientes</h1>
         <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Historial y datos de tus clientes</p>
       </div>
 
@@ -236,7 +236,7 @@ export default function ClientsPage() {
             <Card key={client.id} padding={false}>
               {/* Client header row */}
               <div
-                className="flex cursor-pointer items-center gap-4 px-4 py-4 sm:px-6"
+                className="flex cursor-pointer items-center gap-3 px-4 py-4 sm:gap-4 sm:px-6"
                 onClick={() => toggleExpand(client)}
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-paper-2)] text-sm font-bold text-[var(--color-text-secondary)]">
@@ -244,9 +244,10 @@ export default function ClientsPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium text-[var(--color-text)] truncate">{client.name || 'Sin nombre'}</p>
-                  <div className="flex flex-wrap gap-2 text-xs text-[var(--color-text-secondary)]">
+                  <div className="flex flex-wrap gap-x-3 text-[13px] text-[var(--color-text-secondary)]">
                     {client.phone && <span>{client.phone}</span>}
-                    {client.email && <span>{client.email}</span>}
+                    {client.email && <span className="hidden sm:inline">{client.email}</span>}
+                    <span className="sm:hidden">{client.total_visits} {client.total_visits === 1 ? 'visita' : 'visitas'}</span>
                   </div>
                 </div>
                 {/* Desktop stats — visible sm:block */}
@@ -254,20 +255,17 @@ export default function ClientsPage() {
                   <p className="text-sm font-medium text-[var(--color-text)]">{client.total_visits} visitas</p>
                   <p className="text-xs text-[var(--color-text-secondary)]">{formatCurrency(client.total_spent)}</p>
                 </div>
-                {/* Mobile compact stats — visible solo en mobile */}
-                <div className="sm:hidden text-right shrink-0">
-                  <p className="text-xs font-medium text-[var(--color-text)]">{client.total_visits}</p>
-                  <p className="text-[10px] text-[var(--color-muted)]">visitas</p>
-                </div>
                 {/* History button */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     setHistoryClientId(client.id)
                   }}
-                  className="shrink-0 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-xs font-medium text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-border)] hover:bg-[var(--color-paper)]"
+                  className="flex h-10 shrink-0 items-center gap-1.5 rounded-lg border border-[var(--color-border)] px-2.5 text-[13px] font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-paper)] sm:px-3"
+                  aria-label={`Ver historial de ${client.name || 'cliente'}`}
                 >
-                  Historial
+                  <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.7}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <span className="hidden sm:inline">Historial</span>
                 </button>
                 <svg aria-hidden="true" focusable="false"
                   className={`h-5 w-5 shrink-0 text-[var(--color-muted)] transition-transform ${

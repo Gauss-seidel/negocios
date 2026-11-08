@@ -6,7 +6,7 @@
 
 1. **CSS puro primero** — `overflow-x: auto`, `flex-wrap`, `grid`, `clamp()`, `min()`, `max()` resuelven el 80% de los casos sin JS.
 2. **JS solo cuando cambia la estructura** — si mobile necesita un layout completamente diferente (cards en vez de tabla), usa `useResponsiveTable`.
-3. **Un solo breakpoint** — todas las pantallas admin usan `767px` (definido en `useResponsiveTable`). No crear breakpoints ad-hoc.
+3. **Un solo breakpoint** — todas las pantallas admin usan `1023px` (el mismo punto en que aparece el sidebar) (definido en `useResponsiveTable`). No crear breakpoints ad-hoc.
 
 ## Cuándo usar cada enfoque
 

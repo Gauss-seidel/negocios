@@ -1,16 +1,11 @@
-import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
-import { useState } from 'react'
+import AppShell from '../components/ui/AppShell'
 import BranchSelector from '../components/ui/BranchSelector'
-import ErrorBoundary from '../components/ui/ErrorBoundary'
-import BottomNav from '../components/ui/BottomNav'
-import Breadcrumb from '../components/ui/Breadcrumb'
 
 const navGroups = [
   {
     label: 'Principal',
     items: [
-      { path: '/admin/mi-negocio', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+      { path: '/admin/mi-negocio', label: 'Inicio', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
       { path: '/admin/mi-negocio/reservas', label: 'Reservas', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
       { path: '/admin/mi-negocio/clientes', label: 'Clientes', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
     ],
@@ -37,147 +32,14 @@ const navGroups = [
   },
 ]
 
-const allNavItems = navGroups.flatMap(g => g.items)
-
-function NavIcon({ path }) {
-  return (
-    <svg aria-hidden="true" focusable="false" className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d={path} />
-    </svg>
-  )
-}
-
 export default function AdminLayout() {
-  const { user, logout, businessId } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [collapsedGroups, setCollapsedGroups] = useState({})
-
-  const handleLogout = async () => {
-    await logout()
-    navigate('/admin')
-  }
-
-  function toggleGroup(label) {
-    setCollapsedGroups(prev => ({ ...prev, [label]: !prev[label] }))
-  }
-
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r transition-transform duration-300 lg:relative lg:translate-x-0 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-        style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
-      >
-        <div className="flex h-16 items-center justify-between border-b px-4" style={{ borderColor: 'var(--color-border)' }}>
-          <Link to="/admin/mi-negocio" className="text-lg font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
-            BarberShifts
-          </Link>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--color-muted)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)] lg:hidden"
-            aria-label="Cerrar menú"
-          >
-            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <nav className="flex-1 overflow-y-auto px-2 py-2">
-          <BranchSelector planLimit={3} variant="light" />
-          {navGroups.map((group) => (
-            <div key={group.label} className="mt-3">
-              <button
-                onClick={() => toggleGroup(group.label)}
-                className="flex w-full items-center justify-between px-3 py-1.5 text-[11px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-text)]"
-                aria-expanded={!collapsedGroups[group.label]}
-              >
-                {group.label}
-                <svg aria-hidden="true" focusable="false" className={`h-3 w-3 transition-transform ${collapsedGroups[group.label] ? '-rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {!collapsedGroups[group.label] && group.items.map((item) => {
-                const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition duration-200 ${
-                      isActive
-                        ? 'bg-[var(--color-accent-warm)] text-[var(--color-accent-ink)] shadow-sm'
-                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-paper-2)] hover:text-[var(--color-text)]'
-                    }`}
-                  >
-                    <NavIcon path={item.icon} />
-                    {item.label}
-                  </Link>
-                )
-              })}
-            </div>
-          ))}
-        </nav>
-
-        <div className="border-t p-3" style={{ borderColor: 'var(--color-border)' }}>
-          <div className="mb-2 truncate px-2">
-            <span className="text-xs" style={{ color: 'var(--color-muted)' }}>{user?.email}</span>
-            <br />
-            <span className="text-[10px]" style={{ color: 'var(--color-muted)', opacity: 0.7 }}>ID: {businessId?.slice(0, 8)}…</span>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition hover:bg-[var(--color-paper-2)]"
-            style={{ color: 'var(--color-text-secondary)' }}
-            aria-label="Cerrar sesión"
-          >
-            <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Cerrar sesión
-          </button>
-        </div>
-      </aside>
-
-      {/* Main */}
-      <div className="flex flex-1 flex-col">
-        {/* Mobile header */}
-        <header className="flex h-16 items-center justify-between border-b px-4 lg:hidden" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl hover:bg-[var(--color-paper-2)]"
-            style={{ color: 'var(--color-text-secondary)' }}
-            aria-label="Abrir menú"
-          >
-            <svg aria-hidden="true" focusable="false" className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>BarberShifts</span>
-          <div className="w-9" />
-        </header>
-
-        <main className="flex-1 overflow-auto p-4 pb-24 lg:p-8 lg:pb-8">
-          <ErrorBoundary>
-            <Breadcrumb />
-            <Outlet />
-          </ErrorBoundary>
-        </main>
-
-        {/* Mobile bottom nav */}
-        <BottomNav />
-      </div>
-    </div>
+    <AppShell
+      groups={navGroups}
+      rootPath="/admin/mi-negocio"
+      roleLabel="Administrador"
+      mobileItems={['/admin/mi-negocio', '/admin/mi-negocio/reservas', '/admin/mi-negocio/clientes', '/admin/mi-negocio/caja']}
+      sidebarTop={<BranchSelector planLimit={3} variant="dark" />}
+    />
   )
 }

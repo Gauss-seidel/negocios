@@ -223,7 +223,7 @@ export default function InventoryPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Inventario</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Inventario</h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de productos e insumos</p>
         </div>
         <UpgradePrompt feature="El modulo de Inventario" requiredPlan="Profesional" />
@@ -255,7 +255,7 @@ export default function InventoryPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Inventario</h1>
+          <h1 className="font-serif text-[1.75rem] font-semibold leading-tight text-[var(--color-ink)] sm:text-[2.125rem]">Inventario</h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Control de productos e insumos</p>
         </div>
         <Button onClick={openCreateModal}>
