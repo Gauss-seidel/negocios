@@ -777,7 +777,7 @@ export default function BookingPage() {
                       boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
                     }}
                   >
- <div className="text-[10px] font-semibold"style={{ color: colors.textSecondary }}>
+ <div className="text-[11px] font-semibold"style={{ color: colors.textSecondary }}>
                       {day.label.split(' ')[0]}
                     </div>
                     <div className="mt-1.5 text-2xl font-bold" style={{ color: colors.text }}>
