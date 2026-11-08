@@ -67,6 +67,8 @@ a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 button { font: inherit; cursor: pointer; border: none; background: none; }
 input, select, textarea { font: inherit; }
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+select, textarea { appearance: none; -webkit-appearance: none; min-width: 0; }
 table { border-collapse: collapse; }
 
 ::selection { background-color: var(--color-accent); color: var(--color-accent-ink); }
@@ -540,9 +542,14 @@ table { border-collapse: collapse; }
 .focus\:border-red-500:focus { border-color: #ef4444; }
 .focus\:bg-white\/10:focus { background-color: rgba(255,255,255,0.10); }
 .focus\:outline-none:focus { outline: none; }
+.focus\:ring-1, .focus\:ring-2 { --tw-ring-color: color-mix(in srgb, var(--color-accent) 35%, transparent); }
 .focus\:ring-1:focus { box-shadow: 0 0 0 1px var(--tw-ring-color); }
+.focus\:ring-2:focus { box-shadow: 0 0 0 3px var(--tw-ring-color); border-color: var(--color-accent); }
 .focus\:ring-\[var\(--color-accent\)\]:focus { --tw-ring-color: var(--color-accent); }
 .focus\:ring-red-500:focus { --tw-ring-color: #ef4444; }
+.focus-visible\:ring-2:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 35%, transparent); }
+.focus-visible\:ring-\[var\(--color-accent\)\]:focus-visible { --tw-ring-color: var(--color-accent); }
+.focus-visible\:ring-offset-1:focus-visible { outline-offset: 1px; }
 
 /* Focus-within */
 .focus-within\:border-white\/20:focus-within { border-color: rgba(255,255,255,0.20); }

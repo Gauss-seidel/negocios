@@ -94,17 +94,17 @@ export default function ResetPassword() {
         <h2 className="mb-2 text-lg font-bold" style={{ color: 'var(--color-text)' }}>Restablecer contraseña</h2>
         <p className="mb-6 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Ingresá tu nueva contraseña.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Nueva contraseña</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mínimo 6 caracteres" required minLength={6}
-              className="w-full rounded-xl border px-4 py-3 text-sm transition focus:outline-none focus:ring-2"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }} />
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Nueva contraseña</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mínimo 6 caracteres" required minLength={6} autoComplete="new-password"
+              className="w-full rounded-xl border px-4 py-3.5 text-[15px] leading-5 transition-[box-shadow,border-color] duration-150 focus:outline-none"
+              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)', boxShadow: 'inset 0 1px 0 rgba(255,253,250,.7)', minHeight: '48px' }} />
           </div>
-          <div>
-            <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Confirmar contraseña</label>
-            <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Repetí tu contraseña" required minLength={6}
-              className="w-full rounded-xl border px-4 py-3 text-sm transition focus:outline-none focus:ring-2"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }} />
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Confirmar contraseña</label>
+            <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="Repetí tu contraseña" required minLength={6} autoComplete="new-password"
+              className="w-full rounded-xl border px-4 py-3.5 text-[15px] leading-5 transition-[box-shadow,border-color] duration-150 focus:outline-none"
+              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)', boxShadow: 'inset 0 1px 0 rgba(255,253,250,.7)', minHeight: '48px' }} />
           </div>
           {error && <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">{error}</div>}
           <button type="submit" disabled={loading} className="w-full rounded-xl px-4 py-3 text-sm font-bold transition hover:opacity-92 disabled:opacity-60" style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)' }}>

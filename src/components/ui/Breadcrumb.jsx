@@ -32,7 +32,7 @@ export default function Breadcrumb() {
 
   return (
     <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex items-center gap-1.5 text-sm text-gray-400">
+      <ol className="flex items-center gap-1.5 text-sm" style={{ color: 'var(--color-muted)' }}>
         {crumbs.map((crumb, i) => (
           <li key={crumb.path} className="flex items-center gap-1.5">
             {i > 0 && (
@@ -41,9 +41,9 @@ export default function Breadcrumb() {
               </svg>
             )}
             {i === crumbs.length - 1 ? (
-              <span className="font-medium text-gray-700">{crumb.label}</span>
+              <span className="font-medium" style={{ color: 'var(--color-text)' }}>{crumb.label}</span>
             ) : (
-              <Link to={crumb.path} className="transition-colors hover:text-gray-600">
+              <Link to={crumb.path} className="transition-colors hover:underline underline-offset-2" style={{ color: 'var(--color-text-secondary)' }}>
                 {crumb.label}
               </Link>
             )}

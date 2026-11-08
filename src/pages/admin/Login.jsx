@@ -56,7 +56,14 @@ export default function Login() {
     }
   }
 
-  const inputCls = "w-full rounded-xl border px-4 py-3 text-sm transition focus:outline-none focus:ring-2"
+  const inputCls = "w-full rounded-xl border px-4 py-3.5 text-[15px] leading-5 transition-[box-shadow,border-color,background-color] duration-150 focus:outline-none"
+  const inputStyle = {
+    borderColor: 'var(--color-border)',
+    backgroundColor: 'var(--color-paper)',
+    color: 'var(--color-text)',
+    boxShadow: 'inset 0 1px 0 rgba(255,253,250,.7)',
+    minHeight: '48px',
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}>
@@ -76,8 +83,8 @@ export default function Login() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                 Correo electrónico
               </label>
               <input
@@ -86,13 +93,14 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@barberia.com"
                 required
+                autoComplete="email"
                 className={inputCls}
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }}
+                style={inputStyle}
               />
             </div>
 
-            <div>
-              <label className="mb-1.5 block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                 Contraseña
               </label>
               <input
@@ -101,8 +109,9 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                autoComplete="current-password"
                 className={inputCls}
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }}
+                style={inputStyle}
               />
             </div>
 
@@ -115,8 +124,8 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl px-4 py-3 text-sm font-bold transition hover:opacity-92 disabled:opacity-60"
-              style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)' }}
+              className="w-full rounded-xl px-4 py-3.5 text-[15px] font-bold transition hover:opacity-92 disabled:opacity-60"
+              style={{ backgroundColor: 'var(--color-accent-warm)', color: 'var(--color-accent-ink)', minHeight: '48px' }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -180,8 +189,9 @@ export default function Login() {
                     onChange={(e) => setResetEmail(e.target.value)}
                     placeholder="admin@barberia.com"
                     required
+                    autoComplete="email"
                     className={inputCls}
-                    style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-paper)', color: 'var(--color-text)' }}
+                    style={inputStyle}
                   />
                   {resetError && (
                     <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">

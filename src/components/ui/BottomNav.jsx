@@ -11,7 +11,7 @@ export default function BottomNav() {
   const location = useLocation()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white lg:hidden" role="navigation" aria-label="Navegación móvil">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-surface)] lg:hidden" role="navigation" aria-label="Navegación móvil">
       <div className="flex items-center justify-around px-2 py-1">
         {items.map((item) => {
           const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
@@ -20,7 +20,7 @@ export default function BottomNav() {
               key={item.path}
               to={item.path}
               className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-                isActive ? 'text-[var(--color-accent)]' : 'text-gray-400'
+                isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)]'
               }`}
             >
               <svg aria-hidden="true" focusable="false" className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>

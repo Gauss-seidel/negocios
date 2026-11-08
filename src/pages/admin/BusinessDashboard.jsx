@@ -206,9 +206,9 @@ export default function BusinessDashboard() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-gray-900">Error al cargar</h3>
-        <p className="mt-2 text-sm text-gray-500">{error}</p>
-        <button onClick={fetchDashboard} className="mt-4 rounded-xl bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">Reintentar</button>
+        <h3 className="mt-4 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Error al cargar</h3>
+        <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>{error}</p>
+        <button onClick={fetchDashboard} className="mt-4 rounded-xl bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold transition hover:brightness-110" style={{ color: 'var(--color-accent-ink)' }}>Reintentar</button>
       </div>
     </div>
   )
@@ -236,7 +236,7 @@ export default function BusinessDashboard() {
                   </svg>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>{m.label}</p>
+ <p className="text-xs font-semibold"style={{ color: 'var(--color-text-secondary)' }}>{m.label}</p>
                   <p className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{val}</p>
                 </div>
               </div>
@@ -266,27 +266,27 @@ export default function BusinessDashboard() {
           /* ── Mobile card layout ── */
           <div className="mt-4 space-y-3">
             {recent.map(a => (
-              <div key={a.id} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+              <div key={a.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-900">{a.client?.name || '—'}</span>
+                  <span className="font-medium" style={{ color: 'var(--color-text)' }}>{a.client?.name || '—'}</span>
                   <StatusBadge status={a.status} />
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <span className="text-xs text-gray-400">Barbero</span>
-                    <p className="text-gray-700">{a.barber?.name || '—'}</p>
+                    <span className="text-[11px] font-medium" style={{ color: 'var(--color-muted)' }}>Barbero</span>
+                    <p style={{ color: 'var(--color-text)' }}>{a.barber?.name || '—'}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Fecha</span>
-                    <p className="text-gray-700">{fmtShortDate(a.date)}</p>
+                    <span className="text-[11px] font-medium" style={{ color: 'var(--color-muted)' }}>Fecha</span>
+                    <p style={{ color: 'var(--color-text)' }}>{fmtShortDate(a.date)}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Hora</span>
-                    <p className="text-gray-700">{fmtTime(a.start_time)}</p>
+                    <span className="text-[11px] font-medium" style={{ color: 'var(--color-muted)' }}>Hora</span>
+                    <p style={{ color: 'var(--color-text)' }}>{fmtTime(a.start_time)}</p>
                   </div>
                   <div>
-                    <span className="text-xs text-gray-400">Total</span>
-                    <p className="font-medium text-gray-900">{a.total ? fmtCurrency(a.total) : '—'}</p>
+                    <span className="text-[11px] font-medium" style={{ color: 'var(--color-muted)' }}>Total</span>
+                    <p className="font-medium" style={{ color: 'var(--color-text)' }}>{a.total ? fmtCurrency(a.total) : '—'}</p>
                   </div>
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function BusinessDashboard() {
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b text-xs font-semibold uppercase tracking-wider" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+ <tr className="border-b text-xs font-semibold"style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
                   <th className="pb-3 pr-4">Cliente</th>
                   <th className="pb-3 pr-4">Barbero</th>
                   <th className="pb-3 pr-4">Fecha</th>
