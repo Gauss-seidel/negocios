@@ -221,15 +221,10 @@ function BarberiaBranches({ branches, colors, slug }) {
     <AnimatedSection delay={30}>
       <section className="mx-auto max-w-5xl px-4 py-16 lg:py-20">
         <div className="mb-10 text-center">
- <span
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em]"
-            style={{ backgroundColor: `${colors.primary}08`, color: colors.textSecondary }}
-          >
-            Sucursales
-          </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight" style={{ color: colors.accent }}>
+          <h2 className="text-3xl font-bold tracking-tight" style={{ color: colors.accent }}>
             Nuestras sucursales
           </h2>
+          <p className="mt-2 text-sm" style={{ color: colors.textSecondary }}>Encontranos en cualquiera de nuestras sedes.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -274,17 +269,11 @@ function BarberiaProducts({ products, colors }) {
       <section className="border-t py-16 lg:py-20" style={{ borderColor: `${colors.primary}08` }}>
         <div className="mx-auto max-w-5xl px-4">
           <div className="mb-10 text-center">
- <span
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em]"
-              style={{ backgroundColor: `${colors.primary}08`, color: colors.textSecondary }}
-            >
-              Productos
-            </span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight" style={{ color: colors.accent }}>
+            <h2 className="text-3xl font-bold tracking-tight" style={{ color: colors.accent }}>
               Nuestros productos
             </h2>
             <p className="mt-2 text-sm" style={{ color: colors.textSecondary }}>
-              Llévate el cuidado profesional a casa
+              Llevate el cuidado profesional a casa.
             </p>
           </div>
 

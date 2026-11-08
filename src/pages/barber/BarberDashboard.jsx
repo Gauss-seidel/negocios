@@ -406,7 +406,7 @@ export default function BarberDashboard() {
 
             {/* Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[#1a1a2e] shadow-2xl">
+              <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-lg">
                 <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
                   <h3 className="text-sm font-semibold text-[var(--color-text)]">Notificaciones</h3>
                   {unreadCount > 0 && (

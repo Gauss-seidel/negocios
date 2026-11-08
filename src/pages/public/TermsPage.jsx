@@ -8,7 +8,7 @@ export default function TermsPage() {
       <h2>1. Servicio</h2>
       <p>BarberShifts es una plataforma de gestión y reserva de turnos para barberías/peluquerías. Permite a negocios administrar agenda, servicios, personal, clientes, caja e inventario, y a clientes finales solicitar reservas en línea.</p>
 
-      <h2 style={{ overflowWrap: 'break-word' }}>2. Cuentas y responsabilidades</h2>
+      <h2 style={{ overflowWrap: 'break-word', minWidth: 0 }}>2. Cuentas y responsabilidades</h2>
       <p>El titular del negocio es responsable de la veracidad de la información publicada (servicios, precios, horarios, sucursales), del uso de las cuentas de su personal y del cumplimiento de las normas aplicables a su actividad. Cada usuario debe resguardar sus credenciales.</p>
 
       <h2>3. Reservas, precios y pagos</h2>

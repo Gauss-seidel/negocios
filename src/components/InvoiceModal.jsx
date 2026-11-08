@@ -22,7 +22,7 @@ function DividerDashed() {
   return (
     <div className="flex items-center gap-2 py-1">
       <div className="flex-1 border-t border-dashed border-gray-200" />
- <span className="text-[9px] font-medium tracking-[0.2em] text-gray-300">✦</span>
+      <span className="text-[10px] text-gray-300">·</span>
       <div className="flex-1 border-t border-dashed border-gray-200" />
     </div>
   )
@@ -168,12 +168,8 @@ export default function InvoiceModal({ appointment, business, onClose }) {
         >
           {/* ─── HEADER ─── */}
           <div className="px-6 pt-6 pb-2 text-center">
- <span className="text-[10px] font-semibold tracking-[0.2em] text-gray-400">
-              BarberShifts
-            </span>
-            <h2 className="mt-2 text-lg font-bold tracking-tight text-gray-900">
-              COMPROBANTE DE SERVICIO
-            </h2>
+            <h2 className="text-lg font-bold tracking-tight text-gray-900">Comprobante de servicio</h2>
+            <p className="mt-1 text-xs font-medium text-gray-400">BarberShifts</p>
           </div>
 
           <DividerDashed />
@@ -215,7 +211,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── SERVICES ─── */}
           {services.length > 0 && (
             <div className="px-6 py-2">
- <p className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 mb-2">
+ <p className="mb-2 text-[11px] font-semibold text-gray-500">
                 Servicios
               </p>
               <div className="space-y-1.5">
@@ -239,7 +235,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {products.length > 0 && (
             <div className="px-6 py-2">
               {services.length > 0 && <DividerDashed />}
- <p className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 mb-2">
+ <p className="mb-2 text-[11px] font-semibold text-gray-500">
                 Productos
               </p>
               <div className="space-y-1.5">
@@ -293,7 +289,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── FOOTER ─── */}
           <div className="px-6 pb-6 pt-2 text-center">
             <p className="text-sm font-medium text-gray-700">Gracias por tu visita!</p>
- <p className="mt-1 text-[10px] text-gray-400 font-medium tracking-[0.05em]">
+ <p className="mt-1 text-[11px] font-medium text-gray-400">
               Emitido: {emissionDate}
             </p>
           </div>
