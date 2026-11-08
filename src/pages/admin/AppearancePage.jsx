@@ -133,15 +133,14 @@ export default function AppearancePage() {
           Apariencia guardada exitosamente.
         </div>
       )}
-      {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
-
       {/* Template selection */}
       <Card>
         <h2 className="text-lg font-semibold text-gray-900 mb-1">Plantilla</h2>
+        {error && (
+          <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
         <p className="text-sm text-gray-500 mb-4">Selecciona el diseño base para tu página</p>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
@@ -201,7 +200,7 @@ export default function AppearancePage() {
                 key={fp.id}
                 type="button"
                 onClick={() => { setFontPreset(fp.id); if (success) setSuccess(false) }}
-                className={`rounded-xl border-2 p-4 text-left transition hover:shadow-sm ${active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]' : 'border-gray-200 hover:border-gray-300'}`}
+                className={`overflow-hidden rounded-xl border-2 p-4 text-left transition hover:shadow-sm ${active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]' : 'border-gray-200 hover:border-gray-300'}`}
               >
                 <div className="text-base font-semibold text-gray-900" style={{ fontFamily: fp.heading }}>{fp.name}</div>
                 <div className="mt-1 text-xs text-gray-500" style={{ fontFamily: fp.body }}>{fp.description}</div>

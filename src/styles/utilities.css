@@ -10,7 +10,7 @@
   --color-accent: #8b4a2b;
   --color-accent-hover: #743e24;
   --color-accent-secondary: #b45309;
-  --color-accent-ink: #fffefb;
+  --color-accent-ink: #ffffff;
   --color-bg: #f7f3ee;
   --color-surface: #fffdfa;
   --color-text: #1f1a17;
@@ -648,6 +648,7 @@ table { border-collapse: collapse; }
 .glass-dark {
   background: var(--color-secondary);
   border: 1px solid rgba(255,255,255,0.08);
+  color: var(--color-paper);
 }
 
 /* Toggle switch */

@@ -116,7 +116,7 @@ export default function Login() {
             </div>
 
             {error && (
-              <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">
+              <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">
                 {error}
               </div>
             )}
@@ -144,7 +144,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => { setShowReset(true); setResetEmail(email); setResetSent(false); setResetError('') }}
-                className="whitespace-nowrap text-sm font-semibold underline-offset-2 hover:underline"
+                className="inline-block max-w-full truncate text-sm font-semibold underline-offset-2 hover:underline"
                 style={{ color: 'var(--color-text-secondary)' }}
               >
                 ¿Olvidaste tu contraseña?
@@ -171,7 +171,7 @@ export default function Login() {
               <h3 id="reset-title" className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Recuperar contraseña</h3>
               {resetSent ? (
                 <div className="mt-4 space-y-4">
-                  <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#ecfdf5', borderColor: '#a7f3d0', color: '#047857' }}>
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
                     Te enviamos un enlace de recuperación a <strong>{resetEmail}</strong>. Revisá tu bandeja de entrada.
                   </div>
                   <button type="button" onClick={() => setShowReset(false)} className="w-full rounded-xl border px-4 py-3 text-sm font-semibold" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)', backgroundColor: 'var(--color-paper)' }}>
@@ -194,7 +194,7 @@ export default function Login() {
                     style={inputStyle}
                   />
                   {resetError && (
-                    <div className="rounded-xl border p-3 text-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca', color: '#b91c1c' }} role="alert">
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">
                       {resetError}
                     </div>
                   )}

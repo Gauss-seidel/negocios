@@ -696,7 +696,7 @@ export default function BookingPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <button
                 onClick={() => { setSelectedBarber(null); setStep(3) }}
-                className="group flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-8 text-center transition duration-300 hover:-translate-y-0.5"
+                className="group flex flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition duration-300 hover:-translate-y-0.5"
                 style={{
                   borderColor: selectedBarber === null ? colors.accent : `${colors.primary}20`,
                   backgroundColor: selectedBarber === null ? `${colors.accent}06` : 'transparent',
