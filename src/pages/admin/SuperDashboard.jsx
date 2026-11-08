@@ -390,9 +390,9 @@ export default function SuperDashboard() {
           if (m.key === 'revenue') val = fmtCurrency(val)
           else if (m.key === 'bookings') val = val.toLocaleString('es-PY')
           return (
-            <div key={m.key} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 transition duration-300 hover:border-white/[0.12] hover:-translate-y-0.5">
+            <div key={m.key} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 transition duration-300 hover:border-[var(--color-border)] hover:-translate-y-0.5">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.06]">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-paper-2)]">
                   <svg aria-hidden="true" focusable="false" className={`h-5 w-5 ${m.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={m.icon} />
                   </svg>
@@ -408,7 +408,7 @@ export default function SuperDashboard() {
       </div>
 
       {/* Table Card */}
-      <Card dark padding={false}>
+      <Card padding={false}>
         <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <div>
             <h2 className="text-lg font-semibold text-[var(--color-text)]">Barberías Registradas</h2>
@@ -493,9 +493,9 @@ export default function SuperDashboard() {
                   <th className="px-6 py-3.5 text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-[var(--color-border)]">
                 {businesses.map(b => (
-                  <tr key={b.id} className="transition-colors hover:bg-white/[0.02]">
+                  <tr key={b.id} className="transition-colors hover:bg-[var(--color-paper)]">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)]/10 text-sm font-bold text-[var(--color-accent)]">
@@ -558,15 +558,15 @@ export default function SuperDashboard() {
         {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>}
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input label="Nombre" name="name" value={createForm.name} onChange={handleCreateChange} placeholder="Ej: Barbería El Clásico" error={createErrors.name} dark />
-            <Input label="Slug" name="slug" value={createForm.slug} onChange={handleCreateSlug} placeholder="ej: barberia-el-clasico" error={createErrors.slug} dark />
+            <Input label="Nombre" name="name" value={createForm.name} onChange={handleCreateChange} placeholder="Ej: Barbería El Clásico" error={createErrors.name} />
+            <Input label="Slug" name="slug" value={createForm.slug} onChange={handleCreateSlug} placeholder="ej: barberia-el-clasico" error={createErrors.slug} />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input label="Email" name="email" type="email" value={createForm.email} onChange={handleCreateChange} placeholder="contacto@barberia.com" error={createErrors.email} dark />
-            <Input label="Teléfono" name="phone" value={createForm.phone} onChange={handleCreateChange} placeholder="+52 555 123 4567" dark />
+            <Input label="Email" name="email" type="email" value={createForm.email} onChange={handleCreateChange} placeholder="contacto@barberia.com" error={createErrors.email} />
+            <Input label="Teléfono" name="phone" value={createForm.phone} onChange={handleCreateChange} placeholder="+52 555 123 4567" />
           </div>
-          <Input label="Dirección" name="address" value={createForm.address} onChange={handleCreateChange} placeholder="Calle y número, colonia, ciudad" dark />
-          <Input label="Contraseña del admin" name="password" type="password" value={createForm.password} onChange={handleCreateChange} placeholder="Mínimo 6 caracteres" error={createErrors.password} dark />
+          <Input label="Dirección" name="address" value={createForm.address} onChange={handleCreateChange} placeholder="Calle y número, colonia, ciudad" />
+          <Input label="Contraseña del admin" name="password" type="password" value={createForm.password} onChange={handleCreateChange} placeholder="Mínimo 6 caracteres" error={createErrors.password} />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Plan</label>
@@ -589,13 +589,13 @@ export default function SuperDashboard() {
             <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] mb-3">Sucursal inicial</h3>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Input label="Nombre de sucursal" name="branch_name" value={createForm.branch_name}
-                onChange={handleCreateChange} placeholder="Principal" dark />
+                onChange={handleCreateChange} placeholder="Principal" />
               <Input label="Teléfono de sucursal" name="branch_phone" value={createForm.branch_phone}
-                onChange={handleCreateChange} placeholder={createForm.phone || '+52...'} dark />
+                onChange={handleCreateChange} placeholder={createForm.phone || '+52...'} />
             </div>
             <div className="mt-3">
               <Input label="Dirección de sucursal" name="branch_address" value={createForm.branch_address}
-                onChange={handleCreateChange} placeholder={createForm.address || 'Dirección...'} dark />
+                onChange={handleCreateChange} placeholder={createForm.address || 'Dirección...'} />
             </div>
           </div>
           <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
@@ -610,14 +610,14 @@ export default function SuperDashboard() {
         {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>}
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input label="Nombre" name="name" value={editForm.name} onChange={handleEditChange} error={editErrors.name} dark />
-            <Input label="Slug" name="slug" value={editForm.slug} onChange={handleEditChange} error={editErrors.slug} dark />
+            <Input label="Nombre" name="name" value={editForm.name} onChange={handleEditChange} error={editErrors.name} />
+            <Input label="Slug" name="slug" value={editForm.slug} onChange={handleEditChange} error={editErrors.slug} />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input label="Email" name="email" type="email" value={editForm.email} onChange={handleEditChange} error={editErrors.email} dark />
-            <Input label="Teléfono" name="phone" value={editForm.phone} onChange={handleEditChange} dark />
+            <Input label="Email" name="email" type="email" value={editForm.email} onChange={handleEditChange} error={editErrors.email} />
+            <Input label="Teléfono" name="phone" value={editForm.phone} onChange={handleEditChange} />
           </div>
-          <Input label="Dirección" name="address" value={editForm.address} onChange={handleEditChange} dark />
+          <Input label="Dirección" name="address" value={editForm.address} onChange={handleEditChange} />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Plan</label>
@@ -671,7 +671,7 @@ export default function SuperDashboard() {
         ) : (
           <div className="space-y-2">
             {managerBranches.map(br => (
-              <div key={br.id} className="flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-white/[0.02] px-4 py-3">
+              <div key={br.id} className="flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-3">
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-[var(--color-text)]">{br.name}</p>
                   {br.address && <p className="mt-0.5 text-xs text-[var(--color-muted)] truncate">{br.address}</p>}

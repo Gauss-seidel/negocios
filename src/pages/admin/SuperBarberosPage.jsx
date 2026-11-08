@@ -201,7 +201,7 @@ export default function SuperBarberosPage() {
         </p>
       </div>
 
-      <Card dark padding={false}>
+      <Card padding={false}>
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center px-6 py-16">
             <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
@@ -221,7 +221,7 @@ export default function SuperBarberosPage() {
                       </div>
                       <div>
                         <p className="font-medium text-[var(--color-text)]">{b.name}</p>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-paper)] px-2 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
                           {b.business_name}
                         </span>
                       </div>
@@ -287,9 +287,9 @@ export default function SuperBarberosPage() {
                     <th className="px-6 py-3.5 text-right">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/[0.04]">
+                <tbody className="divide-y divide-[var(--color-border)]">
                   {barbers.map(b => (
-                    <tr key={b.id} className="transition-colors hover:bg-white/[0.02]">
+                    <tr key={b.id} className="transition-colors hover:bg-[var(--color-paper)]">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)]/10 text-sm font-bold text-[var(--color-accent)]">
@@ -299,7 +299,7 @@ export default function SuperBarberosPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-white/[0.04] px-2.5 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-paper)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-text-secondary)]">
                           {b.business_name}
                         </span>
                       </td>
@@ -366,13 +366,13 @@ export default function SuperBarberosPage() {
       <Modal open={showEdit} onClose={() => { setShowEdit(false); setEditTarget(null) }} title={`Editar: ${editTarget?.name || ''}`} size="md" dark>
         {formError && <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Nombre" name="name" value={form.name} onChange={handleChange} error={formErrors.name} dark />
+          <Input label="Nombre" name="name" value={form.name} onChange={handleChange} error={formErrors.name} />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={formErrors.email} dark />
-            <Input label="Teléfono" name="phone" value={form.phone} onChange={handleChange} dark />
+            <Input label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={formErrors.email} />
+            <Input label="Teléfono" name="phone" value={form.phone} onChange={handleChange} />
           </div>
-          <Input label="Especialidad" name="specialty" value={form.specialty} onChange={handleChange} dark />
-          <label className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-white/[0.03] px-4 py-3">
+          <Input label="Especialidad" name="specialty" value={form.specialty} onChange={handleChange} />
+          <label className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-3">
             <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange}
               className="h-4 w-4 rounded border-[var(--color-border)] bg-[var(--color-paper)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]" />
             <span className="text-sm font-medium text-[var(--color-text-secondary)]">Barbero activo</span>

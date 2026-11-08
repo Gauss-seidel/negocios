@@ -164,9 +164,9 @@ export default function SuperConfigPage() {
           { label: 'Empleados', value: stats?.staff?.toLocaleString() ?? '—', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', color: 'text-violet-400' },
           { label: 'Planes', value: stats?.plans ?? '—', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z', color: 'text-amber-400' },
         ].map(s => (
-          <Card key={s.label} dark hover>
+          <Card key={s.label} hover>
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.06]">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--color-paper-2)]">
                 <svg aria-hidden="true" focusable="false" className={`h-5 w-5 ${s.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
                 </svg>
@@ -183,11 +183,11 @@ export default function SuperConfigPage() {
       {/* System Info + Actions */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* System Info */}
-        <Card dark padding={false}>
+        <Card padding={false}>
           <div className="border-b border-[var(--color-border)] px-6 py-4">
             <h2 className="text-lg font-semibold text-[var(--color-text)]">Información del Sistema</h2>
           </div>
-          <div className="divide-y divide-white/[0.04] px-6 py-4">
+          <div className="divide-y divide-[var(--color-border)] px-6 py-4">
             {[
               { label: 'Proyecto', value: import.meta.env.VITE_SUPABASE_URL.replace('https://', '').replace('.supabase.co', '') },
               { label: 'Frontend', value: 'React + Vite' },
@@ -206,7 +206,7 @@ export default function SuperConfigPage() {
         </Card>
 
         {/* Quick Actions */}
-        <Card dark>
+        <Card>
           <h2 className="mb-4 text-lg font-semibold text-[var(--color-text)]">Acciones Rápidas</h2>
           <div className="space-y-3">
             <button
@@ -271,7 +271,7 @@ export default function SuperConfigPage() {
       </div>
 
       {/* Super Admins */}
-      <Card dark padding={false}>
+      <Card padding={false}>
         <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <div>
             <h2 className="text-lg font-semibold text-[var(--color-text)]">Super Administradores</h2>
@@ -298,12 +298,12 @@ export default function SuperConfigPage() {
                   <th className="px-6 py-3.5">Registrado</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-[var(--color-border)]">
                 {superAdmins.map(a => (
-                  <tr key={a.id} className="transition-colors hover:bg-white/[0.02]">
+                  <tr key={a.id} className="transition-colors hover:bg-[var(--color-paper)]">
                     <td className="px-6 py-4 font-medium text-[var(--color-text)]">{a.name}</td>
                     <td className="px-6 py-4">
-                      <code className="rounded-md bg-white/[0.04] px-2 py-0.5 text-xs text-[var(--color-muted)] font-mono">{a.id}</code>
+                      <code className="rounded-md bg-[var(--color-paper)] px-2 py-0.5 text-xs text-[var(--color-muted)] font-mono">{a.id}</code>
                     </td>
                     <td className="px-6 py-4 text-[var(--color-muted)]">
                       {a.created_at
@@ -343,7 +343,6 @@ export default function SuperConfigPage() {
               onChange={handleCreateChange}
               placeholder="Ej: Admin Principal"
               error={createErrors.name}
-              dark
             />
             <Input
               label="Email"
@@ -353,7 +352,6 @@ export default function SuperConfigPage() {
               onChange={handleCreateChange}
               placeholder="admin@ejemplo.com"
               error={createErrors.email}
-              dark
             />
             <Input
               label="Contraseña"
@@ -363,7 +361,6 @@ export default function SuperConfigPage() {
               onChange={handleCreateChange}
               placeholder="Mínimo 6 caracteres"
               error={createErrors.password}
-              dark
             />
             <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
               <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancelar</Button>

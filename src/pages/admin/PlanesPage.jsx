@@ -171,8 +171,8 @@ export default function PlanesPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 className="mt-4 text-lg font-semibold text-white">Error al cargar</h3>
-        <p className="mt-2 text-sm text-white/40">{error}</p>
+        <h3 className="mt-4 text-lg font-semibold text-[var(--color-text)]">Error al cargar</h3>
+        <p className="mt-2 text-sm text-[var(--color-muted)]">{error}</p>
         <Button variant="secondary" className="mt-6" onClick={fetchPlans}>Reintentar</Button>
       </div>
     </div>
@@ -184,34 +184,34 @@ export default function PlanesPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">Planes de Suscripción</h1>
-        <p className="mt-1 text-sm text-white/40">Administrá los planes disponibles para las barberías</p>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text)]">Planes de Suscripción</h1>
+        <p className="mt-1 text-sm text-[var(--color-muted)]">Administrá los planes disponibles para las barberías</p>
       </div>
 
-      <Card dark padding={false}>
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+      <Card padding={false}>
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">Planes</h2>
-            <p className="mt-0.5 text-sm text-white/40">{plans.length} {plans.length === 1 ? 'plan' : 'planes'}</p>
+            <h2 className="text-lg font-semibold text-[var(--color-text)]">Planes</h2>
+            <p className="mt-0.5 text-sm text-[var(--color-muted)]">{plans.length} {plans.length === 1 ? 'plan' : 'planes'}</p>
           </div>
         </div>
 
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center px-6 py-16">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+            <svg aria-hidden="true" focusable="false" className="h-12 w-12 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
-            <h3 className="mt-4 text-base font-medium text-white/60">No hay planes registrados</h3>
-            <p className="mt-1 text-sm text-white/30">Los planes se crean desde la base de datos</p>
+            <h3 className="mt-4 text-base font-medium text-[var(--color-text-secondary)]">No hay planes registrados</h3>
+            <p className="mt-1 text-sm text-[var(--color-muted)]">Los planes se crean desde la base de datos</p>
           </div>
         ) : isMobile ? (
           <div className="space-y-3 px-4 py-4">
             {plans.map(p => (
-              <div key={p.id} className="rounded-2xl border border-white/[0.06] bg-card-dark p-4">
+              <div key={p.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <p className="font-medium text-white">{p.name}</p>
-                    {p.description && <p className="text-xs text-white/30 mt-0.5">{p.description}</p>}
+                    <p className="font-medium text-[var(--color-text)]">{p.name}</p>
+                    {p.description && <p className="text-xs text-[var(--color-muted)] mt-0.5">{p.description}</p>}
                   </div>
                   <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                     p.is_active
@@ -225,25 +225,25 @@ export default function PlanesPage() {
 
                 <div className="grid grid-cols-2 gap-2 text-sm mb-3">
                   <div>
-                    <span className="text-white/40">Precio</span>
+                    <span className="text-[var(--color-muted)]">Precio</span>
                     <p className="font-semibold text-[var(--color-accent)]">{fmtCurrency(p.price)}/mes</p>
                   </div>
                   <div>
-                    <span className="text-white/40">Barberos</span>
-                    <p className="font-medium text-white">{formatLimitShort(p.max_barbers)}</p>
+                    <span className="text-[var(--color-muted)]">Barberos</span>
+                    <p className="font-medium text-[var(--color-text)]">{formatLimitShort(p.max_barbers)}</p>
                   </div>
                   <div>
-                    <span className="text-white/40">Sucursales</span>
-                    <p className="font-medium text-white">{formatLimitShort(p.max_branches)}</p>
+                    <span className="text-[var(--color-muted)]">Sucursales</span>
+                    <p className="font-medium text-[var(--color-text)]">{formatLimitShort(p.max_branches)}</p>
                   </div>
                   <div>
-                    <span className="text-white/40">Reservas/mes</span>
-                    <p className="font-medium text-white">{formatLimitCount(p.max_monthly_bookings)}</p>
+                    <span className="text-[var(--color-muted)]">Reservas/mes</span>
+                    <p className="font-medium text-[var(--color-text)]">{formatLimitCount(p.max_monthly_bookings)}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-1 border-t border-white/[0.06] pt-3">
-                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-white/30 transition hover:bg-white/5 hover:text-white" title="Editar">
+                <div className="flex items-center justify-end gap-1 border-t border-[var(--color-border)] pt-3">
+                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-white/5 hover:text-[var(--color-text)]" title="Editar">
                     <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                     </svg>
@@ -266,7 +266,7 @@ export default function PlanesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
- <tr className="border-b border-white/[0.06] text-xs font-semibold text-white/30">
+ <tr className="border-b border-[var(--color-border)] text-xs font-semibold text-[var(--color-muted)]">
                   <th className="px-6 py-3.5">Plan</th>
                   <th className="px-6 py-3.5">Precio</th>
                   <th className="px-6 py-3.5">Barberos</th>
@@ -276,24 +276,24 @@ export default function PlanesPage() {
                   <th className="px-6 py-3.5 text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-[var(--color-border)]">
                 {plans.map(p => (
-                  <tr key={p.id} className="transition-colors hover:bg-white/[0.02]">
+                  <tr key={p.id} className="transition-colors hover:bg-[var(--color-paper)]">
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-medium text-white">{p.name}</p>
+                        <p className="font-medium text-[var(--color-text)]">{p.name}</p>
                         {p.description && (
-                          <p className="mt-0.5 max-w-xs truncate text-xs text-white/30">{p.description}</p>
+                          <p className="mt-0.5 max-w-xs truncate text-xs text-[var(--color-muted)]">{p.description}</p>
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="font-semibold text-[var(--color-accent)]">{fmtCurrency(p.price)}</span>
-                      <span className="text-xs text-white/30">/mes</span>
+                      <span className="text-xs text-[var(--color-muted)]">/mes</span>
                     </td>
-                    <td className="px-6 py-4 text-white/60">{formatLimitShort(p.max_barbers)}</td>
-                    <td className="px-6 py-4 text-white/60">{formatLimitShort(p.max_branches)}</td>
-                    <td className="px-6 py-4 text-white/60">{formatLimitCount(p.max_monthly_bookings)}</td>
+                    <td className="px-6 py-4 text-[var(--color-text-secondary)]">{formatLimitShort(p.max_barbers)}</td>
+                    <td className="px-6 py-4 text-[var(--color-text-secondary)]">{formatLimitShort(p.max_branches)}</td>
+                    <td className="px-6 py-4 text-[var(--color-text-secondary)]">{formatLimitCount(p.max_monthly_bookings)}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                         p.is_active
@@ -308,7 +308,7 @@ export default function PlanesPage() {
                       <div className="flex items-center justify-end gap-0.5">
                         <button
                           onClick={() => openEdit(p)}
-                          className="rounded-lg p-2 text-white/30 transition hover:bg-white/5 hover:text-white"
+                          className="rounded-lg p-2 text-[var(--color-muted)] transition hover:bg-white/5 hover:text-[var(--color-text)]"
                           title="Editar"
                         >
                           <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -345,14 +345,14 @@ export default function PlanesPage() {
       {/* Features summary with edit */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {plans.filter(p => p.is_active).map(p => (
-          <Card key={p.id} dark hover className="group">
+          <Card key={p.id} hover className="group">
             <div className="space-y-3">
               <div className="flex items-start justify-between">
-                <h3 className="text-lg font-bold text-white">{p.name}</h3>
+                <h3 className="text-lg font-bold text-[var(--color-text)]">{p.name}</h3>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => openEdit(p)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-white/20 opacity-0 transition hover:bg-white/5 hover:text-white group-hover:opacity-100"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--color-muted)] opacity-0 transition hover:bg-white/5 hover:text-[var(--color-text)] group-hover:opacity-100"
                     title="Editar plan"
                   >
                     <svg aria-hidden="true" focusable="false" className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -380,26 +380,26 @@ export default function PlanesPage() {
                 </button>
               </div>
               {p.description && (
-                <p className="text-sm text-white/40">{p.description}</p>
+                <p className="text-sm text-[var(--color-muted)]">{p.description}</p>
               )}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/40">Barberos</span>
-                  <span className="font-medium text-white">{formatLimitShort(p.max_barbers)}</span>
+                  <span className="text-[var(--color-muted)]">Barberos</span>
+                  <span className="font-medium text-[var(--color-text)]">{formatLimitShort(p.max_barbers)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/40">Sucursales</span>
-                  <span className="font-medium text-white">{formatLimitShort(p.max_branches)}</span>
+                  <span className="text-[var(--color-muted)]">Sucursales</span>
+                  <span className="font-medium text-[var(--color-text)]">{formatLimitShort(p.max_branches)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/40">Reservas/mes</span>
-                  <span className="font-medium text-white">{formatLimitCount(p.max_monthly_bookings)}</span>
+                  <span className="text-[var(--color-muted)]">Reservas/mes</span>
+                  <span className="font-medium text-[var(--color-text)]">{formatLimitCount(p.max_monthly_bookings)}</span>
                 </div>
               </div>
               {Array.isArray(p.features) && p.features.length > 0 && (
-                <ul className="space-y-1 border-t border-white/[0.06] pt-3">
+                <ul className="space-y-1 border-t border-[var(--color-border)] pt-3">
                   {p.features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-white/50">
+                    <li key={i} className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
                       <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 flex-shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -414,43 +414,43 @@ export default function PlanesPage() {
       </div>
 
       {/* Edit Modal */}
-      <Modal open={showEdit} onClose={closeEdit} title={`Editar: ${editTarget?.name || ''}`} size="lg" dark>
+      <Modal open={showEdit} onClose={closeEdit} title={`Editar: ${editTarget?.name || ''}`} size="lg">
         {formError && (
           <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">{formError}</div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input label="Nombre" name="name" value={form.name} onChange={handleChange} error={formErrors.name} dark />
-            <Input label="Slug" name="slug" value={form.slug} onChange={handleChange} error={formErrors.slug} dark />
+            <Input label="Nombre" name="name" value={form.name} onChange={handleChange} error={formErrors.name} />
+            <Input label="Slug" name="slug" value={form.slug} onChange={handleChange} error={formErrors.slug} />
           </div>
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-white/70">Descripción</label>
+            <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Descripción</label>
             <textarea
               name="description"
               value={form.description}
               onChange={handleChange}
               rows={2}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-[var(--color-text)]/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
             />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <Input label="Precio (Gs)" name="price" type="number" step="1000" min="0" value={form.price} onChange={handleChange} error={formErrors.price} dark />
-            <Input label="Max. Barberos" name="max_barbers" type="number" min="1" value={form.max_barbers} onChange={handleChange} error={formErrors.max_barbers} dark />
-            <Input label="Max. Sucursales" name="max_branches" type="number" min="1" value={form.max_branches} onChange={handleChange} error={formErrors.max_branches} dark />
-            <Input label="Reservas/mes" name="max_monthly_bookings" type="number" min="1" value={form.max_monthly_bookings} onChange={handleChange} error={formErrors.max_monthly_bookings} dark />
+            <Input label="Precio (Gs)" name="price" type="number" step="1000" min="0" value={form.price} onChange={handleChange} error={formErrors.price} />
+            <Input label="Max. Barberos" name="max_barbers" type="number" min="1" value={form.max_barbers} onChange={handleChange} error={formErrors.max_barbers} />
+            <Input label="Max. Sucursales" name="max_branches" type="number" min="1" value={form.max_branches} onChange={handleChange} error={formErrors.max_branches} />
+            <Input label="Reservas/mes" name="max_monthly_bookings" type="number" min="1" value={form.max_monthly_bookings} onChange={handleChange} error={formErrors.max_monthly_bookings} />
           </div>
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-white/70">Características (una por línea)</label>
+            <label className="block text-sm font-medium text-[var(--color-text-secondary)]">Características (una por línea)</label>
             <textarea
               name="features"
               value={form.features}
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-[var(--color-text)]/25 transition focus:border-white/20 focus:bg-white/10 focus:outline-none"
               placeholder="Gestión de reservas&#10;Gestión de clientes&#10;1 sucursal&#10;3 empleados"
             />
           </div>
-          <label className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3">
+          <label className="flex items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-paper)] px-4 py-3">
             <input
               type="checkbox"
               name="is_active"
@@ -458,9 +458,9 @@ export default function PlanesPage() {
               onChange={handleChange}
               className="h-4 w-4 rounded border-white/20 bg-white/5 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
             />
-            <span className="text-sm font-medium text-white/70">Plan activo</span>
+            <span className="text-sm font-medium text-[var(--color-text-secondary)]">Plan activo</span>
           </label>
-          <div className="flex items-center justify-end gap-3 border-t border-white/[0.06] pt-4">
+          <div className="flex items-center justify-end gap-3 border-t border-[var(--color-border)] pt-4">
             <Button type="button" variant="ghost" onClick={closeEdit}>Cancelar</Button>
             <Button type="submit" loading={actionLoading}>Guardar Cambios</Button>
           </div>
