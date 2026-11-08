@@ -75,12 +75,10 @@ function BusinessCard({ business, index }) {
           <div className="min-w-0 flex-1">
             <h3 className="truncate text-[1.05rem] font-bold tracking-[-0.01em]" style={{ color: 'var(--color-text)' }}>{business.name}</h3>
             <span
-              className="mt-1.5 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold"
-              style={business.status === 'active'
-                ? { backgroundColor: '#eef6f1', color: '#2f6b4f', boxShadow: 'inset 0 0 0 1px rgba(47,107,79,.12)' }
-                : { backgroundColor: '#fff5ea', color: '#8a5a14', boxShadow: 'inset 0 0 0 1px rgba(138,90,20,.12)' }}
+              className={`mt-1.5 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${business.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'}`}
+              style={{ boxShadow: `inset 0 0 0 1px ${business.status === 'active' ? 'rgba(4,120,87,.14)' : 'rgba(146,64,14,.14)'}` }}
             >
-              <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: business.status === 'active' ? '#2f6b4f' : '#c2410c' }} />
+              <span className={`h-1.5 w-1.5 rounded-full ${business.status === 'active' ? 'bg-emerald-600' : 'bg-amber-600'}`} />
               {business.status === 'active' ? 'Abierto' : 'Próximamente'}
             </span>
           </div>

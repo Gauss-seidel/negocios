@@ -281,6 +281,7 @@ table { border-collapse: collapse; }
 .tracking-\[0\.15em\] { letter-spacing: 0.15em; }
 
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.break-words { overflow-wrap: break-word; word-break: break-word; }
 .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .whitespace-nowrap { white-space: nowrap; }
 .text-transparent { color: transparent; }

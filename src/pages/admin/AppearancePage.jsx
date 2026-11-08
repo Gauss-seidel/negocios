@@ -128,14 +128,14 @@ export default function AppearancePage() {
       </div>
 
       {/* Success / Error */}
-      {success && (
-        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          Apariencia guardada exitosamente.
-        </div>
-      )}
       {/* Template selection */}
       <Card>
         <h2 className="text-lg font-semibold text-gray-900 mb-1">Plantilla</h2>
+        {success && (
+          <div className="mb-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            Apariencia guardada exitosamente.
+          </div>
+        )}
         {error && (
           <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
