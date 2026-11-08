@@ -216,9 +216,11 @@ export default function BusinessDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>Dashboard</h1>
-        <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Resumen de actividad de tu negocio</p>
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>Dashboard</h1>
+          <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Resumen de actividad de tu negocio hoy.</p>
+        </div>
       </div>
 
       {/* Metrics */}
@@ -246,27 +248,27 @@ export default function BusinessDashboard() {
       </div>
 
       {/* Recent appointments */}
-      <Card>
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Reservas recientes</h2>
-            <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>Últimas 10 reservas registradas</p>
-          </div>
+      <Card padding={false}>
+        <div className="border-b px-5 py-4 lg:px-6" style={{ borderColor: 'var(--color-border)' }}>
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Reservas recientes</h2>
+          <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Últimas 10 reservas registradas</p>
         </div>
 
         {recent.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12">
-            <svg aria-hidden="true" focusable="false" className="h-12 w-12" style={{ color: 'var(--color-text-secondary)', opacity: 0.3 }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <h3 className="mt-4 text-base font-medium" style={{ color: 'var(--color-text)' }}>No hay reservas aún</h3>
-            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>Las reservas aparecerán aquí cuando los clientes agenden citas.</p>
+          <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl" style={{ backgroundColor: 'var(--color-paper-2)', color: 'var(--color-muted)' }}>
+              <svg aria-hidden="true" focusable="false" className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 className="mt-4 text-base font-semibold" style={{ color: 'var(--color-text)' }}>No hay reservas aún</h3>
+            <p className="mt-1 max-w-sm text-sm" style={{ color: 'var(--color-text-secondary)' }}>Las reservas aparecerán aquí cuando los clientes agenden citas.</p>
           </div>
         ) : isMobile ? (
           /* ── Mobile card layout ── */
-          <div className="mt-4 space-y-3">
+          <div className="space-y-3 p-4 lg:p-5">
             {recent.map(a => (
-              <div key={a.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm">
+              <div key={a.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-4">
                 <div className="flex items-center justify-between">
                   <span className="font-medium" style={{ color: 'var(--color-text)' }}>{a.client?.name || '—'}</span>
                   <StatusBadge status={a.status} />
@@ -294,11 +296,11 @@ export default function BusinessDashboard() {
           </div>
         ) : (
           /* ── Desktop table ── */
-          <div className="mt-4 overflow-x-auto">
+          <div className="overflow-x-auto px-5 py-2 lg:px-6">
             <table className="w-full text-left text-sm">
               <thead>
- <tr className="border-b text-xs font-semibold"style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
-                  <th className="pb-3 pr-4">Cliente</th>
+                <tr className="border-b text-xs font-semibold" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+                  <th className="py-3 pr-4">Cliente</th>
                   <th className="pb-3 pr-4">Barbero</th>
                   <th className="pb-3 pr-4">Fecha</th>
                   <th className="pb-3 pr-4">Hora</th>
