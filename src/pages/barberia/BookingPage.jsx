@@ -93,7 +93,7 @@ function StepProgress({ step, colors }) {
                   num
                 )}
               </div>
-              <span
+ <span
                 className={`hidden text-[10px] font-semibold uppercase tracking-wider transition-colors sm:inline ${
                   isCurrent ? 'opacity-100' : 'opacity-50'
                 }`}
@@ -690,7 +690,7 @@ export default function BookingPage() {
                 Elegí un barbero
               </h2>
               <p className="mt-1 text-sm" style={{ color: colors.textSecondary }}>
-                Opcional — podés dejar que te atienda cualquier barbero disponible
+                Opcional: podés dejar que te atienda cualquier barbero disponible
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -777,14 +777,14 @@ export default function BookingPage() {
                       boxShadow: isSelected ? `0 4px 20px ${colors.accent}15` : '0 1px 3px rgba(0,0,0,0.04)',
                     }}
                   >
-                    <div className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: colors.textSecondary }}>
+ <div className="text-[10px] font-semibold"style={{ color: colors.textSecondary }}>
                       {day.label.split(' ')[0]}
                     </div>
                     <div className="mt-1.5 text-2xl font-bold" style={{ color: colors.text }}>
                       {day.label.split(' ')[1]}
                     </div>
                     {isClosed && (
-                      <div className="mt-1 text-[9px] font-medium uppercase tracking-wider" style={{ color: '#ef4444' }}>
+ <div className="mt-1 text-[9px] font-medium"style={{ color: '#ef4444' }}>
                         Cerrado
                       </div>
                     )}
@@ -878,7 +878,7 @@ export default function BookingPage() {
                   className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-sm font-medium transition-colors"
                   style={{ color: colors.accent }}
                 >
-                  Continuar sin productos →
+                  Continuar sin productos
                 </button>
               </div>
             ) : (
@@ -1088,7 +1088,7 @@ export default function BookingPage() {
                   {selectedProducts.length > 0 && (
                     <>
                       <div className="border-t pt-2" style={{ borderColor: `${colors.primary}12` }}>
-                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: colors.textSecondary }}>
+ <p className="mb-2 text-xs font-semibold"style={{ color: colors.textSecondary }}>
                           Productos adicionales
                         </p>
                         {selectedProducts.map(sp => (

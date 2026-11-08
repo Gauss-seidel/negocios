@@ -253,7 +253,7 @@ export default function SucursalesPage() {
         <Card padding={false}>
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b text-xs font-semibold uppercase tracking-wider" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+ <tr className="border-b text-xs font-semibold"style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
                 <th className="px-6 py-3.5">Nombre</th>
                 <th className="px-6 py-3.5">Dirección</th>
                 <th className="px-6 py-3.5">Teléfono</th>

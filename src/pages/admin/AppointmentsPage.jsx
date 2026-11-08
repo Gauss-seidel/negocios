@@ -365,7 +365,7 @@ export default function AppointmentsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-xs font-medium uppercase tracking-wider text-gray-500">
+ <tr className="border-b border-gray-200 text-xs font-medium text-gray-500">
                   <th className="px-4 py-3 sm:px-6">Cliente</th>
                   <th className="px-4 py-3 sm:px-6">Barbero</th>
                   <th className="px-4 py-3 sm:px-6">Servicio</th>
@@ -429,7 +429,7 @@ export default function AppointmentsPage() {
           const count = appointments.filter((a) => a.status === f.value).length
           return (
             <Card key={f.value} className="text-center">
-              <p className="text-xs font-medium uppercase tracking-wider text-gray-500">{f.label}</p>
+ <p className="text-xs font-medium text-gray-500">{f.label}</p>
               <p className="mt-1 text-2xl font-bold text-gray-900">{count}</p>
             </Card>
           )

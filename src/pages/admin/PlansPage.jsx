@@ -51,7 +51,7 @@ function PlanCard({ plan, isCurrent }) {
     >
       {isCurrent && (
         <div className="absolute left-0 right-0 top-0 flex -translate-y-1/2 items-center justify-center px-6">
-          <span className="rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm">
+ <span className="rounded-full bg-emerald-500 px-3 py-1 text-[11px] font-semibold text-white shadow-sm">
             Plan actual
           </span>
         </div>
@@ -208,7 +208,7 @@ export default function PlansPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b text-xs font-semibold uppercase tracking-wider" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+ <tr className="border-b text-xs font-semibold"style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
                   <th className="pb-3 pr-6 font-medium">Característica</th>
                   {plans.map(p => (
                     <th key={p.slug || p.id} className={`pb-3 pr-6 text-center ${currentPlan === p.slug ? 'text-[var(--color-accent)]' : ''}`}>

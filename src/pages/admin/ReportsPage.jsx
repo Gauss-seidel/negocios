@@ -572,17 +572,17 @@ export default function ReportsPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card className="transition-shadow hover:shadow-md">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Ingresos</p>
+ <p className="text-xs font-medium text-gray-500">Ingresos</p>
           <p className="mt-1 text-3xl font-bold text-gray-900">{fmtCurrency(income)}</p>
           <p className="mt-1 text-xs text-gray-400">{periodLabel}</p>
         </Card>
         <Card className="transition-shadow hover:shadow-md">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Reservas</p>
+ <p className="text-xs font-medium text-gray-500">Reservas</p>
           <p className="mt-1 text-3xl font-bold text-gray-900">{apptCount.toLocaleString('es-PY')}</p>
           <p className="mt-1 text-xs text-gray-400">{periodLabel}</p>
         </Card>
         <Card className="transition-shadow hover:shadow-md">
-          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Ticket promedio</p>
+ <p className="text-xs font-medium text-gray-500">Ticket promedio</p>
           <p className="mt-1 text-3xl font-bold text-gray-900">{fmtCurrency(avgTicket)}</p>
           <p className="mt-1 text-xs text-gray-400">por reserva</p>
         </Card>

@@ -266,7 +266,7 @@ export default function PlanesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs font-semibold uppercase tracking-wider text-white/30">
+ <tr className="border-b border-white/[0.06] text-xs font-semibold text-white/30">
                   <th className="px-6 py-3.5">Plan</th>
                   <th className="px-6 py-3.5">Precio</th>
                   <th className="px-6 py-3.5">Barberos</th>

@@ -140,7 +140,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
             {/* Services */}
             {hasServices && (
               <div>
-                <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400">Servicios</h3>
+ <h3 className="mb-3 text-sm font-semibold text-gray-400">Servicios</h3>
                 <div className="space-y-2">
                   {services.map(s => (
                     <label key={s.id} className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
@@ -163,7 +163,7 @@ export default function CompleteAppointmentModal({ appointment, services, produc
             {/* Products */}
             {hasProducts && (
               <div>
-                <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-400">Productos</h3>
+ <h3 className="mb-3 text-sm font-semibold text-gray-400">Productos</h3>
                 <div className="space-y-2">
                   {products.map(p => {
                     const available = p.product?.current_stock ?? p.current_stock

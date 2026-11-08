@@ -198,7 +198,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                 key={stat.label}
                 className="rounded-xl border border-gray-100 bg-gray-50/50 p-4"
               >
-                <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+ <p className="text-xs font-medium text-gray-400">
                   {stat.label}
                 </p>
                 <p className="mt-1.5 text-lg font-bold tracking-tight text-gray-900">
@@ -306,7 +306,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
                           <div className="grid gap-4 sm:grid-cols-2">
                             {/* Services */}
                             <div>
-                              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+ <h4 className="mb-2 text-xs font-semibold text-gray-400">
                                 Servicios
                               </h4>
                               {services.length === 0 ? (
@@ -327,7 +327,7 @@ export default function ClientHistoryModal({ clientId, branchId, onClose }) {
 
                             {/* Products */}
                             <div>
-                              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+ <h4 className="mb-2 text-xs font-semibold text-gray-400">
                                 Productos
                               </h4>
                               {products.length === 0 ? (

@@ -384,7 +384,7 @@ export default function InventoryPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50 text-xs font-medium uppercase tracking-wider text-gray-500">
+ <tr className="border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500">
                   <th className="px-6 py-3">Producto</th>
                   <th className="px-6 py-3">Stock</th>
                   <th className="px-6 py-3">Mínimo</th>
@@ -442,11 +442,11 @@ export default function InventoryPage() {
                             {product.is_active ? 'Activo' : 'Inactivo'}
                           </span>
                         ) : (
-                          <span className="text-xs text-gray-400">—</span>
+                          <span className="text-xs text-gray-400">·</span>
                         )}
                       </td>
                       <td className="px-6 py-4 font-medium text-gray-900">
-                        {product.price ? formatCurrency(product.price) : '—'}
+                        {product.price ? formatCurrency(product.price) : '·'}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-1">

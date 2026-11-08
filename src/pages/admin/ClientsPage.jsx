@@ -321,7 +321,7 @@ export default function ClientsPage() {
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-sm">
                         <thead>
-                          <tr className="border-b border-gray-200 text-xs font-medium uppercase tracking-wider text-gray-500">
+ <tr className="border-b border-gray-200 text-xs font-medium text-gray-500">
                             <th className="pb-2 pr-4">Fecha</th>
                             <th className="pb-2 pr-4">Hora</th>
                             <th className="pb-2 pr-4">Barbero</th>

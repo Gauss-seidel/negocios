@@ -14,7 +14,7 @@ function StatusBadge({ status }) {
   }
   const c = config[status] || config.pending
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${c.bg} ${c.text}`}>
+ <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${c.bg} ${c.text}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
       {c.label}
     </span>
@@ -341,7 +341,7 @@ export default function TVQueue() {
             {/* In progress */}
             {inProgress.length > 0 && (
               <section>
-                <h2 className="text-sm font-semibold uppercase tracking-widest mb-4 flex items-center gap-2" style={{ color: '#34d399' }}>
+ <h2 className="text-sm font-semibold mb-4 flex items-center gap-2"style={{ color: '#34d399' }}>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   En curso
                 </h2>
@@ -356,7 +356,7 @@ export default function TVQueue() {
             {/* Upcoming */}
             {upcoming.length > 0 && (
               <section>
-                <h2 className="text-sm font-semibold uppercase tracking-widest mb-4" style={{ color: tvColors.textSecondary }}>
+ <h2 className="text-sm font-semibold mb-4"style={{ color: tvColors.textSecondary }}>
                   Próximos turnos ({upcoming.length})
                 </h2>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -371,7 +371,7 @@ export default function TVQueue() {
             {completed.length > 0 && (
               <section>
                 <details className="group">
-                  <summary className="text-xs font-semibold uppercase tracking-widest cursor-pointer py-2 flex items-center gap-2" style={{ color: tvColors.textSecondary }}>
+ <summary className="text-xs font-semibold cursor-pointer py-2 flex items-center gap-2"style={{ color: tvColors.textSecondary }}>
                     <svg aria-hidden="true" focusable="false" className="w-3 h-3 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>

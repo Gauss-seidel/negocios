@@ -22,7 +22,7 @@ function DividerDashed() {
   return (
     <div className="flex items-center gap-2 py-1">
       <div className="flex-1 border-t border-dashed border-gray-200" />
-      <span className="text-[9px] font-medium tracking-[0.2em] text-gray-300">✦</span>
+ <span className="text-[9px] font-medium tracking-[0.2em] text-gray-300">✦</span>
       <div className="flex-1 border-t border-dashed border-gray-200" />
     </div>
   )
@@ -168,7 +168,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
         >
           {/* ─── HEADER ─── */}
           <div className="px-6 pt-6 pb-2 text-center">
-            <span className="text-[10px] font-semibold tracking-[0.2em] text-gray-400 uppercase">
+ <span className="text-[10px] font-semibold tracking-[0.2em] text-gray-400">
               BarberShifts
             </span>
             <h2 className="mt-2 text-lg font-bold tracking-tight text-gray-900">
@@ -215,7 +215,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── SERVICES ─── */}
           {services.length > 0 && (
             <div className="px-6 py-2">
-              <p className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 uppercase mb-2">
+ <p className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 mb-2">
                 Servicios
               </p>
               <div className="space-y-1.5">
@@ -239,7 +239,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {products.length > 0 && (
             <div className="px-6 py-2">
               {services.length > 0 && <DividerDashed />}
-              <p className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 uppercase mb-2">
+ <p className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 mb-2">
                 Productos
               </p>
               <div className="space-y-1.5">
@@ -274,7 +274,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
 
           {/* ─── TOTAL ─── */}
           <div className="mx-6 mt-3 mb-4 flex items-center justify-between rounded-lg bg-gradient-to-r from-[var(--color-accent)]/5 to-transparent border-l-4 border-[var(--color-accent)] px-4 py-3.5">
-            <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Total</span>
+ <span className="text-sm font-semibold text-gray-700">Total</span>
             <span className="text-xl font-bold font-mono tabular-nums text-[var(--color-accent)]">
               {fmtCurrency(total)}
             </span>
@@ -293,7 +293,7 @@ export default function InvoiceModal({ appointment, business, onClose }) {
           {/* ─── FOOTER ─── */}
           <div className="px-6 pb-6 pt-2 text-center">
             <p className="text-sm font-medium text-gray-700">Gracias por tu visita!</p>
-            <p className="mt-1 text-[10px] text-gray-400 font-medium tracking-[0.05em] uppercase">
+ <p className="mt-1 text-[10px] text-gray-400 font-medium tracking-[0.05em]">
               Emitido: {emissionDate}
             </p>
           </div>

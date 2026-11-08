@@ -484,7 +484,7 @@ export default function SuperDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-[var(--color-border)] text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)]">
+ <tr className="border-b border-[var(--color-border)] text-xs font-semibold text-[var(--color-muted)]">
                   <th className="px-6 py-3.5">Nombre</th>
                   <th className="px-6 py-3.5">Estado</th>
                   <th className="px-6 py-3.5">Plan</th>
